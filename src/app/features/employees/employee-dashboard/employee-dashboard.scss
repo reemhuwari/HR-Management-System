@@ -1,0 +1,68 @@
+@use '../employee-shared';
+
+.two-column {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr);
+  gap: 22px;
+}
+
+.balance-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 22px 24px 26px;
+}
+
+.balance-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  row-gap: 9px;
+  color: var(--text);
+  font-size: 13px;
+
+  strong {
+    color: var(--navy);
+  }
+}
+
+.balance-label {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+
+  &.annual { background: #4f6ef7; }
+  &.sick { background: #19945b; }
+  &.personal { background: #d97706; }
+}
+
+.bar {
+  grid-column: 1 / -1;
+  height: 7px;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #eef1f7;
+
+  span {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    transition: width 0.3s ease;
+
+    &.annual { background: #4f6ef7; }
+    &.sick { background: #19945b; }
+    &.personal { background: #d97706; }
+  }
+}
+
+@media (max-width: 1000px) {
+  .two-column {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

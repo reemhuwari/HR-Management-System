@@ -1,0 +1,311 @@
+
+<section class="page">
+
+  <div class="page-header">
+    <div>
+      <span class="eyebrow">{{ 'LEAVE_BALANCES.EYEBROW' | translate }}</span>
+      <h1>{{ 'LEAVE_BALANCES.TITLE' | translate }}</h1>
+      <p>{{ 'LEAVE_BALANCES.DESCRIPTION' | translate }}</p>
+    </div>
+
+    <button
+      type="button"
+      class="refresh-button"
+      (click)="loadBalances()"
+      [disabled]="isLoading"
+    >
+      <span aria-hidden="true">↻</span>
+      {{
+        isLoading
+          ? ('LEAVE_BALANCES.REFRESHING' | translate)
+          : ('LEAVE_BALANCES.REFRESH' | translate)
+      }}
+    </button>
+  </div>
+
+  @if (errorMessage) {
+    <div class="alert error-alert" role="alert">
+      <span class="alert-icon" aria-hidden="true">!</span>
+
+      <div class="alert-content">
+        <strong>{{ 'LEAVE_BALANCES.LOAD_ERROR_TITLE' | translate }}</strong>
+        <p>{{ errorMessage }}</p>
+      </div>
+
+      <button
+        type="button"
+        class="retry-button"
+        (click)="loadBalances()"
+      >
+        {{ 'LEAVE_BALANCES.TRY_AGAIN' | translate }}
+      </button>
+    </div>
+  }
+
+  <div class="summary">
+
+    <div class="summary-card total-card">
+      <div class="card-top">
+        <span class="card-label">
+          {{ 'LEAVE_BALANCES.TOTAL_REMAINING' | translate }}
+        </span>
+        <span class="card-icon total-icon" aria-hidden="true">◷</span>
+      </div>
+
+      <strong>{{ totalRemaining }}</strong>
+      <small>{{ 'LEAVE_BALANCES.DAYS_ACROSS_EMPLOYEES' | translate }}</small>
+    </div>
+
+    <div class="summary-card annual-card">
+      <div class="card-top">
+        <span class="card-label">{{ 'LEAVE_BALANCES.ANNUAL' | translate }}</span>
+        <span class="card-icon annual-icon" aria-hidden="true">✦</span>
+      </div>
+
+      <strong>{{ totalAnnual }}</strong>
+      <small>{{ 'LEAVE_BALANCES.TOTAL_REMAINING_DAYS' | translate }}</small>
+    </div>
+
+    <div class="summary-card sick-card">
+      <div class="card-top">
+        <span class="card-label">{{ 'LEAVE_BALANCES.SICK' | translate }}</span>
+        <span class="card-icon sick-icon" aria-hidden="true">＋</span>
+      </div>
+
+      <strong>{{ totalSick }}</strong>
+      <small>{{ 'LEAVE_BALANCES.TOTAL_REMAINING_DAYS' | translate }}</small>
+    </div>
+
+    <div class="summary-card personal-card">
+      <div class="card-top">
+        <span class="card-label">{{ 'LEAVE_BALANCES.PERSONAL' | translate }}</span>
+        <span class="card-icon personal-icon" aria-hidden="true">◇</span>
+      </div>
+
+      <strong>{{ totalPersonal }}</strong>
+      <small>{{ 'LEAVE_BALANCES.TOTAL_REMAINING_DAYS' | translate }}</small>
+    </div>
+
+  </div>
+
+  <div class="overview-row">
+    <div class="overview-item">
+      <span class="overview-icon employees-icon" aria-hidden="true">♙</span>
+      <div>
+        <strong>{{ employeesWithBalances }}</strong>
+        <span>{{ 'LEAVE_BALANCES.EMPLOYEES_WITH_BALANCES' | translate }}</span>
+      </div>
+    </div>
+
+    <div class="overview-item">
+      <span class="overview-icon warning-icon" aria-hidden="true">!</span>
+      <div>
+        <strong>{{ lowBalanceCount }}</strong>
+        <span>{{ 'LEAVE_BALANCES.LOW_BALANCE_EMPLOYEES' | translate }}</span>
+      </div>
+    </div>
+
+    <p class="balance-note">
+      {{ 'LEAVE_BALANCES.LOW_BALANCE_NOTE' | translate }}
+    </p>
+  </div>
+
+  <div class="toolbar">
+    <div class="search-box">
+      <span class="search-icon" aria-hidden="true">⌕</span>
+
+      <input
+        type="search"
+        [placeholder]="'LEAVE_BALANCES.SEARCH' | translate"
+        [attr.aria-label]="'LEAVE_BALANCES.SEARCH_LABEL' | translate"
+        [(ngModel)]="searchTerm"
+      />
+
+      @if (searchTerm) {
+        <button
+          type="button"
+          class="clear-search"
+          [attr.aria-label]="'LEAVE_BALANCES.CLEAR_SEARCH' | translate"
+          (click)="searchTerm = ''"
+        >
+          ×
+        </button>
+      }
+    </div>
+
+    <span class="results-count">
+      {{ filteredBalances.length }}
+      {{
+        filteredBalances.length === 1
+          ? ('LEAVE_BALANCES.EMPLOYEE' | translate)
+          : ('LEAVE_BALANCES.EMPLOYEES' | translate)
+      }}
+    </span>
+  </div>
+
+  <div class="table-card">
+
+    <div class="table-header">
+      <div>
+        <h2>{{ 'LEAVE_BALANCES.TABLE_TITLE' | translate }}</h2>
+        <p>{{ 'LEAVE_BALANCES.TABLE_DESCRIPTION' | translate }}</p>
+      </div>
+
+      <span class="table-count">
+        {{ filteredBalances.length }}
+        {{ 'LEAVE_BALANCES.RECORDS' | translate }}
+      </span>
+    </div>
+
+    @if (isLoading) {
+
+      <div class="loading-state">
+        <span class="spinner" aria-hidden="true"></span>
+        <strong>{{ 'LEAVE_BALANCES.LOADING' | translate }}</strong>
+        <p>{{ 'LEAVE_BALANCES.PLEASE_WAIT' | translate }}</p>
+      </div>
+
+    } @else if (!errorMessage) {
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>{{ 'LEAVE_BALANCES.EMPLOYEE_COLUMN' | translate }}</th>
+              <th>{{ 'LEAVE_BALANCES.ANNUAL_COLUMN' | translate }}</th>
+              <th>{{ 'LEAVE_BALANCES.SICK_COLUMN' | translate }}</th>
+              <th>{{ 'LEAVE_BALANCES.PERSONAL_COLUMN' | translate }}</th>
+              <th>{{ 'LEAVE_BALANCES.TOTAL_COLUMN' | translate }}</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (
+              balance of filteredBalances;
+              track trackBalance($index, balance)
+            ) {
+              <tr>
+                <td>
+                  <div class="employee">
+                    <div class="avatar">
+                      {{ (balance.employeeName || '?').charAt(0).toUpperCase() }}
+                    </div>
+
+                    <div class="employee-info">
+                      <strong>{{ balance.employeeName }}</strong>
+                      <span>{{ balance.employeeId }}</span>
+                    </div>
+                  </div>
+                </td>
+
+                <td>
+                  <span
+                    class="balance annual"
+                    [class.low]="isLow(balance.annual)"
+                    [class.depleted]="isDepleted(balance.annual)"
+                  >
+                    {{ balance.annual }}
+                    {{ 'LEAVE_BALANCES.DAYS' | translate }}
+
+                    @if (isLow(balance.annual)) {
+                      <span
+                        class="balance-warning"
+                        [attr.aria-label]="'LEAVE_BALANCES.LOW_BALANCE' | translate"
+                      >!</span>
+                    }
+                  </span>
+                </td>
+
+                <td>
+                  <span
+                    class="balance sick"
+                    [class.low]="isLow(balance.sick)"
+                    [class.depleted]="isDepleted(balance.sick)"
+                  >
+                    {{ balance.sick }}
+                    {{ 'LEAVE_BALANCES.DAYS' | translate }}
+
+                    @if (isLow(balance.sick)) {
+                      <span
+                        class="balance-warning"
+                        [attr.aria-label]="'LEAVE_BALANCES.LOW_BALANCE' | translate"
+                      >!</span>
+                    }
+                  </span>
+                </td>
+
+                <td>
+                  <span
+                    class="balance personal"
+                    [class.low]="isLow(balance.personal)"
+                    [class.depleted]="isDepleted(balance.personal)"
+                  >
+                    {{ balance.personal }}
+                    {{ 'LEAVE_BALANCES.DAYS' | translate }}
+
+                    @if (isLow(balance.personal)) {
+                      <span
+                        class="balance-warning"
+                        [attr.aria-label]="'LEAVE_BALANCES.LOW_BALANCE' | translate"
+                      >!</span>
+                    }
+                  </span>
+                </td>
+
+                <td>
+                  <strong class="total">
+                    {{ balance.total }}
+                    {{ 'LEAVE_BALANCES.DAYS' | translate }}
+                  </strong>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      @if (filteredBalances.length === 0) {
+        <div class="empty-state">
+          <span class="empty-icon" aria-hidden="true">⌕</span>
+          <h3>{{ 'LEAVE_BALANCES.EMPTY_TITLE' | translate }}</h3>
+
+          <p>
+            @if (searchTerm) {
+              {{ 'LEAVE_BALANCES.TRY_ANOTHER_SEARCH' | translate }}
+            } @else {
+              {{ 'LEAVE_BALANCES.NO_RECORDS' | translate }}
+            }
+          </p>
+
+          @if (searchTerm) {
+            <button
+              type="button"
+              class="clear-button"
+              (click)="searchTerm = ''"
+            >
+              {{ 'LEAVE_BALANCES.CLEAR_SEARCH' | translate }}
+            </button>
+          }
+        </div>
+      }
+
+    }
+
+    <div class="table-footer">
+      <span>
+        {{ 'LEAVE_BALANCES.SHOWING' | translate }}
+        {{ filteredBalances.length }}
+        {{ 'LEAVE_BALANCES.OF' | translate }}
+        {{ balances.length }}
+        {{ 'LEAVE_BALANCES.EMPLOYEES' | translate }}
+      </span>
+
+      <span class="live-indicator">
+        <span></span>
+        {{ 'LEAVE_BALANCES.LIVE_DATA' | translate }}
+      </span>
+    </div>
+
+  </div>
+
+</section>

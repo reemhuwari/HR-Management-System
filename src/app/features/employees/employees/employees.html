@@ -1,0 +1,423 @@
+<section class="page">
+
+  <div class="page-header">
+    <div>
+      <span class="eyebrow">{{ 'EMPLOYEES.EYEBROW' | translate }}</span>
+      <h1>{{ 'EMPLOYEES.TITLE' | translate }}</h1>
+      <p>{{ 'EMPLOYEES.SUBTITLE' | translate }}</p>
+    </div>
+
+    <button class="primary-btn" type="button" (click)="openAddModal()" [disabled]="isSaving">
+      <span>+</span>
+      {{ 'EMPLOYEES.ADD' | translate }}
+    </button>
+  </div>
+
+  @if (successMessage) {
+    <div class="feedback success-feedback" role="status">
+      <span>{{ successMessage }}</span>
+      <button
+        type="button"
+        [attr.aria-label]="'EMPLOYEES.DISMISS' | translate"
+        (click)="successMessage = ''"
+      >×</button>
+    </div>
+  }
+
+  @if (actionError) {
+    <div class="feedback error-feedback" role="alert">
+      <span>{{ actionError }}</span>
+      <button
+        type="button"
+        [attr.aria-label]="'EMPLOYEES.DISMISS' | translate"
+        (click)="actionError = ''"
+      >×</button>
+    </div>
+  }
+  @if (pendingAccounts.length > 0) {
+    <section class="pending-card">
+      <div class="pending-header">
+        <div>
+          <h2>{{ 'EMPLOYEES.PENDING_TITLE' | translate }}</h2>
+          <p>{{ 'EMPLOYEES.PENDING_DESC' | translate }}</p>
+        </div>
+
+        <span class="pending-count">{{ pendingAccounts.length }}</span>
+      </div>
+
+      <div class="pending-list">
+        @for (account of pendingAccounts; track account.id) {
+          <div class="pending-item">
+            <div class="avatar">
+              {{ account.firstName.charAt(0) }}{{ account.lastName.charAt(0) }}
+            </div>
+
+            <div class="pending-info">
+              <strong>{{ account.firstName }} {{ account.lastName }}</strong>
+              <span>{{ account.email }}</span>
+              <span>
+                {{ getDepartmentLabel(account.department || '') }}
+                @if (account.position) { · {{ account.position }} }
+              </span>
+            </div>
+
+            <div class="pending-actions">
+              <button
+                type="button"
+                class="approve-btn"
+                [disabled]="isProcessingAccount(account)"
+                (click)="approveAccount(account)"
+              >
+                {{ (isProcessingAccount(account) ? 'COMMON.SAVING' : 'EMPLOYEES.APPROVE') | translate }}
+              </button>
+
+              <button
+                type="button"
+                class="reject-btn"
+                [disabled]="isProcessingAccount(account)"
+                (click)="rejectAccount(account)"
+              >
+                {{ 'EMPLOYEES.REJECT' | translate }}
+              </button>
+            </div>
+          </div>
+        }
+      </div>
+    </section>
+  }
+  <div class="toolbar">
+    <div class="search-box">
+      <span>⌕</span>
+      <input
+        type="text"
+        [placeholder]="'EMPLOYEES.SEARCH_PLACEHOLDER' | translate"
+        [(ngModel)]="searchTerm"
+        (ngModelChange)="applyFilters()"
+        [attr.aria-label]="'EMPLOYEES.SEARCH_LABEL' | translate"
+      />
+    </div>
+
+    <select
+      [(ngModel)]="selectedDepartment"
+      (ngModelChange)="applyFilters()"
+      [attr.aria-label]="'EMPLOYEES.FILTER_DEPARTMENT' | translate"
+    >
+      <option value="all">{{ 'EMPLOYEES.ALL_DEPARTMENTS' | translate }}</option>
+      @for (department of departments; track department) {
+        <option [value]="department">{{ getDepartmentLabel(department) }}</option>
+      }
+    </select>
+
+    <select
+      [(ngModel)]="selectedStatus"
+      (ngModelChange)="applyFilters()"
+      [attr.aria-label]="'EMPLOYEES.FILTER_STATUS' | translate"
+    >
+      <option value="all">{{ 'EMPLOYEES.ALL_STATUSES' | translate }}</option>
+      <option value="active">{{ 'STATUS.ACTIVE' | translate }}</option>
+      <option value="inactive">{{ 'STATUS.INACTIVE' | translate }}</option>
+      <option value="on-leave">{{ 'STATUS.ON_LEAVE' | translate }}</option>
+    </select>
+  </div>
+
+  @if (isLoading) {
+    <div class="state-card">
+      <div class="loader"></div>
+      <p>{{ 'EMPLOYEES.LOADING' | translate }}</p>
+    </div>
+  } @else if (errorMessage) {
+    <div class="state-card error-state">
+      <div class="state-icon">!</div>
+      <h3>{{ 'EMPLOYEES.ERROR_TITLE' | translate }}</h3>
+      <p>{{ errorMessage }}</p>
+      <button class="primary-btn" type="button" (click)="loadEmployees()">
+        {{ 'COMMON.TRY_AGAIN' | translate }}
+      </button>
+    </div>
+  } @else {
+    <div class="table-card">
+      <div class="table-heading">
+        <div>
+          <h2>{{ 'EMPLOYEES.ALL_EMPLOYEES' | translate }}</h2>
+          <span>{{ filteredEmployees.length }} {{ 'EMPLOYEES.COUNT' | translate }}</span>
+        </div>
+      </div>
+
+      @if (paginatedEmployees.length > 0) {
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>{{ 'LABELS.EMPLOYEE' | translate }}</th>
+                <th>{{ 'LABELS.EMPLOYEE_ID' | translate }}</th>
+                <th>{{ 'LABELS.DEPARTMENT' | translate }}</th>
+                <th>{{ 'LABELS.POSITION' | translate }}</th>
+                <th>{{ 'COMMON.STATUS' | translate }}</th>
+                <th>{{ 'LABELS.HIRE_DATE' | translate }}</th>
+                <th>{{ 'COMMON.ACTIONS' | translate }}</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              @for (employee of paginatedEmployees; track employee.id) {
+                <tr>
+                  <td>
+                    <div class="employee-cell">
+                      <div class="avatar">
+                        {{ employee.firstName.charAt(0) }}{{ employee.lastName.charAt(0) }}
+                      </div>
+                      <div>
+                        <strong>{{ employee.firstName }} {{ employee.lastName }}</strong>
+                        <span>{{ employee.email }}</span>
+                      </div>
+                    </div>
+                  </td>
+
+                  <td>
+                    <span class="employee-id">{{ employee.employeeId }}</span>
+                  </td>
+
+                  <td>{{ getDepartmentLabel(employee.department) }}</td>
+                  <td>{{ employee.position }}</td>
+
+                  <td>
+                    <span
+                      class="status"
+                      [class.active]="employee.status === 'active'"
+                      [class.inactive]="employee.status === 'inactive'"
+                      [class.leave]="employee.status === 'on-leave'"
+                    >
+                      {{ getStatusLabel(employee.status) }}
+                    </span>
+                  </td>
+
+                  <td>{{ formatDate(employee.hireDate) }}</td>
+
+                  <td>
+                    <div class="actions">
+                      <button
+                        type="button"
+                        [title]="'EMPLOYEES.EDIT_EMPLOYEE' | translate"
+                        [attr.aria-label]="'EMPLOYEES.EDIT_EMPLOYEE' | translate"
+                        (click)="openEditModal(employee)"
+                        [disabled]="isSaving || isDeleting"
+                      >
+                        ✎
+                      </button>
+
+                      <button
+                        type="button"
+                        class="delete"
+                        [title]="'EMPLOYEES.DELETE_EMPLOYEE' | translate"
+                        [attr.aria-label]="'EMPLOYEES.DELETE_EMPLOYEE' | translate"
+                        (click)="deleteEmployee(employee)"
+                        [disabled]="isDeleting || isSaving"
+                      >
+                        ×
+                      </button>
+
+                      <button
+                        type="button"
+                        class="action-button view"
+                        [title]="'EMPLOYEES.VIEW_EMPLOYEE' | translate"
+                        [attr.aria-label]="'EMPLOYEES.VIEW_EMPLOYEE' | translate"
+                        (click)="viewEmployee(employee.id)"
+                        [disabled]="!employee.id"
+                      >
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                          <circle cx="12" cy="12" r="3" />
+                        </svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+        <div class="pagination">
+          <button
+            type="button"
+            [attr.aria-label]="'EMPLOYEES.PREVIOUS_PAGE' | translate"
+            [disabled]="currentPage === 1"
+            (click)="changePage(currentPage - 1)"
+          >
+            ‹
+          </button>
+
+          @for (page of pageNumbers; track page) {
+            <button
+              type="button"
+              [class.current]="page === currentPage"
+              [attr.aria-current]="page === currentPage ? 'page' : null"
+              (click)="changePage(page)"
+            >
+              {{ page }}
+            </button>
+          }
+
+          <button
+            type="button"
+            [attr.aria-label]="'EMPLOYEES.NEXT_PAGE' | translate"
+            [disabled]="currentPage === totalPages"
+            (click)="changePage(currentPage + 1)"
+          >
+            ›
+          </button>
+        </div>
+      } @else {
+        <div class="empty-state">
+          <div>⌕</div>
+          <h3>{{ 'EMPLOYEES.NO_RESULTS_TITLE' | translate }}</h3>
+          <p>{{ 'EMPLOYEES.NO_RESULTS_DESC' | translate }}</p>
+        </div>
+      }
+    </div>
+  }
+
+</section>
+
+@if (showModal) {
+  <div class="modal-backdrop" (click)="closeModal()">
+    <div
+      class="modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="employee-modal-title"
+      (click)="$event.stopPropagation()"
+    >
+      <div class="modal-header">
+        <div>
+          <span class="eyebrow">{{ 'EMPLOYEES.MODAL_EYEBROW' | translate }}</span>
+          <h2 id="employee-modal-title">
+            {{ (isEditMode ? 'EMPLOYEES.MODAL_EDIT' : 'EMPLOYEES.MODAL_ADD') | translate }}
+          </h2>
+        </div>
+
+        <button
+          type="button"
+          class="close-btn"
+          [attr.aria-label]="'EMPLOYEES.CLOSE_DIALOG' | translate"
+          (click)="closeModal()"
+          [disabled]="isSaving"
+        >
+          ×
+        </button>
+      </div>
+
+      @if (formError) {
+        <div class="form-error" role="alert">{{ formError }}</div>
+      }
+
+      <div class="form-grid">
+        <label>
+          {{ 'LABELS.FIRST_NAME' | translate }} *
+          <input
+            type="text"
+            [(ngModel)]="formEmployee.firstName"
+            [placeholder]="'EMPLOYEES.PH_FIRST_NAME' | translate"
+            autocomplete="given-name"
+            required
+            maxlength="60"
+            [disabled]="isSaving"
+          />
+        </label>
+
+        <label>
+          {{ 'LABELS.LAST_NAME' | translate }} *
+          <input
+            type="text"
+            [(ngModel)]="formEmployee.lastName"
+            [placeholder]="'EMPLOYEES.PH_LAST_NAME' | translate"
+            autocomplete="family-name"
+            required
+            maxlength="60"
+            [disabled]="isSaving"
+          />
+        </label>
+
+        <label>
+          {{ 'LABELS.EMAIL' | translate }} *
+          <input
+            type="email"
+            [(ngModel)]="formEmployee.email"
+            [placeholder]="'EMPLOYEES.PH_EMAIL' | translate"
+            autocomplete="email"
+            required
+            maxlength="150"
+            [disabled]="isSaving"
+          />
+        </label>
+
+        <label>
+          {{ 'LABELS.PHONE' | translate }}
+          <input
+            type="tel"
+            [(ngModel)]="formEmployee.phone"
+            [placeholder]="'EMPLOYEES.PH_PHONE' | translate"
+            autocomplete="tel"
+            maxlength="30"
+            [disabled]="isSaving"
+          />
+        </label>
+
+        <label>
+          {{ 'LABELS.DEPARTMENT' | translate }} *
+          <select [(ngModel)]="formEmployee.department" required [disabled]="isSaving">
+            @for (department of departmentOptions; track department) {
+              <option [value]="department">{{ getDepartmentLabel(department) }}</option>
+            }
+          </select>
+        </label>
+
+        <label>
+          {{ 'LABELS.POSITION' | translate }} *
+          <input
+            type="text"
+            [(ngModel)]="formEmployee.position"
+            [placeholder]="'EMPLOYEES.PH_POSITION' | translate"
+            required
+            maxlength="100"
+            [disabled]="isSaving"
+          />
+        </label>
+
+        <label>
+          {{ 'COMMON.STATUS' | translate }} *
+          <select [(ngModel)]="formEmployee.status" required [disabled]="isSaving">
+            <option value="active">{{ 'STATUS.ACTIVE' | translate }}</option>
+            <option value="inactive">{{ 'STATUS.INACTIVE' | translate }}</option>
+            <option value="on-leave">{{ 'STATUS.ON_LEAVE' | translate }}</option>
+          </select>
+        </label>
+
+        <label>
+          {{ 'LABELS.HIRE_DATE' | translate }} *
+          <input
+            type="date"
+            [(ngModel)]="formEmployee.hireDate"
+            required
+            [max]="today"
+            [disabled]="isSaving"
+          />
+        </label>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="secondary-btn" (click)="closeModal()" [disabled]="isSaving">
+          {{ 'COMMON.CANCEL' | translate }}
+        </button>
+
+        <button type="button" class="primary-btn" (click)="saveEmployee()" [disabled]="isSaving">
+          {{
+            (isSaving
+              ? 'COMMON.SAVING'
+              : (isEditMode ? 'COMMON.SAVE_CHANGES' : 'EMPLOYEES.ADD')) | translate
+          }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

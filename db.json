@@ -1,0 +1,401 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "firstName": "Reem",
+      "lastName": "Huwari",
+      "email": "admin@peopleflow.com",
+      "password": "Admin123!",
+      "role": "admin",
+      "department": "Human Resources",
+      "position": "HR Administrator",
+      "createdAt": "2026-01-10T08:00:00.000Z"
+    },
+    {
+      "id": "2",
+      "firstName": "HR",
+      "lastName": "Manager",
+      "email": "hr@peopleflow.com",
+      "password": "Hr123456!",
+      "role": "hr",
+      "department": "Human Resources",
+      "position": "HR Manager",
+      "createdAt": "2026-01-15T08:00:00.000Z"
+    },
+    {
+      "id": "3",
+      "employeeId": "1",
+      "firstName": "Sarah",
+      "lastName": "Ahmad",
+      "email": "sarah.ahmad@peopleflow.com",
+      "password": "Employee123!",
+      "role": "employee",
+      "department": "Human Resources",
+      "position": "HR Specialist",
+      "createdAt": "2026-01-12T08:00:00.000Z"
+    },
+    {
+      "firstName": "غادة",
+      "lastName": "احمد",
+      "email": "ghada@gmail.com",
+      "password": "GHada2022",
+      "department": "Engineering",
+      "position": "هندسة البرمجيات",
+      "phone": "+962786421254",
+      "role": "employee",
+      "status": "active",
+      "createdAt": "2026-10-19T15:04:38.715Z",
+      "id": "Wmfaf1OPgMI",
+      "employeeId": "foUGw0gusgI"
+    }
+  ],
+  "employees": [
+    {
+      "id": "1",
+      "employeeId": "EMP-001",
+      "firstName": "Sarah",
+      "lastName": "Ahmad",
+      "email": "sarah.ahmad@peopleflow.com",
+      "phone": "+962 79 123 4567",
+      "department": "Human Resources",
+      "position": "HR Specialist",
+      "status": "active",
+      "hireDate": "2023-04-12"
+    },
+    {
+      "id": "2",
+      "employeeId": "EMP-002",
+      "firstName": "Jamal",
+      "lastName": "Dwaik",
+      "email": "jamal.dwaik@peopleflow.com",
+      "phone": "+962 79 234 5678",
+      "department": "Engineering",
+      "position": "Frontend Developer",
+      "status": "active",
+      "hireDate": "2022-09-18"
+    },
+    {
+      "id": "3",
+      "employeeId": "EMP-003",
+      "firstName": "Eman",
+      "lastName": "Wilson",
+      "email": "eman.wilson@peopleflow.com",
+      "phone": "+962 79 345 6789",
+      "department": "Finance",
+      "position": "Financial Analyst",
+      "status": "on-leave",
+      "hireDate": "2024-01-08"
+    },
+    {
+      "id": "4",
+      "employeeId": "EMP-004",
+      "firstName": "Mai",
+      "lastName": "Bdran",
+      "email": "mai.bdran@peopleflow.com",
+      "phone": "+962 79 456 7890",
+      "department": "Engineering",
+      "position": "Backend Developer",
+      "status": "active",
+      "hireDate": "2023-07-21"
+    },
+    {
+      "id": "5",
+      "employeeId": "EMP-005",
+      "firstName": "Olivia",
+      "lastName": "Taylor",
+      "email": "olivia.taylor@peopleflow.com",
+      "phone": "+962 79 567 8901",
+      "department": "Marketing",
+      "position": "Marketing Executive",
+      "status": "active",
+      "hireDate": "2024-03-15"
+    },
+    {
+      "id": "6",
+      "employeeId": "EMP-006",
+      "firstName": "Doaa",
+      "lastName": "Ali",
+      "email": "doaa.ali@peopleflow.com",
+      "phone": "+962 79 678 9012",
+      "department": "Sales",
+      "position": "Sales Representative",
+      "status": "inactive",
+      "hireDate": "2021-11-02"
+    },
+    {
+      "id": "0TF4yBrvCBY",
+      "employeeId": "EMP-007",
+      "firstName": "محمد",
+      "lastName": "هواري",
+      "email": "mo@gmail.com",
+      "phone": "+962786421254",
+      "department": "Sales",
+      "position": "بائع تجزئة",
+      "status": "inactive",
+      "hireDate": "2026-10-16"
+    },
+    {
+      "id": "foUGw0gusgI",
+      "employeeId": "EMP-009",
+      "firstName": "غادة",
+      "lastName": "احمد",
+      "email": "ghada@gmail.com",
+      "phone": "+962786421254",
+      "department": "Engineering",
+      "position": "هندسة البرمجيات",
+      "status": "active",
+      "hireDate": "2026-10-19"
+    }
+  ],
+  "attendance": [
+    {
+      "id": "1",
+      "employeeId": "1",
+      "date": "2026-10-08",
+      "checkIn": "08:18",
+      "checkOut": null,
+      "status": "present",
+      "workHours": 0
+    },
+    {
+      "id": "2",
+      "employeeId": "2",
+      "date": "2026-10-08",
+      "checkIn": "08:07",
+      "checkOut": "17:02",
+      "status": "present",
+      "workHours": 8.92
+    },
+    {
+      "id": "3",
+      "employeeId": "3",
+      "date": "2026-10-08",
+      "checkIn": null,
+      "checkOut": null,
+      "status": "on-leave",
+      "workHours": 0
+    },
+    {
+      "id": "4",
+      "employeeId": "4",
+      "date": "2026-10-08",
+      "checkIn": "09:11",
+      "checkOut": null,
+      "status": "late",
+      "workHours": 0
+    },
+    {
+      "id": "5",
+      "employeeId": "5",
+      "date": "2026-10-08",
+      "checkIn": null,
+      "checkOut": null,
+      "status": "absent",
+      "workHours": 0
+    },
+    {
+      "id": "6",
+      "employeeId": "1",
+      "date": "2026-10-07",
+      "checkIn": "08:25",
+      "checkOut": "17:10",
+      "status": "present",
+      "workHours": 8.75
+    },
+    {
+      "id": "7",
+      "employeeId": "2",
+      "date": "2026-10-07",
+      "checkIn": "08:12",
+      "checkOut": "17:05",
+      "status": "present",
+      "workHours": 8.88
+    },
+    {
+      "id": "8",
+      "employeeId": "4",
+      "date": "2026-10-07",
+      "checkIn": "09:05",
+      "checkOut": "17:20",
+      "status": "late",
+      "workHours": 8.25
+    },
+    {
+      "id": "QtzsuegvqVI",
+      "employeeId": "1",
+      "date": "2026-10-19",
+      "checkIn": "14:34",
+      "checkOut": null,
+      "status": "late",
+      "workHours": 0
+    }
+  ],
+  "leaveRequests": [
+    {
+      "id": "1",
+      "employeeId": "1",
+      "employeeName": "Sarah Ahmad",
+      "type": "Annual Leave",
+      "startDate": "2026-10-12",
+      "endDate": "2026-10-15",
+      "days": 4,
+      "reason": "Family vacation",
+      "status": "approved",
+      "submittedAt": "2026-10-05"
+    },
+    {
+      "id": "2",
+      "employeeId": "2",
+      "employeeName": "Jamal Dwaik",
+      "type": "Sick Leave",
+      "startDate": "2026-10-08",
+      "endDate": "2026-10-09",
+      "days": 2,
+      "reason": "Medical appointment",
+      "status": "approved",
+      "submittedAt": "2026-10-04"
+    },
+    {
+      "id": "3",
+      "employeeId": "3",
+      "employeeName": "Eman Wilson",
+      "type": "Annual Leave",
+      "startDate": "2026-10-06",
+      "endDate": "2026-10-10",
+      "days": 5,
+      "reason": "Personal vacation",
+      "status": "approved",
+      "submittedAt": "2026-10-01"
+    },
+    {
+      "id": "2O-wWcU25Us",
+      "employeeId": "1",
+      "employeeName": "Sarah Ahmad",
+      "type": "Sick Leave",
+      "startDate": "2026-10-20",
+      "endDate": "2026-10-20",
+      "days": 1,
+      "reason": "مرضية",
+      "status": "approved",
+      "submittedAt": "2026-10-19"
+    }
+  ],
+  "leaveBalances": [
+    {
+      "id": "1",
+      "employeeId": "1",
+      "employeeName": "Sarah Ahmad",
+      "annual": 14,
+      "sick": 7,
+      "personal": 3,
+      "total": 24
+    },
+    {
+      "id": "2",
+      "employeeId": "2",
+      "employeeName": "Jamal Dwaik",
+      "annual": 10,
+      "sick": 7,
+      "personal": 2,
+      "total": 19
+    },
+    {
+      "id": "3",
+      "employeeId": "3",
+      "employeeName": "Eman Wilson",
+      "annual": 8,
+      "sick": 10,
+      "personal": 3,
+      "total": 21
+    },
+    {
+      "id": "4",
+      "employeeId": "4",
+      "employeeName": "Mai Bdran",
+      "annual": 12,
+      "sick": 6,
+      "personal": 4,
+      "total": 22
+    },
+    {
+      "id": "5",
+      "employeeId": "5",
+      "employeeName": "Olivia Taylor",
+      "annual": 15,
+      "sick": 8,
+      "personal": 3,
+      "total": 26
+    },
+    {
+      "id": "kYLq32RYZ3I",
+      "employeeId": "foUGw0gusgI",
+      "employeeName": "غادة احمد",
+      "annual": 14,
+      "sick": 8,
+      "personal": 3,
+      "total": 25
+    }
+  ],
+  "notifications": [
+    {
+      "id": "1",
+      "title": "New Leave Request",
+      "message": "Sarah Ahmad submitted an annual leave request for 4 day(s).",
+      "type": "leave-request",
+      "relatedId": "1",
+      "audience": "admin",
+      "params": {
+        "employeeName": "Sarah Ahmad",
+        "leaveType": "Annual Leave",
+        "days": 4
+      },
+      "isRead": true,
+      "createdAt": "2026-10-10T09:30:00"
+    },
+    {
+      "id": "SK9PLlIEE80",
+      "title": "New Leave Request",
+      "message": "Sarah Ahmad submitted a sick leave request for 1 day(s).",
+      "type": "leave-request",
+      "relatedId": "2O-wWcU25Us",
+      "audience": "admin",
+      "params": {
+        "employeeName": "Sarah Ahmad",
+        "leaveType": "Sick Leave",
+        "days": 1
+      },
+      "isRead": true,
+      "createdAt": "2026-10-19T11:32:13.185Z"
+    },
+    {
+      "id": "uosxny9I7Dc",
+      "title": "Leave Request Approved",
+      "message": "Your sick leave request for 1 day(s) was approved.",
+      "type": "leave-approved",
+      "relatedId": "2O-wWcU25Us",
+      "audience": "employee",
+      "recipientEmployeeId": "1",
+      "params": {
+        "employeeName": "Sarah Ahmad",
+        "leaveType": "Sick Leave",
+        "days": 1
+      },
+      "isRead": false,
+      "createdAt": "2026-10-19T11:34:59.745Z"
+    },
+    {
+      "id": "jPy-vMmtXDQ",
+      "title": "New Account Request",
+      "message": "غادة احمد signed up and is waiting for your approval.",
+      "type": "account-request",
+      "relatedId": "Wmfaf1OPgMI",
+      "audience": "admin",
+      "params": {
+        "employeeName": "غادة احمد"
+      },
+      "isRead": true,
+      "createdAt": "2026-10-19T15:04:38.811Z"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}

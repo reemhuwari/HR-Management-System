@@ -1,0 +1,252 @@
+<div class="employee-edit-page">
+
+  <!-- Loading -->
+  <div class="loading-state" *ngIf="isLoading">
+    <div class="spinner"></div>
+    <p>{{ 'EMPLOYEE_EDIT.LOADING' | translate }}</p>
+  </div>
+
+  <!-- Error -->
+  <div class="error-state" *ngIf="!isLoading && hasError">
+
+    <div class="error-icon">
+      <svg viewBox="0 0 24 24">
+        <path d="M12 9v4M12 17h.01M10.29 3.86l-7.36 12.75A2 2 0 004.66 20h14.68a2 2 0 001.73-3L13.71 4.25a2 2 0 00-3.42-.39z" />
+      </svg>
+    </div>
+
+    <h2>{{ 'EMPLOYEE_DETAILS.NOT_FOUND_TITLE' | translate }}</h2>
+    <p>{{ 'EMPLOYEE_EDIT.NOT_FOUND_DESC' | translate }}</p>
+
+    <button class="back-button" (click)="goBack()">
+      {{ 'EMPLOYEE_EDIT.BACK' | translate }}
+    </button>
+
+  </div>
+
+  <!-- Content -->
+  <ng-container *ngIf="!isLoading && !hasError">
+
+    <!-- Header -->
+    <div class="page-header">
+      <div>
+        <button class="back-link" type="button" (click)="goBack()">
+          <svg viewBox="0 0 24 24">
+            <path d="M19 12H5M12 19l-7-7 7-7" />
+          </svg>
+          {{ 'EMPLOYEE_EDIT.BACK' | translate }}
+        </button>
+
+        <div class="title-area">
+          <h1>{{ 'EMPLOYEE_EDIT.TITLE' | translate }}</h1>
+          <p>{{ 'EMPLOYEE_EDIT.SUBTITLE' | translate }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Form Card -->
+    <section class="form-card">
+
+      <div class="card-header">
+        <div>
+          <h2>{{ 'EMPLOYEE_EDIT.FORM_TITLE' | translate }}</h2>
+          <p>{{ 'EMPLOYEE_EDIT.FORM_DESC' | translate }}</p>
+        </div>
+
+        <div class="employee-code">{{ employee.employeeId }}</div>
+      </div>
+
+      <form #employeeForm="ngForm" (ngSubmit)="saveChanges()" novalidate>
+
+        <!-- Personal Information -->
+        <div class="form-section">
+
+          <div class="section-heading">
+            <h3>{{ 'EMPLOYEE_EDIT.PERSONAL' | translate }}</h3>
+            <p>{{ 'EMPLOYEE_EDIT.PERSONAL_DESC' | translate }}</p>
+          </div>
+
+          <div class="form-grid">
+
+            <div class="form-group">
+              <label for="firstName">{{ 'LABELS.FIRST_NAME' | translate }}</label>
+              <input
+                id="firstName"
+                name="firstName"
+                type="text"
+                [(ngModel)]="employee.firstName"
+                required
+                [placeholder]="'EMPLOYEE_EDIT.PH_FIRST_NAME' | translate"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="lastName">{{ 'LABELS.LAST_NAME' | translate }}</label>
+              <input
+                id="lastName"
+                name="lastName"
+                type="text"
+                [(ngModel)]="employee.lastName"
+                required
+                [placeholder]="'EMPLOYEE_EDIT.PH_LAST_NAME' | translate"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="email">{{ 'LABELS.EMAIL' | translate }}</label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                [(ngModel)]="employee.email"
+                required
+                placeholder="employee@example.com"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="phone">{{ 'LABELS.PHONE' | translate }}</label>
+              <input
+                id="phone"
+                name="phone"
+                type="tel"
+                dir="ltr"
+                [(ngModel)]="employee.phone"
+                required
+                placeholder="+962 79 000 0000"
+              />
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- Employment Information -->
+        <div class="form-section">
+
+          <div class="section-heading">
+            <h3>{{ 'EMPLOYEE_EDIT.EMPLOYMENT' | translate }}</h3>
+            <p>{{ 'EMPLOYEE_EDIT.EMPLOYMENT_DESC' | translate }}</p>
+          </div>
+
+          <div class="form-grid">
+
+            <div class="form-group">
+              <label for="department">{{ 'LABELS.DEPARTMENT' | translate }}</label>
+
+              <select
+                id="department"
+                name="department"
+                [(ngModel)]="employee.department"
+                required
+              >
+                <option value="">{{ 'EMPLOYEE_EDIT.SELECT_DEPARTMENT' | translate }}</option>
+                <option value="Human Resources">{{ 'DEPARTMENT_NAMES.HUMAN_RESOURCES' | translate }}</option>
+                <option value="Engineering">{{ 'DEPARTMENT_NAMES.ENGINEERING' | translate }}</option>
+                <option value="Finance">{{ 'DEPARTMENT_NAMES.FINANCE' | translate }}</option>
+                <option value="Marketing">{{ 'DEPARTMENT_NAMES.MARKETING' | translate }}</option>
+                <option value="Sales">{{ 'DEPARTMENT_NAMES.SALES' | translate }}</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="position">{{ 'LABELS.POSITION' | translate }}</label>
+              <input
+                id="position"
+                name="position"
+                type="text"
+                [(ngModel)]="employee.position"
+                required
+                [placeholder]="'EMPLOYEE_EDIT.PH_POSITION' | translate"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="status">{{ 'EMPLOYEE_EDIT.EMPLOYMENT_STATUS' | translate }}</label>
+
+              <select
+                id="status"
+                name="status"
+                [(ngModel)]="employee.status"
+                required
+              >
+                <option value="active">{{ 'STATUS.ACTIVE' | translate }}</option>
+                <option value="inactive">{{ 'STATUS.INACTIVE' | translate }}</option>
+                <option value="on-leave">{{ 'STATUS.ON_LEAVE' | translate }}</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="hireDate">{{ 'LABELS.HIRE_DATE' | translate }}</label>
+              <input
+                id="hireDate"
+                name="hireDate"
+                type="date"
+                [(ngModel)]="employee.hireDate"
+                required
+              />
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="form-section">
+
+          <div class="section-heading">
+            <h3>{{ 'EMPLOYEE_EDIT.PROFILE_IMAGE' | translate }}</h3>
+            <p>{{ 'EMPLOYEE_EDIT.PROFILE_IMAGE_DESC' | translate }}</p>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="avatar">{{ 'EMPLOYEE_EDIT.AVATAR_URL' | translate }}</label>
+            <input
+              id="avatar"
+              name="avatar"
+              type="url"
+              [(ngModel)]="employee.avatar"
+              placeholder="https://example.com/avatar.jpg"
+            />
+          </div>
+
+        </div>
+
+        <div class="success-message" *ngIf="saveSuccess">
+          <svg viewBox="0 0 24 24">
+            <path d="M20 6L9 17l-5-5" />
+          </svg>
+          {{ 'EMPLOYEE_EDIT.SUCCESS' | translate }}
+        </div>
+
+        <div class="form-actions">
+
+          <button
+            type="button"
+            class="cancel-button"
+            (click)="cancel()"
+            [disabled]="isSaving"
+          >
+            {{ 'COMMON.CANCEL' | translate }}
+          </button>
+
+          <button
+            type="submit"
+            class="save-button"
+            [disabled]="isSaving || employeeForm.invalid"
+          >
+            <span class="button-spinner" *ngIf="isSaving"></span>
+
+            <span>
+              {{ (isSaving ? 'EMPLOYEE_EDIT.SAVING_CHANGES' : 'COMMON.SAVE_CHANGES') | translate }}
+            </span>
+          </button>
+
+        </div>
+
+      </form>
+
+    </section>
+
+  </ng-container>
+
+</div>

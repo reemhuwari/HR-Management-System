@@ -1,0 +1,84 @@
+
+<div class="edit-page">
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">{{ 'EDIT.ACCOUNT_SETTINGS' | translate }}</p>
+      <h1>{{ 'EDIT.TITLE' | translate }}</h1>
+      <p class="subtitle">{{ 'EDIT.SUBTITLE' | translate }}</p>
+    </div>
+  </header>
+
+  <form class="edit-card" [formGroup]="form" (ngSubmit)="saveChanges()">
+    <div class="card-heading">
+      <div class="heading-icon">✎</div>
+      <div>
+        <h2>{{ 'EDIT.PERSONAL_INFO' | translate }}</h2>
+        <p>{{ 'EDIT.DESCRIPTION' | translate }}</p>
+      </div>
+    </div>
+
+    <div class="form-grid">
+      <div class="form-field">
+        <label for="firstName">{{ 'EDIT.FIRST_NAME' | translate }} *</label>
+        <input id="firstName" type="text" formControlName="firstName"
+          autocomplete="given-name" placeholder="'EDIT.ENTER_FIRST_NAME' | translate" />
+        <small class="field-error"
+          *ngIf="form.controls.firstName.touched && form.controls.firstName.invalid">
+          Enter a first name (maximum 50 characters).
+        </small>
+      </div>
+
+      <div class="form-field">
+        <label for="lastName">{{ 'EDIT.LAST_NAME' | translate }} *</label>
+        <input id="lastName" type="text" formControlName="lastName"
+          autocomplete="family-name" placeholder="'EDIT.ENTER_LAST_NAME' | translate" />
+        <small class="field-error"
+          *ngIf="form.controls.lastName.touched && form.controls.lastName.invalid">
+          Enter a last name (maximum 50 characters).
+        </small>
+      </div>
+
+      <div class="form-field full-width">
+        <label for="email">{{ 'EDIT.EMAIL' | translate }} *</label>
+        <input id="email" type="email" formControlName="email"
+          autocomplete="email" placeholder="'EDIT.ENTER_EMAIL' | translate" />
+        <small class="field-error"
+          *ngIf="form.controls.email.touched && form.controls.email.invalid">
+          Enter a valid email address.
+        </small>
+      </div>
+
+      <div class="form-field">
+        <label for="department">{{ 'EDIT.DEPARTMENT' | translate }}</label>
+        <input id="department" type="text" formControlName="department"
+          placeholder="'EDIT.ENTER_DEPARTMENT' | translate" />
+      </div>
+
+      <div class="form-field">
+        <label for="position">{{ 'EDIT.POSITION' | translate }}</label>
+        <input id="position" type="text" formControlName="position"
+          placeholder="'EDIT.ENTER_POSITION' | translate" />
+      </div>
+    </div>
+
+    <p class="notice">
+     {{ 'EDIT.PASSWORD_NOTICE' | translate }}
+    </p>
+
+    <div class="feedback success" *ngIf="successMessage" role="status">
+      {{ 'EDIT.SUCCESS' | translate }}
+    </div>
+
+    <div class="feedback error" *ngIf="errorMessage" role="alert">
+      {{ errorMessage }}
+    </div>
+
+    <div class="form-actions">
+      <a class="cancel-button" routerLink="/profile"> {{ 'COMMON.CANCEL' | translate }}</a>
+
+      <button class="save-button" type="submit" [disabled]="saving">
+        {{ (saving ? 'COMMON.SAVING' : 'COMMON.SAVE_CHANGES') | translate }}
+      </button>
+    </div>
+  </form>
+</div>

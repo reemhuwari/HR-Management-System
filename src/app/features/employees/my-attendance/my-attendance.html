@@ -1,0 +1,200 @@
+<div class="employee-page">
+
+  @if (isLoading) {
+
+    <div class="state-card loading-state" role="status">
+      <span class="spinner"></span>
+      <p>{{ 'COMMON.LOADING' | translate }}</p>
+    </div>
+
+  } @else if (hasError) {
+
+    <div class="state-card error-state" role="alert">
+      <h2>{{ 'EMP_COMMON.ERR_LOAD' | translate }}</h2>
+      <button type="button" class="primary-btn" (click)="load()">
+        {{ 'COMMON.TRY_AGAIN' | translate }}
+      </button>
+    </div>
+
+  } @else if (!employee) {
+
+    <div class="state-card empty-state">
+      <h2>{{ 'EMP_COMMON.NO_RECORD_TITLE' | translate }}</h2>
+      <p>{{ 'EMP_COMMON.NO_RECORD_DESC' | translate }}</p>
+    </div>
+
+  } @else {
+
+    <section class="page-header">
+      <div>
+        <span class="eyebrow">{{ 'EMP_DASHBOARD.EYEBROW' | translate }}</span>
+        <h1>{{ 'EMP_ATTENDANCE.TITLE' | translate }}</h1>
+        <p>{{ 'EMP_ATTENDANCE.SUBTITLE' | translate }}</p>
+      </div>
+    </section>
+
+    @if (successMessage) {
+      <div class="alert success-alert" role="status">{{ successMessage }}</div>
+    }
+
+    @if (errorMessage) {
+      <div class="alert error-alert" role="alert">{{ errorMessage }}</div>
+    }
+
+    <!-- Today -->
+    <section class="today-card">
+      <div class="today-info">
+        <span class="today-label">{{ 'EMP_ATTENDANCE.TODAY' | translate }} · {{ formatDate(today) }}</span>
+
+        <strong class="today-status">{{ todayStatusLabel }}</strong>
+
+        <div class="times">
+          <span>{{ 'LABELS.CHECK_IN' | translate }}
+            <b>{{ todayRecord?.checkIn || '—' }}</b></span>
+          <span>{{ 'LABELS.CHECK_OUT' | translate }}
+            <b>{{ todayRecord?.checkOut || '—' }}</b></span>
+        </div>
+      </div>
+
+      <div class="today-action">
+        @switch (todayState) {
+          @case ('idle') {
+            <button
+              type="button"
+              class="primary-btn big"
+              [disabled]="isProcessing"
+              (click)="checkIn()"
+            >
+              {{ (isProcessing ? 'EMP_ATTENDANCE.PROCESSING' : 'EMP_ATTENDANCE.CHECK_IN') | translate }}
+            </button>
+          }
+          @case ('working') {
+            <button
+              type="button"
+              class="primary-btn big checkout"
+              [disabled]="isProcessing"
+              (click)="checkOut()"
+            >
+              {{ (isProcessing ? 'EMP_ATTENDANCE.PROCESSING' : 'EMP_ATTENDANCE.CHECK_OUT') | translate }}
+            </button>
+          }
+          @case ('done') {
+            <span class="hint ok">{{ 'EMP_ATTENDANCE.COMPLETED' | translate }}</span>
+          }
+          @case ('leave') {
+            <span class="hint">{{ 'EMP_ATTENDANCE.ON_LEAVE_TODAY' | translate }}</span>
+          }
+          @case ('unavailable') {
+            <span class="hint">{{ 'EMP_ATTENDANCE.UNAVAILABLE' | translate }}</span>
+          }
+        }
+      </div>
+    </section>
+
+    <!-- Month stats -->
+    <section class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon present">
+          <svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5" /></svg>
+        </div>
+        <div class="stat-content">
+          <span>{{ 'EMP_ATTENDANCE.PRESENT_DAYS' | translate }}</span>
+          <strong>{{ presentDays }}</strong>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon late">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></svg>
+        </div>
+        <div class="stat-content">
+          <span>{{ 'EMP_ATTENDANCE.LATE_DAYS' | translate }}</span>
+          <strong>{{ lateDays }}</strong>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon absent">
+          <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" /></svg>
+        </div>
+        <div class="stat-content">
+          <span>{{ 'EMP_ATTENDANCE.ABSENT_DAYS' | translate }}</span>
+          <strong>{{ absentDays }}</strong>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></svg>
+        </div>
+        <div class="stat-content">
+          <span>{{ 'EMP_ATTENDANCE.TOTAL_HOURS' | translate }}</span>
+          <strong>{{ totalHours.toFixed(1) }}</strong>
+        </div>
+      </div>
+    </section>
+
+    <!-- History -->
+    <section class="content-card">
+
+      <div class="card-header">
+        <div>
+          <h2>{{ 'EMP_ATTENDANCE.HISTORY' | translate }}</h2>
+          <p>{{ 'EMP_ATTENDANCE.HISTORY_DESC' | translate }}</p>
+        </div>
+
+        <input
+          type="month"
+          class="month-input"
+          [(ngModel)]="selectedMonth"
+          [attr.aria-label]="'EMP_ATTENDANCE.MONTH' | translate"
+        />
+      </div>
+
+      @if (monthRecords.length === 0) {
+        <div class="empty-state">
+          <p>{{ 'EMP_ATTENDANCE.EMPTY' | translate }}</p>
+        </div>
+      } @else {
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>{{ 'LABELS.DATE' | translate }}</th>
+                <th>{{ 'LABELS.CHECK_IN' | translate }}</th>
+                <th>{{ 'LABELS.CHECK_OUT' | translate }}</th>
+                <th>{{ 'LABELS.WORK_HOURS' | translate }}</th>
+                <th>{{ 'COMMON.STATUS' | translate }}</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              @for (record of monthRecords; track record.id) {
+                <tr>
+                  <td><strong>{{ formatDate(record.date) }}</strong></td>
+                  <td>{{ record.checkIn || '—' }}</td>
+                  <td>{{ record.checkOut || '—' }}</td>
+                  <td>{{ formatHours(record.workHours) }}</td>
+                  <td>
+                    <span
+                      class="status-badge"
+                      [class.present]="record.status === 'present'"
+                      [class.late]="record.status === 'late'"
+                      [class.absent]="record.status === 'absent'"
+                      [class.on-leave]="record.status === 'on-leave'"
+                    >
+                      {{ getStatusLabel(record.status) }}
+                    </span>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+
+    </section>
+
+  }
+
+</div>

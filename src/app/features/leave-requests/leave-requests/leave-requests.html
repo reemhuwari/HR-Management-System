@@ -1,0 +1,239 @@
+
+<section class="page">
+
+  <div class="page-header">
+    <div class="page-heading">
+      <h1>{{ 'LEAVE_REQUESTS.TITLE' | translate }}</h1>
+      <p>{{ 'LEAVE_REQUESTS.DESCRIPTION' | translate }}</p>
+    </div>
+
+    <button
+      type="button"
+      class="new-request-button"
+      routerLink="/leave-requests/new"
+    >
+      <span aria-hidden="true">＋</span>
+      {{ 'LEAVE_REQUESTS.NEW_REQUEST' | translate }}
+    </button>
+  </div>
+
+  @if (successMessage) {
+    <div class="alert success-alert" role="status">
+      <span aria-hidden="true">✓</span>
+      {{ successMessage }}
+    </div>
+  }
+
+  @if (errorMessage) {
+    <div class="alert error-alert" role="alert">
+      <span aria-hidden="true">!</span>
+      {{ errorMessage }}
+    </div>
+  }
+
+  <div class="stats">
+    <div class="stat-card">
+      <span>{{ 'LEAVE_REQUESTS.PENDING_REQUESTS' | translate }}</span>
+      <strong>{{ pendingCount }}</strong>
+    </div>
+
+    <div class="stat-card">
+      <span>{{ 'LEAVE_REQUESTS.APPROVED' | translate }}</span>
+      <strong>{{ approvedCount }}</strong>
+    </div>
+
+    <div class="stat-card">
+      <span>{{ 'LEAVE_REQUESTS.REJECTED' | translate }}</span>
+      <strong>{{ rejectedCount }}</strong>
+    </div>
+  </div>
+
+  <div class="filters">
+    <div class="search">
+      <span aria-hidden="true">⌕</span>
+
+      <input
+        type="text"
+        [placeholder]="'LEAVE_REQUESTS.SEARCH' | translate"
+        [attr.aria-label]="'LEAVE_REQUESTS.SEARCH_LABEL' | translate"
+        [(ngModel)]="searchTerm"
+      />
+    </div>
+
+    <select
+      [attr.aria-label]="'LEAVE_REQUESTS.ALL_STATUSES' | translate"
+      [(ngModel)]="selectedStatus"
+    >
+      <option value="all">
+        {{ 'LEAVE_REQUESTS.ALL_STATUSES' | translate }}
+      </option>
+      <option value="pending">
+        {{ 'LEAVE_REQUESTS.PENDING' | translate }}
+      </option>
+      <option value="approved">
+        {{ 'LEAVE_REQUESTS.APPROVED' | translate }}
+      </option>
+      <option value="rejected">
+        {{ 'LEAVE_REQUESTS.REJECTED' | translate }}
+      </option>
+    </select>
+
+    <select
+      [attr.aria-label]="'LEAVE_REQUESTS.ALL_TYPES' | translate"
+      [(ngModel)]="selectedType"
+    >
+      <option value="all">
+        {{ 'LEAVE_REQUESTS.ALL_TYPES' | translate }}
+      </option>
+      <option value="Annual Leave">
+        {{ 'LEAVE_FORM.ANNUAL' | translate }}
+      </option>
+      <option value="Sick Leave">
+        {{ 'LEAVE_FORM.SICK' | translate }}
+      </option>
+      <option value="Personal Leave">
+        {{ 'LEAVE_FORM.PERSONAL' | translate }}
+      </option>
+    </select>
+  </div>
+
+  <div class="table-card">
+    <div class="table-header">
+      <div>
+        <h2>{{ 'LEAVE_REQUESTS.TITLE' | translate }}</h2>
+        <span>
+          {{ filteredRequests.length }}
+          {{ 'LEAVE_REQUESTS.REQUESTS' | translate }}
+        </span>
+      </div>
+    </div>
+
+    @if (isLoading) {
+      <div class="loading" role="status">
+        <span class="spinner"></span>
+        <span>{{ 'LEAVE_REQUESTS.LOADING' | translate }}</span>
+      </div>
+    } @else if (loadError) {
+      <div class="empty error-state">
+        <p>{{ loadError }}</p>
+
+        <button
+          type="button"
+          class="retry-button"
+          (click)="loadRequests()"
+        >
+          {{ 'LEAVE_REQUESTS.TRY_AGAIN' | translate }}
+        </button>
+      </div>
+    } @else {
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>{{ 'LEAVE_REQUESTS.EMPLOYEE' | translate }}</th>
+              <th>{{ 'LEAVE_REQUESTS.LEAVE_TYPE' | translate }}</th>
+              <th>{{ 'LEAVE_REQUESTS.DATES' | translate }}</th>
+              <th>{{ 'LEAVE_REQUESTS.DAYS' | translate }}</th>
+              <th>{{ 'LEAVE_REQUESTS.REASON' | translate }}</th>
+              <th>{{ 'LEAVE_REQUESTS.STATUS' | translate }}</th>
+              <th>{{ 'LEAVE_REQUESTS.ACTION' | translate }}</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (request of filteredRequests; track request.id) {
+              <tr>
+                <td>
+                  <strong class="employee-name">
+                    {{ request.employeeName }}
+                  </strong>
+                </td>
+
+                <td>
+                  {{
+                    request.type === 'Annual Leave'
+                      ? ('LEAVE_FORM.ANNUAL' | translate)
+                      : request.type === 'Sick Leave'
+                        ? ('LEAVE_FORM.SICK' | translate)
+                        : ('LEAVE_FORM.PERSONAL' | translate)
+                  }}
+                </td>
+
+                <td>
+                  <span class="date">
+                    {{ request.startDate | date:'MMM d, y' }}
+                  </span>
+                  <span class="date">
+                    {{ 'LEAVE_REQUESTS.TO' | translate }}
+                    {{ request.endDate | date:'MMM d, y' }}
+                  </span>
+                </td>
+
+                <td>{{ request.days }}</td>
+
+                <td>
+                  <span class="reason">{{ request.reason }}</span>
+                </td>
+
+                <td>
+                  <span
+                    class="status"
+                    [class.pending]="request.status === 'pending'"
+                    [class.approved]="request.status === 'approved'"
+                    [class.rejected]="request.status === 'rejected'"
+                  >
+                    {{
+                      request.status === 'pending'
+                        ? ('LEAVE_REQUESTS.PENDING' | translate)
+                        : request.status === 'approved'
+                          ? ('LEAVE_REQUESTS.APPROVED' | translate)
+                          : ('LEAVE_REQUESTS.REJECTED' | translate)
+                    }}
+                  </span>
+                </td>
+
+                <td>
+                  @if (request.status === 'pending') {
+                    <div class="actions">
+                      <button
+                        type="button"
+                        class="approve"
+                        [disabled]="isUpdating(request)"
+                        (click)="updateStatus(request, 'approved')"
+                      >
+                        @if (isUpdating(request)) {
+                          {{ 'LEAVE_REQUESTS.SAVING' | translate }}
+                        } @else {
+                          {{ 'LEAVE_REQUESTS.APPROVE' | translate }}
+                        }
+                      </button>
+
+                      <button
+                        type="button"
+                        class="reject"
+                        [disabled]="isUpdating(request)"
+                        (click)="updateStatus(request, 'rejected')"
+                      >
+                        {{ 'LEAVE_REQUESTS.REJECT' | translate }}
+                      </button>
+                    </div>
+                  } @else {
+                    <span class="completed">
+                      {{ 'LEAVE_REQUESTS.COMPLETED' | translate }}
+                    </span>
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      @if (filteredRequests.length === 0) {
+        <div class="empty">
+          {{ 'LEAVE_REQUESTS.EMPTY' | translate }}
+        </div>
+      }
+    }
+  </div>
+</section>

@@ -1,0 +1,379 @@
+<div class="dashboard-page">
+
+  <!-- Loading -->
+  <div class="loading-state" *ngIf="isLoading">
+    <div class="spinner"></div>
+    <p>{{ 'DASHBOARD.LOADING' | translate }}</p>
+  </div>
+
+  <!-- Error -->
+  <div class="error-state" *ngIf="!isLoading && hasError">
+    <div class="error-icon">
+      <svg viewBox="0 0 24 24">
+        <path d="M12 9v4M12 17h.01M10.29 3.86l-7.36 12.75A2 2 0 004.66 20h14.68a2 2 0 001.73-3L13.71 4.25a2 2 0 00-3.42-.39z" />
+      </svg>
+    </div>
+
+    <h2>{{ 'DASHBOARD.LOAD_ERROR_TITLE' | translate }}</h2>
+    <p>{{ 'DASHBOARD.LOAD_ERROR_MESSAGE' | translate }}</p>
+
+    <button type="button" class="retry-button" (click)="loadDashboard()">
+      {{ 'COMMON.TRY_AGAIN' | translate }}
+    </button>
+  </div>
+
+  <!-- Dashboard -->
+  <ng-container *ngIf="!isLoading && !hasError">
+
+    <!-- Header -->
+    <section class="dashboard-header">
+      <div class="welcome-section">
+        <span class="eyebrow">{{ formatDate(today) }}</span>
+
+        <h1>
+          {{ getGreeting() }}{{ 'DASHBOARD.COMMA' | translate }}
+          {{ currentUser?.firstName || ('DASHBOARD.ADMIN_FALLBACK' | translate) }} 👋
+        </h1>
+
+        <p>{{ 'DASHBOARD.WELCOME_SUBTITLE' | translate }}</p>
+      </div>
+
+      <a routerLink="/employees" class="header-action">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 5v14M5 12h14" />
+        </svg>
+        {{ 'DASHBOARD.ADD_EMPLOYEE' | translate }}
+      </a>
+    </section>
+
+    <!-- Statistics -->
+    <section class="stats-grid">
+
+      <div class="stat-card">
+        <div class="stat-icon employees-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2" />
+            <circle cx="9" cy="7" r="4" />
+            <path d="M22 21v-2a4 4 0 00-3-3.87" />
+            <path d="M16 3.13a4 4 0 010 7.75" />
+          </svg>
+        </div>
+        <div class="stat-content">
+          <span class="stat-label">{{ 'DASHBOARD.TOTAL_EMPLOYEES' | translate }}</span>
+          <strong>{{ totalEmployees }}</strong>
+          <small>{{ 'DASHBOARD.ACTIVE_EMPLOYEES' | translate }}: {{ activeEmployees }}</small>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon present-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M20 6L9 17l-5-5" />
+          </svg>
+        </div>
+        <div class="stat-content">
+          <span class="stat-label">{{ 'DASHBOARD.PRESENT_TODAY' | translate }}</span>
+          <strong>{{ presentToday }}</strong>
+          <small>{{ 'DASHBOARD.CHECKED_IN' | translate }}</small>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon late-icon">
+          <svg viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="9" />
+            <path d="M12 7v5l3 2" />
+          </svg>
+        </div>
+        <div class="stat-content">
+          <span class="stat-label">{{ 'DASHBOARD.LATE_TODAY' | translate }}</span>
+          <strong>{{ lateToday }}</strong>
+          <small>{{ 'DASHBOARD.LATE_RECORDS' | translate }}</small>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon leave-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M6 2h12v20H6z" />
+            <path d="M9 6h6M9 10h6M9 14h6" />
+          </svg>
+        </div>
+        <div class="stat-content">
+          <span class="stat-label">{{ 'DASHBOARD.PENDING_LEAVES' | translate }}</span>
+          <strong>{{ pendingLeaves }}</strong>
+          <small>{{ 'DASHBOARD.WAITING_APPROVAL' | translate }}</small>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Attendance + Leave Overview -->
+    <section class="overview-grid">
+
+      <div class="overview-card">
+
+        <div class="card-header">
+          <div>
+            <h2>{{ 'DASHBOARD.TODAY_ATTENDANCE' | translate }}</h2>
+            <p>{{ 'DASHBOARD.TODAY_ATTENDANCE_DESC' | translate }}</p>
+          </div>
+
+          <a routerLink="/attendance" class="view-all">
+            {{ 'LABELS.VIEW_ALL' | translate }}
+          </a>
+        </div>
+
+        <div class="attendance-summary">
+
+          <div class="summary-item">
+            <div class="summary-top">
+              <span class="summary-dot present"></span>
+              <span>{{ 'STATUS.PRESENT' | translate }}</span>
+            </div>
+            <strong>{{ presentToday }}</strong>
+          </div>
+
+          <div class="summary-item">
+            <div class="summary-top">
+              <span class="summary-dot late"></span>
+              <span>{{ 'STATUS.LATE' | translate }}</span>
+            </div>
+            <strong>{{ lateToday }}</strong>
+          </div>
+
+          <div class="summary-item">
+            <div class="summary-top">
+              <span class="summary-dot leave"></span>
+              <span>{{ 'STATUS.ON_LEAVE' | translate }}</span>
+            </div>
+            <strong>{{ onLeaveToday }}</strong>
+          </div>
+
+          <div class="summary-item">
+            <div class="summary-top">
+              <span class="summary-dot absent"></span>
+              <span>{{ 'STATUS.ABSENT' | translate }}</span>
+            </div>
+            <strong>{{ absentToday }}</strong>
+          </div>
+
+        </div>
+
+        <div class="attendance-progress">
+          <div class="progress-header">
+            <span>{{ 'DASHBOARD.COVERAGE' | translate }}</span>
+            <strong>{{ attendanceCoverage }}%</strong>
+          </div>
+
+          <div class="progress-bar">
+            <div class="progress-fill" [style.width.%]="attendanceCoverage"></div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="overview-card">
+
+        <div class="card-header">
+          <div>
+            <h2>{{ 'DASHBOARD.LEAVE_OVERVIEW' | translate }}</h2>
+            <p>{{ 'DASHBOARD.LEAVE_OVERVIEW_DESC' | translate }}</p>
+          </div>
+
+          <a routerLink="/leave-requests" class="view-all">
+            {{ 'LABELS.VIEW_ALL' | translate }}
+          </a>
+        </div>
+
+        <div class="leave-overview">
+
+          <div class="leave-overview-item pending">
+            <div class="leave-icon-small">
+              <svg viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="9" />
+                <path d="M12 7v5l3 2" />
+              </svg>
+            </div>
+            <div>
+              <span>{{ 'STATUS.PENDING' | translate }}</span>
+              <strong>{{ pendingLeaves }}</strong>
+            </div>
+          </div>
+
+          <div class="leave-overview-item approved">
+            <div class="leave-icon-small">
+              <svg viewBox="0 0 24 24">
+                <path d="M20 6L9 17l-5-5" />
+              </svg>
+            </div>
+            <div>
+              <span>{{ 'STATUS.APPROVED' | translate }}</span>
+              <strong>{{ approvedLeaves }}</strong>
+            </div>
+          </div>
+
+          <div class="leave-overview-item rejected">
+            <div class="leave-icon-small">
+              <svg viewBox="0 0 24 24">
+                <path d="M18 6L6 18M6 6l12 12" />
+              </svg>
+            </div>
+            <div>
+              <span>{{ 'STATUS.REJECTED' | translate }}</span>
+              <strong>{{ rejectedLeaves }}</strong>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- Recent Attendance -->
+    <section class="content-card">
+
+      <div class="card-header">
+        <div>
+          <h2>{{ 'DASHBOARD.RECENT_ATTENDANCE' | translate }}</h2>
+          <p>{{ 'DASHBOARD.RECENT_ATTENDANCE_DESC' | translate }}</p>
+        </div>
+
+        <a routerLink="/attendance" class="view-all">
+          {{ 'LABELS.VIEW_ALL' | translate }}
+        </a>
+      </div>
+
+      <div class="empty-state" *ngIf="recentAttendance.length === 0">
+        <p>{{ 'DASHBOARD.NO_ATTENDANCE' | translate }}</p>
+      </div>
+
+      <div class="table-wrapper" *ngIf="recentAttendance.length > 0">
+        <table>
+          <thead>
+            <tr>
+              <th>{{ 'LABELS.EMPLOYEE' | translate }}</th>
+              <th>{{ 'LABELS.DATE' | translate }}</th>
+              <th>{{ 'LABELS.CHECK_IN' | translate }}</th>
+              <th>{{ 'LABELS.CHECK_OUT' | translate }}</th>
+              <th>{{ 'LABELS.WORK_HOURS' | translate }}</th>
+              <th>{{ 'COMMON.STATUS' | translate }}</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let record of recentAttendance">
+
+              <td>
+                <div class="employee-cell">
+                  <div class="employee-avatar">
+                    {{ getEmployeeInitials(record.employeeId) }}
+                  </div>
+                  <div>
+                    <strong>{{ getEmployeeName(record.employeeId) }}</strong>
+                    <span>{{ 'LABELS.EMPLOYEE' | translate }}</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>{{ formatDate(record.date) }}</td>
+              <td>{{ record.checkIn || '—' }}</td>
+              <td>{{ record.checkOut || '—' }}</td>
+              <td>{{ record.workHours.toFixed(2) }} {{ 'LABELS.HRS' | translate }}</td>
+
+              <td>
+                <span
+                  class="status-badge"
+                  [class.present]="record.status === 'present'"
+                  [class.late]="record.status === 'late'"
+                  [class.absent]="record.status === 'absent'"
+                  [class.on-leave]="record.status === 'on-leave'"
+                >
+                  {{ getAttendanceStatusLabel(record.status) }}
+                </span>
+              </td>
+
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </section>
+
+    <!-- Recent Leave Requests -->
+    <section class="content-card">
+
+      <div class="card-header">
+        <div>
+          <h2>{{ 'DASHBOARD.RECENT_LEAVES' | translate }}</h2>
+          <p>{{ 'DASHBOARD.RECENT_LEAVES_DESC' | translate }}</p>
+        </div>
+
+        <a routerLink="/leave-requests" class="view-all">
+          {{ 'LABELS.VIEW_ALL' | translate }}
+        </a>
+      </div>
+
+      <div class="empty-state" *ngIf="recentLeaveRequests.length === 0">
+        <p>{{ 'DASHBOARD.NO_LEAVES' | translate }}</p>
+      </div>
+
+      <div class="table-wrapper" *ngIf="recentLeaveRequests.length > 0">
+        <table>
+          <thead>
+            <tr>
+              <th>{{ 'LABELS.EMPLOYEE' | translate }}</th>
+              <th>{{ 'LABELS.LEAVE_TYPE' | translate }}</th>
+              <th>{{ 'LABELS.DATES' | translate }}</th>
+              <th>{{ 'LABELS.DAYS' | translate }}</th>
+              <th>{{ 'COMMON.STATUS' | translate }}</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let request of recentLeaveRequests">
+
+              <td>
+                <div class="employee-cell">
+                  <div class="employee-avatar">
+                    {{ request.employeeName.charAt(0) }}
+                  </div>
+                  <div>
+                    <strong>{{ request.employeeName }}</strong>
+                    <span>{{ 'DASHBOARD.LEAVE_REQUEST' | translate }}</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>{{ getLeaveTypeLabel(request.type) }}</td>
+
+              <td>
+                {{ formatDate(request.startDate) }}
+                -
+                {{ formatDate(request.endDate) }}
+              </td>
+
+              <td>{{ request.days }}</td>
+
+              <td>
+                <span
+                  class="status-badge"
+                  [class.pending]="request.status === 'pending'"
+                  [class.approved]="request.status === 'approved'"
+                  [class.rejected]="request.status === 'rejected'"
+                >
+                  {{ getLeaveStatusLabel(request.status) }}
+                </span>
+              </td>
+
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </section>
+
+  </ng-container>
+
+</div>

@@ -1,0 +1,238 @@
+<div class="notifications-page">
+  <header class="page-header">
+    <div class="header-copy">
+      <a [routerLink]="homeRoute" class="back-link">
+        ← {{ 'NOTIFICATIONS.BACK' | translate }}
+      </a>
+
+      <h1>{{ 'NOTIFICATIONS.TITLE' | translate }}</h1>
+      <p>{{ 'NOTIFICATIONS.DESCRIPTION' | translate }}</p>
+    </div>
+
+    <button
+      class="btn btn-outline"
+      type="button"
+      (click)="markAllAsRead()"
+      [disabled]="unreadCount === 0 || isUpdating"
+    >
+      {{
+        isUpdating
+          ? ('NOTIFICATIONS.UPDATING' | translate)
+          : ('NOTIFICATIONS.MARK_ALL_READ' | translate)
+      }}
+    </button>
+  </header>
+
+  <div class="alert alert-error" *ngIf="errorMessage" role="alert">
+    <span>{{ errorMessage | translate }}</span>
+    <button
+      type="button"
+      (click)="clearMessages()"
+      [attr.aria-label]="'NOTIFICATIONS.DISMISS_ERROR' | translate"
+    >×</button>
+  </div>
+
+  <div class="alert alert-success" *ngIf="successMessage" role="status">
+    <span>{{ successMessage | translate }}</span>
+    <button
+      type="button"
+      (click)="clearMessages()"
+      [attr.aria-label]="'NOTIFICATIONS.DISMISS_MESSAGE' | translate"
+    >×</button>
+  </div>
+
+  <section class="stats-grid">
+    <article class="stat-card">
+      <div class="stat-icon total-icon">▤</div>
+      <div>
+        <p>{{ 'NOTIFICATIONS.TOTAL' | translate }}</p>
+        <h2>{{ notifications.length }}</h2>
+        <span>{{ 'NOTIFICATIONS.ALL_NOTIFICATIONS' | translate }}</span>
+      </div>
+    </article>
+
+    <article class="stat-card">
+      <div class="stat-icon unread-icon">●</div>
+      <div>
+        <p>{{ 'NOTIFICATIONS.UNREAD' | translate }}</p>
+        <h2>{{ unreadCount }}</h2>
+        <span>{{ 'NOTIFICATIONS.AWAITING_ATTENTION' | translate }}</span>
+      </div>
+    </article>
+
+    <article class="stat-card">
+      <div class="stat-icon read-icon">✓</div>
+      <div>
+        <p>{{ 'NOTIFICATIONS.READ' | translate }}</p>
+        <h2>{{ readCount }}</h2>
+        <span>{{ 'NOTIFICATIONS.ALREADY_REVIEWED' | translate }}</span>
+      </div>
+    </article>
+  </section>
+
+  <section class="notifications-panel">
+    <div class="panel-header">
+      <div>
+        <h2>{{ 'NOTIFICATIONS.RECENT_ACTIVITY' | translate }}</h2>
+        <p>{{ 'NOTIFICATIONS.MANAGE_DESCRIPTION' | translate }}</p>
+      </div>
+
+      <div class="filter-tabs">
+        <button
+          type="button"
+          [class.active]="activeFilter === 'all'"
+          (click)="setFilter('all')"
+        >
+          {{ 'NOTIFICATIONS.ALL' | translate }}
+          <span>{{ notifications.length }}</span>
+        </button>
+
+        <button
+          type="button"
+          [class.active]="activeFilter === 'unread'"
+          (click)="setFilter('unread')"
+        >
+          {{ 'NOTIFICATIONS.UNREAD' | translate }}
+          <span>{{ unreadCount }}</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="page-notification-loading-state" *ngIf="isLoading">
+      <span class="page-notification-spinner"></span>
+      <p>{{ 'NOTIFICATIONS.LOADING' | translate }}</p>
+    </div>
+
+    <div
+      class="page-notification-list"
+      *ngIf="!isLoading && filteredNotifications.length > 0"
+    >
+      <article
+        class="page-notification-item"
+        *ngFor="let notification of filteredNotifications; trackBy: trackById"
+        [class.unread]="!notification.isRead"
+      >
+        <div
+          class="page-notification-icon"
+          [ngClass]="'icon-' + notification.type"
+        >
+          {{ getTypeIcon(notification.type) }}
+        </div>
+
+        <div class="page-notification-content">
+          <div class="page-notification-title-row">
+            <h3>{{ notification | notificationText:'title' }}</h3>
+
+            <span
+              class="page-notification-unread-dot"
+              *ngIf="!notification.isRead"
+              [attr.title]="'NOTIFICATIONS.UNREAD' | translate"
+            ></span>
+          </div>
+
+          <p class="page-notification-message">
+            {{ notification | notificationText:'message' }}
+          </p>
+
+          <div class="page-notification-meta">
+            <span
+              class="type-label"
+              [ngClass]="'label-' + notification.type"
+            >
+              {{ getTypeLabel(notification.type) | translate }}
+            </span>
+
+            <span class="meta-dot">•</span>
+            <span>{{ formatDate(notification.createdAt) }}</span>
+          </div>
+        </div>
+
+        <div class="page-notification-actions">
+          <button
+            *ngIf="!notification.isRead"
+            class="page-notification-action-button"
+            type="button"
+            [attr.title]="'NOTIFICATIONS.MARK_READ' | translate"
+            [attr.aria-label]="'NOTIFICATIONS.MARK_READ_ARIA' | translate"
+            (click)="markAsRead(notification)"
+          >✓</button>
+
+          <span
+            *ngIf="notification.isRead"
+            class="page-notification-read-indicator"
+            [attr.title]="'NOTIFICATIONS.ALREADY_READ' | translate"
+          >✓</span>
+
+          <button
+            class="page-notification-action-button page-notification-delete-button"
+            type="button"
+            [attr.title]="'NOTIFICATIONS.DELETE' | translate"
+            [attr.aria-label]="'NOTIFICATIONS.DELETE_ARIA' | translate"
+            (click)="deleteNotification(notification)"
+          >×</button>
+        </div>
+      </article>
+    </div>
+
+    <div
+      class="page-notification-empty-state"
+      *ngIf="!isLoading && filteredNotifications.length === 0"
+    >
+      <div class="page-notification-empty-illustration">
+        <span>🔔</span>
+      </div>
+
+      <h3>
+        {{
+          activeFilter === 'unread'
+            ? ('NOTIFICATIONS.ALL_CAUGHT_UP' | translate)
+            : ('NOTIFICATIONS.NO_NOTIFICATIONS' | translate)
+        }}
+      </h3>
+
+      <p>
+        {{
+          activeFilter === 'unread'
+            ? ('NOTIFICATIONS.NO_UNREAD' | translate)
+            : ('NOTIFICATIONS.NEW_APPEAR_HERE' | translate)
+        }}
+      </p>
+
+      <button
+        *ngIf="activeFilter === 'unread' && notifications.length > 0"
+        type="button"
+        class="btn btn-outline"
+        (click)="setFilter('all')"
+      >
+        {{ 'NOTIFICATIONS.VIEW_ALL' | translate }}
+      </button>
+
+      <button
+        *ngIf="errorMessage"
+        type="button"
+        class="btn btn-outline"
+        (click)="loadNotifications()"
+      >
+        {{ 'NOTIFICATIONS.TRY_AGAIN' | translate }}
+      </button>
+    </div>
+
+    <footer
+      class="page-notification-panel-footer"
+      *ngIf="!isLoading && notifications.length > 0"
+    >
+      <span>
+        {{ 'NOTIFICATIONS.SHOWING_LABEL' | translate }}
+        {{ filteredNotifications.length }}
+        {{ 'NOTIFICATIONS.OF' | translate }}
+        {{ notifications.length }}
+        {{ 'NOTIFICATIONS.NOTIFICATIONS_LABEL' | translate }}
+      </span>
+
+      <span class="page-notification-live-indicator">
+        <span></span>
+        {{ 'NOTIFICATIONS.API_CONNECTED' | translate }}
+      </span>
+    </footer>
+  </section>
+</div>

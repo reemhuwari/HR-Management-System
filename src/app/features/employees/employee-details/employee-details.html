@@ -1,0 +1,396 @@
+<div class="employee-details-page">
+
+  <!-- Loading -->
+  <div class="loading-state" *ngIf="isLoading">
+    <div class="spinner"></div>
+    <p>{{ 'EMPLOYEE_DETAILS.LOADING' | translate }}</p>
+  </div>
+
+  <!-- Error -->
+  <div class="error-state" *ngIf="!isLoading && hasError">
+    <div class="error-icon">
+      <svg viewBox="0 0 24 24">
+        <path d="M12 9v4M12 17h.01M10.29 3.86l-7.36 12.75A2 2 0 004.66 20h14.68a2 2 0 001.73-3L13.71 4.25a2 2 0 00-3.42-.39z" />
+      </svg>
+    </div>
+
+    <h2>{{ 'EMPLOYEE_DETAILS.NOT_FOUND_TITLE' | translate }}</h2>
+    <p>{{ 'EMPLOYEE_DETAILS.NOT_FOUND_DESC' | translate }}</p>
+
+    <button class="back-button" (click)="goBack()">
+      {{ 'EMPLOYEE_DETAILS.BACK' | translate }}
+    </button>
+  </div>
+
+  <!-- Content -->
+  <ng-container *ngIf="!isLoading && !hasError && employee">
+
+    <div class="page-header">
+      <div>
+        <button class="back-link" (click)="goBack()">
+          <svg viewBox="0 0 24 24">
+            <path d="M19 12H5M12 19l-7-7 7-7" />
+          </svg>
+          {{ 'EMPLOYEE_DETAILS.BACK' | translate }}
+        </button>
+
+        <div class="title-area">
+          <h1>{{ 'EMPLOYEE_DETAILS.TITLE' | translate }}</h1>
+          <p>{{ 'EMPLOYEE_DETAILS.SUBTITLE' | translate }}</p>
+        </div>
+      </div>
+
+      <button class="edit-button" (click)="editEmployee()">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 20h9" />
+          <path d="M16.5 3.5a2.12 2.12 0 013 3L8 18l-4 1 1-4L16.5 3.5z" />
+        </svg>
+        {{ 'EMPLOYEE_DETAILS.EDIT' | translate }}
+      </button>
+    </div>
+
+    <!-- Profile Card -->
+    <section class="profile-card">
+
+      <div class="profile-main">
+
+        <div class="avatar">
+          <img *ngIf="employee.avatar" [src]="employee.avatar" [alt]="fullName" />
+          <span *ngIf="!employee.avatar">{{ initials }}</span>
+        </div>
+
+        <div class="profile-info">
+          <div class="name-row">
+            <h2>{{ fullName }}</h2>
+
+            <span
+              class="status-badge"
+              [class.status-active]="employee.status === 'active'"
+              [class.status-inactive]="employee.status === 'inactive'"
+              [class.status-leave]="employee.status === 'on-leave'"
+            >
+              {{ getStatusLabel(employee.status) }}
+            </span>
+          </div>
+
+          <p class="position">{{ employee.position }}</p>
+          <p class="employee-code">{{ employee.employeeId }}</p>
+        </div>
+
+      </div>
+
+      <div class="profile-meta">
+
+        <div class="meta-item">
+          <span class="meta-label">{{ 'LABELS.DEPARTMENT' | translate }}</span>
+          <strong>{{ getDepartmentLabel(employee.department) }}</strong>
+        </div>
+
+        <div class="meta-item">
+          <span class="meta-label">{{ 'LABELS.HIRE_DATE' | translate }}</span>
+          <strong>{{ formatDate(employee.hireDate) }}</strong>
+        </div>
+
+        <div class="meta-item">
+          <span class="meta-label">{{ 'LABELS.EMAIL' | translate }}</span>
+          <strong>{{ employee.email }}</strong>
+        </div>
+
+        <div class="meta-item">
+          <span class="meta-label">{{ 'LABELS.PHONE' | translate }}</span>
+          <strong dir="ltr" class="ltr-value">{{ employee.phone }}</strong>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- Attendance Stats -->
+    <section class="stats-grid">
+
+      <div class="stat-card">
+        <div class="stat-icon present">
+          <svg viewBox="0 0 24 24">
+            <path d="M20 6L9 17l-5-5" />
+          </svg>
+        </div>
+        <div>
+          <span>{{ 'EMPLOYEE_DETAILS.PRESENT_DAYS' | translate }}</span>
+          <strong>{{ presentDays }}</strong>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon late">
+          <svg viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="9" />
+            <path d="M12 7v5l3 2" />
+          </svg>
+        </div>
+        <div>
+          <span>{{ 'EMPLOYEE_DETAILS.LATE_DAYS' | translate }}</span>
+          <strong>{{ lateDays }}</strong>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon hours">
+          <svg viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="9" />
+            <path d="M12 7v5l3 2" />
+          </svg>
+        </div>
+        <div>
+          <span>{{ 'EMPLOYEE_DETAILS.AVG_HOURS' | translate }}</span>
+          <strong>{{ averageWorkHours.toFixed(1) }}</strong>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon leave">
+          <svg viewBox="0 0 24 24">
+            <path d="M5 4h14v16H5z" />
+            <path d="M9 8h6M9 12h6M9 16h4" />
+          </svg>
+        </div>
+        <div>
+          <span>{{ 'EMPLOYEE_DETAILS.LEAVE_REQUESTS' | translate }}</span>
+          <strong>{{ leaveRequests.length }}</strong>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Main Grid -->
+    <div class="content-grid">
+
+      <!-- Employee Information -->
+      <section class="content-card">
+
+        <div class="card-header">
+          <div>
+            <h3>{{ 'EMPLOYEE_DETAILS.INFO_TITLE' | translate }}</h3>
+            <p>{{ 'EMPLOYEE_DETAILS.INFO_DESC' | translate }}</p>
+          </div>
+        </div>
+
+        <div class="information-grid">
+
+          <div class="information-item">
+            <span>{{ 'LABELS.EMPLOYEE_ID' | translate }}</span>
+            <strong>{{ employee.employeeId }}</strong>
+          </div>
+
+          <div class="information-item">
+            <span>{{ 'LABELS.FULL_NAME' | translate }}</span>
+            <strong>{{ fullName }}</strong>
+          </div>
+
+          <div class="information-item">
+            <span>{{ 'LABELS.DEPARTMENT' | translate }}</span>
+            <strong>{{ getDepartmentLabel(employee.department) }}</strong>
+          </div>
+
+          <div class="information-item">
+            <span>{{ 'LABELS.POSITION' | translate }}</span>
+            <strong>{{ employee.position }}</strong>
+          </div>
+
+          <div class="information-item">
+            <span>{{ 'LABELS.EMAIL' | translate }}</span>
+            <strong>{{ employee.email }}</strong>
+          </div>
+
+          <div class="information-item">
+            <span>{{ 'LABELS.PHONE' | translate }}</span>
+            <strong dir="ltr" class="ltr-value">{{ employee.phone }}</strong>
+          </div>
+
+          <div class="information-item">
+            <span>{{ 'LABELS.HIRE_DATE' | translate }}</span>
+            <strong>{{ formatDate(employee.hireDate) }}</strong>
+          </div>
+
+          <div class="information-item">
+            <span>{{ 'EMPLOYEE_DETAILS.EMPLOYMENT_STATUS' | translate }}</span>
+            <strong class="capitalize">{{ getStatusLabel(employee.status) }}</strong>
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- Leave Balance -->
+      <section class="content-card">
+
+        <div class="card-header">
+          <div>
+            <h3>{{ 'EMPLOYEE_DETAILS.BALANCE_TITLE' | translate }}</h3>
+            <p>{{ 'EMPLOYEE_DETAILS.BALANCE_DESC' | translate }}</p>
+          </div>
+        </div>
+
+        <div class="balance-empty" *ngIf="!leaveBalance">
+          <div class="empty-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M6 2h12v20H6z" />
+              <path d="M9 6h6M9 10h6M9 14h4" />
+            </svg>
+          </div>
+          <p>{{ 'EMPLOYEE_DETAILS.NO_BALANCE' | translate }}</p>
+        </div>
+
+        <div class="balance-list" *ngIf="leaveBalance">
+
+          <div class="balance-item">
+            <div class="balance-label">
+              <span class="dot annual"></span>
+              {{ 'LEAVE_TYPE.ANNUAL' | translate }}
+            </div>
+            <strong>{{ leaveBalance.annual }} {{ 'LABELS.DAYS_UNIT' | translate }}</strong>
+          </div>
+
+          <div class="balance-item">
+            <div class="balance-label">
+              <span class="dot sick"></span>
+              {{ 'LEAVE_TYPE.SICK' | translate }}
+            </div>
+            <strong>{{ leaveBalance.sick }} {{ 'LABELS.DAYS_UNIT' | translate }}</strong>
+          </div>
+
+          <div class="balance-item">
+            <div class="balance-label">
+              <span class="dot personal"></span>
+              {{ 'LEAVE_TYPE.PERSONAL' | translate }}
+            </div>
+            <strong>{{ leaveBalance.personal }} {{ 'LABELS.DAYS_UNIT' | translate }}</strong>
+          </div>
+
+          <div class="balance-total">
+            <span>{{ 'EMPLOYEE_DETAILS.TOTAL_AVAILABLE' | translate }}</span>
+            <strong>{{ leaveBalance.total }} {{ 'LABELS.DAYS_UNIT' | translate }}</strong>
+          </div>
+
+        </div>
+
+      </section>
+
+    </div>
+
+    <!-- Recent Attendance -->
+    <section class="content-card table-card">
+
+      <div class="card-header">
+        <div>
+          <h3>{{ 'EMPLOYEE_DETAILS.RECENT_ATTENDANCE' | translate }}</h3>
+          <p>{{ 'EMPLOYEE_DETAILS.RECENT_ATTENDANCE_DESC' | translate }}</p>
+        </div>
+
+        <a routerLink="/attendance" class="view-all">
+          {{ 'LABELS.VIEW_ALL' | translate }}
+        </a>
+      </div>
+
+      <div class="empty-state" *ngIf="recentAttendance.length === 0">
+        <p>{{ 'EMPLOYEE_DETAILS.NO_ATTENDANCE' | translate }}</p>
+      </div>
+
+      <div class="table-wrapper" *ngIf="recentAttendance.length > 0">
+        <table>
+          <thead>
+            <tr>
+              <th>{{ 'LABELS.DATE' | translate }}</th>
+              <th>{{ 'LABELS.CHECK_IN' | translate }}</th>
+              <th>{{ 'LABELS.CHECK_OUT' | translate }}</th>
+              <th>{{ 'LABELS.WORK_HOURS' | translate }}</th>
+              <th>{{ 'COMMON.STATUS' | translate }}</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let record of recentAttendance">
+              <td><strong>{{ formatDate(record.date) }}</strong></td>
+              <td>{{ record.checkIn || '—' }}</td>
+              <td>{{ record.checkOut || '—' }}</td>
+              <td>{{ formatHours(record.workHours) }}</td>
+              <td>
+                <span
+                  class="table-status"
+                  [class.present]="record.status === 'present'"
+                  [class.late]="record.status === 'late'"
+                  [class.absent]="record.status === 'absent'"
+                  [class.on-leave]="record.status === 'on-leave'"
+                >
+                  {{ getAttendanceStatusLabel(record.status) }}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </section>
+
+    <!-- Recent Leave Requests -->
+    <section class="content-card table-card">
+
+      <div class="card-header">
+        <div>
+          <h3>{{ 'EMPLOYEE_DETAILS.RECENT_LEAVES' | translate }}</h3>
+          <p>{{ 'EMPLOYEE_DETAILS.RECENT_LEAVES_DESC' | translate }}</p>
+        </div>
+
+        <a routerLink="/leave-requests" class="view-all">
+          {{ 'LABELS.VIEW_ALL' | translate }}
+        </a>
+      </div>
+
+      <div class="empty-state" *ngIf="recentLeaveRequests.length === 0">
+        <p>{{ 'EMPLOYEE_DETAILS.NO_LEAVES' | translate }}</p>
+      </div>
+
+      <div class="table-wrapper" *ngIf="recentLeaveRequests.length > 0">
+        <table>
+          <thead>
+            <tr>
+              <th>{{ 'LABELS.TYPE' | translate }}</th>
+              <th>{{ 'LABELS.DATES' | translate }}</th>
+              <th>{{ 'LABELS.DAYS' | translate }}</th>
+              <th>{{ 'LABELS.REASON' | translate }}</th>
+              <th>{{ 'COMMON.STATUS' | translate }}</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let request of recentLeaveRequests">
+              <td><strong>{{ getLeaveTypeLabel(request.type) }}</strong></td>
+
+              <td>
+                {{ formatDate(request.startDate) }}
+                -
+                {{ formatDate(request.endDate) }}
+              </td>
+
+              <td>{{ request.days }}</td>
+              <td class="reason-cell">{{ request.reason }}</td>
+
+              <td>
+                <span
+                  class="table-status"
+                  [class.pending]="request.status === 'pending'"
+                  [class.approved]="request.status === 'approved'"
+                  [class.rejected]="request.status === 'rejected'"
+                >
+                  {{ getLeaveStatusLabel(request.status) }}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </section>
+
+  </ng-container>
+
+</div>

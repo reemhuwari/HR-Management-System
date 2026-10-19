@@ -1,0 +1,126 @@
+
+<div class="profile-page" *ngIf="user as currentUser">
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">{{ 'PROFILE.ACCOUNT' | translate }}</p>
+
+      <h1>{{ 'PROFILE.TITLE' | translate }}</h1>
+
+      <p class="subtitle">
+        {{ 'PROFILE.SUBTITLE' | translate }}
+      </p>
+    </div>
+
+    <button
+      class="primary-button"
+      type="button"
+      (click)="editProfile()"
+    >
+      <span aria-hidden="true">✎</span>
+      {{ 'PROFILE.EDIT' | translate }}
+    </button>
+  </header>
+
+  <section class="profile-card">
+    <div class="profile-banner"></div>
+
+    <div class="profile-overview">
+      <div class="avatar">{{ initials }}</div>
+
+      <div class="identity">
+        <h2>{{ fullName }}</h2>
+
+        <p>
+          {{
+            currentUser.position ||
+            ('PROFILE.POSITION_UNSPECIFIED' | translate)
+          }}
+        </p>
+
+        <span class="role-badge">{{ currentUser.role }}</span>
+      </div>
+    </div>
+
+    <div class="section-heading">
+      <h3>{{ 'PROFILE.PERSONAL_INFO' | translate }}</h3>
+
+      <p>{{ 'PROFILE.ACCOUNT_INFO' | translate }}</p>
+    </div>
+
+    <div class="details-grid">
+      <div class="detail-item">
+        <span class="detail-label">
+          {{ 'PROFILE.FIRST_NAME' | translate }}
+        </span>
+
+        <strong>{{ currentUser.firstName || '—' }}</strong>
+      </div>
+
+      <div class="detail-item">
+        <span class="detail-label">
+          {{ 'PROFILE.LAST_NAME' | translate }}
+        </span>
+
+        <strong>{{ currentUser.lastName || '—' }}</strong>
+      </div>
+
+      <div class="detail-item">
+        <span class="detail-label">
+          {{ 'PROFILE.EMAIL' | translate }}
+        </span>
+
+        <strong>{{ currentUser.email || '—' }}</strong>
+      </div>
+
+      <div class="detail-item">
+        <span class="detail-label">
+          {{ 'PROFILE.DEPARTMENT' | translate }}
+        </span>
+
+        <strong>
+          {{
+            currentUser.department ||
+            ('PROFILE.NOT_SPECIFIED' | translate)
+          }}
+        </strong>
+      </div>
+
+      <div class="detail-item">
+        <span class="detail-label">
+          {{ 'PROFILE.POSITION' | translate }}
+        </span>
+
+        <strong>
+          {{
+            currentUser.position ||
+            ('PROFILE.NOT_SPECIFIED' | translate)
+          }}
+        </strong>
+      </div>
+
+      <div class="detail-item">
+        <span class="detail-label">
+          {{ 'PROFILE.CREATED' | translate }}
+        </span>
+
+        <strong>
+          {{
+            currentUser.createdAt
+              ? (currentUser.createdAt | date:'mediumDate')
+              : '—'
+          }}
+        </strong>
+      </div>
+    </div>
+
+    <div class="profile-footer">
+      <span class="status-dot"></span>
+      {{ 'PROFILE.ACTIVE' | translate }}
+    </div>
+  </section>
+
+  <a class="back-link" routerLink="/dashboard">
+    <span aria-hidden="true">←</span>
+    {{ 'COMMON.BACK_TO_DASHBOARD' | translate }}
+  </a>
+</div>

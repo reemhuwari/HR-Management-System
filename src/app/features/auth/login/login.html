@@ -1,0 +1,306 @@
+
+<div class="auth-page login-page">
+  <div class="auth-visual">
+    <video
+      class="auth-video"
+      autoplay
+      muted
+      loop
+      playsinline
+      aria-hidden="true"
+    >
+      <source src="videos/hr-office.mp4" type="video/mp4" />
+    </video>
+
+    <div class="auth-visual-overlay"></div>
+
+    <div class="visual-content">
+      <div class="brand">
+        <div class="brand-icon">
+          <span>PF</span>
+        </div>
+
+        <span class="brand-name">PeopleFlow</span>
+      </div>
+
+      <div class="visual-message">
+        <span class="visual-eyebrow">
+          {{ 'LOGIN.VISUAL_EYEBROW' | translate }}
+        </span>
+
+        <h1>
+          {{ 'LOGIN.VISUAL_TITLE' | translate }}
+          <span>{{ 'LOGIN.VISUAL_TITLE_ACCENT' | translate }}</span>
+        </h1>
+
+        <p>
+          {{ 'LOGIN.VISUAL_DESCRIPTION' | translate }}
+        </p>
+      </div>
+
+      <div class="visual-footer">
+        <span class="status-dot"></span>
+        <span>{{ 'LOGIN.PLATFORM' | translate }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="auth-form-section">
+    <div class="auth-form-wrapper">
+      <div class="mobile-brand">
+        <div class="brand-icon">
+          <span>PF</span>
+        </div>
+        <span class="brand-name">PeopleFlow</span>
+      </div>
+
+      <div class="form-heading">
+        <span class="form-eyebrow">
+          {{ 'LOGIN.WELCOME' | translate }}
+        </span>
+
+        <h2>{{ 'LOGIN.TITLE' | translate }}</h2>
+
+        <p>{{ 'LOGIN.SUBTITLE' | translate }}</p>
+      </div>
+      <div class="role-switch" role="tablist">
+        <button
+          type="button"
+          role="tab"
+          class="role-tab"
+          [class.active]="selectedRole === 'employee'"
+          [attr.aria-selected]="selectedRole === 'employee'"
+          (click)="setRole('employee')"
+        >
+          {{ 'LOGIN.ROLE_EMPLOYEE' | translate }}
+        </button>
+
+        <button
+          type="button"
+          role="tab"
+          class="role-tab"
+          [class.active]="selectedRole === 'admin'"
+          [attr.aria-selected]="selectedRole === 'admin'"
+          (click)="setRole('admin')"
+        >
+          {{ 'LOGIN.ROLE_ADMIN' | translate }}
+        </button>
+      </div>
+      <form
+        [formGroup]="loginForm"
+        (ngSubmit)="onSubmit()"
+        novalidate
+      >
+        <div class="form-field">
+          <label for="login-email">
+            {{ 'LOGIN.EMAIL' | translate }}
+          </label>
+
+          <div
+            class="input-wrapper"
+            [class.input-error]="
+              loginForm.get('email')?.invalid &&
+              loginForm.get('email')?.touched
+            "
+          >
+            <span class="input-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M4 6.5h16v11H4z"
+                  stroke="currentColor"
+                  stroke-width="1.7"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="m5 7.5 7 5.5 7-5.5"
+                  stroke="currentColor"
+                  stroke-width="1.7"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </span>
+
+            <input
+              id="login-email"
+              type="email"
+              formControlName="email"
+              [placeholder]="'LOGIN.EMAIL_PLACEHOLDER' | translate"
+              autocomplete="email"
+              [attr.aria-invalid]="
+                loginForm.get('email')?.invalid &&
+                loginForm.get('email')?.touched
+              "
+            />
+          </div>
+
+          @if (
+            loginForm.get('email')?.hasError('required') &&
+            loginForm.get('email')?.touched
+          ) {
+            <small class="field-error">
+              {{ 'LOGIN.EMAIL_REQUIRED' | translate }}
+            </small>
+          }
+
+          @if (
+            loginForm.get('email')?.hasError('email') &&
+            loginForm.get('email')?.touched
+          ) {
+            <small class="field-error">
+              {{ 'LOGIN.EMAIL_INVALID' | translate }}
+            </small>
+          }
+        </div>
+
+        <div class="form-field">
+          <div class="label-row">
+            <label for="login-password">
+              {{ 'LOGIN.PASSWORD' | translate }}
+            </label>
+
+            <a class="text-link forgot-link" href="#">
+              {{ 'LOGIN.FORGOT_PASSWORD' | translate }}
+            </a>
+          </div>
+
+          <div
+            class="input-wrapper"
+            [class.input-error]="
+              loginForm.get('password')?.invalid &&
+              loginForm.get('password')?.touched
+            "
+          >
+            <span class="input-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <rect
+                  x="5"
+                  y="10"
+                  width="14"
+                  height="10"
+                  rx="2"
+                  stroke="currentColor"
+                  stroke-width="1.7"
+                />
+                <path
+                  d="M8 10V7a4 4 0 0 1 8 0v3"
+                  stroke="currentColor"
+                  stroke-width="1.7"
+                  stroke-linecap="round"
+                />
+                <path
+                  d="M12 14v2"
+                  stroke="currentColor"
+                  stroke-width="1.7"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </span>
+
+            <input
+              id="login-password"
+              [type]="showPassword ? 'text' : 'password'"
+              formControlName="password"
+              [placeholder]="'LOGIN.PASSWORD_PLACEHOLDER' | translate"
+              autocomplete="current-password"
+              [attr.aria-invalid]="
+                loginForm.get('password')?.invalid &&
+                loginForm.get('password')?.touched
+              "
+            />
+
+            <button
+              class="password-toggle"
+              type="button"
+              (click)="showPassword = !showPassword"
+              [attr.aria-label]="
+                (showPassword ? 'LOGIN.HIDE' : 'LOGIN.SHOW') | translate
+              "
+            >
+              {{
+                (showPassword ? 'LOGIN.HIDE' : 'LOGIN.SHOW') | translate
+              }}
+            </button>
+          </div>
+
+          @if (
+            loginForm.get('password')?.hasError('required') &&
+            loginForm.get('password')?.touched
+          ) {
+            <small class="field-error">
+              {{ 'LOGIN.PASSWORD_REQUIRED' | translate }}
+            </small>
+          }
+
+          @if (
+            loginForm.get('password')?.hasError('minlength') &&
+            loginForm.get('password')?.touched
+          ) {
+            <small class="field-error">
+              {{ 'LOGIN.PASSWORD_MIN' | translate }}
+            </small>
+          }
+
+          @if (loginForm.get('password')?.hasError('invalidCredentials')) {
+            <small class="field-error">
+              {{ 'LOGIN.INVALID_CREDENTIALS' | translate }}
+            </small>
+          }
+        </div>
+
+        <div class="form-options">
+          <label class="checkbox-label">
+            <input type="checkbox" formControlName="rememberMe" />
+            <span class="custom-checkbox"></span>
+            <span>{{ 'LOGIN.REMEMBER_ME' | translate }}</span>
+          </label>
+        </div>
+
+        <button
+          class="auth-submit-btn"
+          type="submit"
+          [disabled]="isLoading"
+        >
+          @if (isLoading) {
+            <span class="loading-spinner"></span>
+            <span>{{ 'LOGIN.SUBMITTING' | translate }}</span>
+          } @else {
+            <span>{{ 'LOGIN.SUBMIT' | translate }}</span>
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path
+                d="M5 12h14m-6-6 6 6-6 6"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          }
+        </button>
+
+        @if (errorMessage) {
+          <div class="auth-error-message" role="alert">
+            {{ errorMessage }}
+          </div>
+        }
+                @if (roleError) {
+          <div class="auth-error-message" role="alert">
+            {{ roleError | translate }}
+          </div>
+        }
+      </form>
+
+      <div class="auth-switch">
+        <span>{{ 'LOGIN.NO_ACCOUNT' | translate }}</span>
+        <a routerLink="/signup" class="text-link">
+          {{ 'LOGIN.CREATE_ACCOUNT' | translate }}
+        </a>
+      </div>
+
+     <p class="auth-copyright" dir="auto">
+  <span dir="ltr">© {{ currentYear }} PeopleFlow.</span>
+  <span>{{ 'AUTH.COPYRIGHT' | translate }}</span>
+</p>
+    </div>
+  </div>
+</div>

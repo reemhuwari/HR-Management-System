@@ -1,0 +1,198 @@
+<div class="employee-page">
+
+  @if (isLoading) {
+
+    <div class="state-card loading-state" role="status">
+      <span class="spinner"></span>
+      <p>{{ 'COMMON.LOADING' | translate }}</p>
+    </div>
+
+  } @else if (hasError) {
+
+    <div class="state-card error-state" role="alert">
+      <h2>{{ 'EMP_COMMON.ERR_LOAD' | translate }}</h2>
+      <button type="button" class="primary-btn" (click)="load()">
+        {{ 'COMMON.TRY_AGAIN' | translate }}
+      </button>
+    </div>
+
+  } @else if (!employee) {
+
+    <div class="state-card empty-state">
+      <h2>{{ 'EMP_COMMON.NO_RECORD_TITLE' | translate }}</h2>
+      <p>{{ 'EMP_COMMON.NO_RECORD_DESC' | translate }}</p>
+    </div>
+
+  } @else {
+
+    <section class="page-header">
+      <div>
+        <a routerLink="/employee/leave-requests" class="back-link">
+          <span class="arrow" aria-hidden="true">←</span>
+          {{ 'EMP_REQUEST_FORM.BACK' | translate }}
+        </a>
+
+        <h1>{{ 'EMP_REQUEST_FORM.TITLE' | translate }}</h1>
+        <p>{{ 'EMP_REQUEST_FORM.SUBTITLE' | translate }}</p>
+      </div>
+    </section>
+
+    <div class="form-layout">
+
+      <!-- Form -->
+      <section class="content-card">
+        <div class="card-header">
+          <div>
+            <h2>{{ 'EMP_REQUEST_FORM.FORM_TITLE' | translate }}</h2>
+            <p>{{ 'EMP_REQUEST_FORM.FORM_DESC' | translate }}</p>
+          </div>
+        </div>
+
+        <div class="form-body">
+
+          <div class="form-group">
+            <label for="leave-type">{{ 'LABELS.LEAVE_TYPE' | translate }}</label>
+
+            <select
+              id="leave-type"
+              [(ngModel)]="form.type"
+              (ngModelChange)="clearMessages()"
+            >
+              <option value="Annual Leave">{{ 'LEAVE_TYPE.ANNUAL' | translate }}</option>
+              <option value="Sick Leave">{{ 'LEAVE_TYPE.SICK' | translate }}</option>
+              <option value="Personal Leave">{{ 'LEAVE_TYPE.PERSONAL' | translate }}</option>
+            </select>
+          </div>
+
+          <div class="date-grid">
+            <div class="form-group">
+              <label for="start-date">{{ 'EMP_REQUEST_FORM.START' | translate }}</label>
+              <input
+                id="start-date"
+                type="date"
+                [min]="minDate"
+                [(ngModel)]="form.startDate"
+                (ngModelChange)="clearMessages()"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="end-date">{{ 'EMP_REQUEST_FORM.END' | translate }}</label>
+              <input
+                id="end-date"
+                type="date"
+                [min]="form.startDate || minDate"
+                [(ngModel)]="form.endDate"
+                (ngModelChange)="clearMessages()"
+              />
+            </div>
+          </div>
+
+          @if (form.startDate && form.endDate && !hasValidDates) {
+            <div class="alert error-alert">
+              {{ 'EMP_REQUEST_FORM.DATE_WARNING' | translate }}
+            </div>
+          }
+
+          @if (hasValidDates) {
+            <div class="days-preview">
+              <strong>
+                {{ requestedDays }}
+                {{ (requestedDays === 1 ? 'EMP_REQUEST_FORM.DAY' : 'EMP_REQUEST_FORM.DAYS') | translate }}
+              </strong>
+              <span>{{ 'EMP_REQUEST_FORM.TOTAL' | translate }}</span>
+            </div>
+          }
+
+          <div class="form-group">
+            <label for="reason">{{ 'EMP_REQUEST_FORM.REASON' | translate }}</label>
+
+            <textarea
+              id="reason"
+              rows="4"
+              maxlength="500"
+              [(ngModel)]="form.reason"
+              (ngModelChange)="clearMessages()"
+              [placeholder]="'EMP_REQUEST_FORM.REASON_PH' | translate"
+            ></textarea>
+
+            <span class="char-count">
+              {{ form.reason.length }} / 500 {{ 'EMP_REQUEST_FORM.CHARS' | translate }}
+            </span>
+          </div>
+
+          @if (!balance) {
+            <div class="alert error-alert">
+              {{ 'EMP_REQUEST_FORM.ERR_NO_BALANCE' | translate }}
+            </div>
+          }
+
+          @if (errorMessage) {
+            <div class="alert error-alert" role="alert">{{ errorMessage }}</div>
+          }
+
+          @if (successMessage) {
+            <div class="alert success-alert" role="status">{{ successMessage }}</div>
+          }
+
+          <div class="form-actions">
+            <a routerLink="/employee/leave-requests" class="secondary-btn">
+              {{ 'COMMON.CANCEL' | translate }}
+            </a>
+
+            <button
+              type="button"
+              class="primary-btn"
+              [disabled]="!canSubmit"
+              (click)="submit()"
+            >
+              {{ (isSaving ? 'EMP_REQUEST_FORM.SUBMITTING' : 'EMP_REQUEST_FORM.SUBMIT') | translate }}
+            </button>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Summary -->
+      <aside class="content-card summary-card">
+        <div class="card-header">
+          <div>
+            <h2>{{ 'EMP_REQUEST_FORM.SUMMARY' | translate }}</h2>
+          </div>
+        </div>
+
+        <div class="summary-body">
+          <div class="summary-row">
+            <span>{{ 'LABELS.LEAVE_TYPE' | translate }}</span>
+            <strong>{{ getLeaveTypeLabel(form.type) }}</strong>
+          </div>
+
+          <div class="summary-row">
+            <span>{{ 'EMP_REQUEST_FORM.REQUESTED' | translate }}</span>
+            <strong>{{ requestedDays }}</strong>
+          </div>
+
+          <div class="summary-row">
+            <span>{{ 'EMP_REQUEST_FORM.AVAILABLE' | translate }}</span>
+            <strong>{{ availableDays === null ? '—' : availableDays }}</strong>
+          </div>
+
+          @if (hasValidDates && availableDays !== null) {
+            <div
+              class="balance-status"
+              [class.valid]="hasSufficientBalance"
+              [class.invalid]="!hasSufficientBalance"
+            >
+              {{ (hasSufficientBalance ? 'EMP_REQUEST_FORM.SUFFICIENT' : 'EMP_REQUEST_FORM.INSUFFICIENT') | translate }}
+            </div>
+          }
+
+          <p class="policy">{{ 'EMP_REQUEST_FORM.POLICY' | translate }}</p>
+        </div>
+      </aside>
+
+    </div>
+
+  }
+
+</div>

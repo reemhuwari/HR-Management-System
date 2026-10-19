@@ -1,0 +1,153 @@
+<div class="employee-page">
+
+  @if (isLoading) {
+
+    <div class="state-card loading-state" role="status">
+      <span class="spinner"></span>
+      <p>{{ 'COMMON.LOADING' | translate }}</p>
+    </div>
+
+  } @else if (hasError) {
+
+    <div class="state-card error-state" role="alert">
+      <h2>{{ 'EMP_COMMON.ERR_LOAD' | translate }}</h2>
+      <button type="button" class="primary-btn" (click)="load()">
+        {{ 'COMMON.TRY_AGAIN' | translate }}
+      </button>
+    </div>
+
+  } @else if (!employee) {
+
+    <div class="state-card empty-state">
+      <h2>{{ 'EMP_COMMON.NO_RECORD_TITLE' | translate }}</h2>
+      <p>{{ 'EMP_COMMON.NO_RECORD_DESC' | translate }}</p>
+    </div>
+
+  } @else {
+
+    <section class="page-header">
+      <div>
+        <span class="eyebrow">{{ 'EMP_DASHBOARD.EYEBROW' | translate }}</span>
+        <h1>{{ 'EMP_REQUESTS.TITLE' | translate }}</h1>
+        <p>{{ 'EMP_REQUESTS.SUBTITLE' | translate }}</p>
+      </div>
+
+      <a routerLink="/employee/request-leave" class="primary-btn">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 5v14M5 12h14" />
+        </svg>
+        {{ 'EMP_REQUESTS.NEW' | translate }}
+      </a>
+    </section>
+
+    <section class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon late">
+          <svg viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="9" />
+            <path d="M12 7v5l3 2" />
+          </svg>
+        </div>
+        <div class="stat-content">
+          <span>{{ 'STATUS.PENDING' | translate }}</span>
+          <strong>{{ pendingCount }}</strong>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon present">
+          <svg viewBox="0 0 24 24">
+            <path d="M20 6L9 17l-5-5" />
+          </svg>
+        </div>
+        <div class="stat-content">
+          <span>{{ 'STATUS.APPROVED' | translate }}</span>
+          <strong>{{ approvedCount }}</strong>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon absent">
+          <svg viewBox="0 0 24 24">
+            <path d="M18 6L6 18M6 6l12 12" />
+          </svg>
+        </div>
+        <div class="stat-content">
+          <span>{{ 'STATUS.REJECTED' | translate }}</span>
+          <strong>{{ rejectedCount }}</strong>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-card">
+
+      <div class="card-header">
+        <div>
+          <h2>{{ 'EMP_REQUESTS.TABLE_TITLE' | translate }}</h2>
+          <p>{{ filteredRequests.length }} {{ 'EMP_REQUESTS.COUNT' | translate }}</p>
+        </div>
+
+        <select
+          class="filter-select"
+          [(ngModel)]="selectedStatus"
+          [attr.aria-label]="'EMP_REQUESTS.FILTER' | translate"
+        >
+          <option value="all">{{ 'EMP_REQUESTS.ALL' | translate }}</option>
+          <option value="pending">{{ 'STATUS.PENDING' | translate }}</option>
+          <option value="approved">{{ 'STATUS.APPROVED' | translate }}</option>
+          <option value="rejected">{{ 'STATUS.REJECTED' | translate }}</option>
+        </select>
+      </div>
+
+      @if (filteredRequests.length === 0) {
+        <div class="empty-state">
+          <p>{{ 'EMP_REQUESTS.EMPTY' | translate }}</p>
+        </div>
+      } @else {
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>{{ 'LABELS.LEAVE_TYPE' | translate }}</th>
+                <th>{{ 'LABELS.DATES' | translate }}</th>
+                <th>{{ 'LABELS.DAYS' | translate }}</th>
+                <th>{{ 'LABELS.REASON' | translate }}</th>
+                <th>{{ 'EMP_REQUESTS.SUBMITTED' | translate }}</th>
+                <th>{{ 'COMMON.STATUS' | translate }}</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              @for (request of filteredRequests; track request.id) {
+                <tr>
+                  <td><strong>{{ getLeaveTypeLabel(request.type) }}</strong></td>
+                  <td>
+                    {{ formatDate(request.startDate) }}
+                    -
+                    {{ formatDate(request.endDate) }}
+                  </td>
+                  <td>{{ request.days }}</td>
+                  <td><span class="reason">{{ request.reason }}</span></td>
+                  <td>{{ formatDate(request.submittedAt) }}</td>
+                  <td>
+                    <span
+                      class="status-badge"
+                      [class.pending]="request.status === 'pending'"
+                      [class.approved]="request.status === 'approved'"
+                      [class.rejected]="request.status === 'rejected'"
+                    >
+                      {{ getLeaveStatusLabel(request.status) }}
+                    </span>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+
+    </section>
+
+  }
+
+</div>

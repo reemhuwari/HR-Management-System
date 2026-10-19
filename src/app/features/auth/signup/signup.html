@@ -1,0 +1,543 @@
+
+<div class="auth-page signup-page">
+  <div class="auth-visual">
+    <video
+      class="auth-video"
+      autoplay
+      muted
+      loop
+      playsinline
+      aria-hidden="true"
+    >
+      <source src="videos/hr-office.mp4" type="video/mp4" />
+    </video>
+
+    <div class="auth-visual-overlay"></div>
+
+    <div class="visual-content">
+      <div class="brand">
+        <div class="brand-icon">
+          <span>PF</span>
+        </div>
+
+        <span class="brand-name">PeopleFlow</span>
+      </div>
+
+      <div class="visual-message">
+        <span class="visual-eyebrow">
+          {{ 'SIGNUP.VISUAL_EYEBROW' | translate }}
+        </span>
+
+        <h1>
+          {{ 'SIGNUP.VISUAL_TITLE' | translate }}
+          <span>{{ 'SIGNUP.VISUAL_TITLE_ACCENT' | translate }}</span>
+        </h1>
+
+        <p>
+          {{ 'SIGNUP.VISUAL_DESCRIPTION' | translate }}
+        </p>
+      </div>
+
+      <div class="visual-footer">
+        <span class="status-dot"></span>
+        <span>{{ 'SIGNUP.PLATFORM' | translate }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="auth-form-section signup-form-section">
+    <div class="auth-form-wrapper signup-form-wrapper">
+      <div class="mobile-brand">
+        <div class="brand-icon">
+          <span>PF</span>
+        </div>
+        <span class="brand-name">PeopleFlow</span>
+      </div>
+
+      <div class="form-heading">
+        <span class="form-eyebrow">
+          {{ 'SIGNUP.GET_STARTED' | translate }}
+        </span>
+
+        <h2>{{ 'SIGNUP.TITLE' | translate }}</h2>
+
+        <p>{{ 'SIGNUP.SUBTITLE' | translate }}</p>
+      </div>
+      @if (!submitted) {
+      <form
+        [formGroup]="signupForm"
+        (ngSubmit)="onSubmit()"
+        novalidate
+      >
+        <div class="form-row">
+          <div class="form-field">
+            <label for="signup-first-name">
+              {{ 'SIGNUP.FIRST_NAME' | translate }}
+            </label>
+
+            <div
+              class="input-wrapper"
+              [class.input-error]="
+                signupForm.get('firstName')?.invalid &&
+                signupForm.get('firstName')?.touched
+              "
+            >
+              <input
+                id="signup-first-name"
+                type="text"
+                formControlName="firstName"
+                [placeholder]="'SIGNUP.FIRST_NAME_PLACEHOLDER' | translate"
+                autocomplete="given-name"
+              />
+            </div>
+
+            @if (
+              signupForm.get('firstName')?.hasError('required') &&
+              signupForm.get('firstName')?.touched
+            ) {
+              <small class="field-error">
+                {{ 'SIGNUP.FIRST_NAME_REQUIRED' | translate }}
+              </small>
+            }
+
+            @if (
+              signupForm.get('firstName')?.hasError('minlength') &&
+              signupForm.get('firstName')?.touched
+            ) {
+              <small class="field-error">
+                {{ 'SIGNUP.FIRST_NAME_MIN' | translate }}
+              </small>
+            }
+          </div>
+
+          <div class="form-field">
+            <label for="signup-last-name">
+              {{ 'SIGNUP.LAST_NAME' | translate }}
+            </label>
+
+            <div
+              class="input-wrapper"
+              [class.input-error]="
+                signupForm.get('lastName')?.invalid &&
+                signupForm.get('lastName')?.touched
+              "
+            >
+              <input
+                id="signup-last-name"
+                type="text"
+                formControlName="lastName"
+                [placeholder]="'SIGNUP.LAST_NAME_PLACEHOLDER' | translate"
+                autocomplete="family-name"
+              />
+            </div>
+
+            @if (
+              signupForm.get('lastName')?.hasError('required') &&
+              signupForm.get('lastName')?.touched
+            ) {
+              <small class="field-error">
+                {{ 'SIGNUP.LAST_NAME_REQUIRED' | translate }}
+              </small>
+            }
+
+            @if (
+              signupForm.get('lastName')?.hasError('minlength') &&
+              signupForm.get('lastName')?.touched
+            ) {
+              <small class="field-error">
+                {{ 'SIGNUP.LAST_NAME_MIN' | translate }}
+              </small>
+            }
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label for="signup-email">
+            {{ 'SIGNUP.EMAIL' | translate }}
+          </label>
+
+          <div
+            class="input-wrapper"
+            [class.input-error]="
+              signupForm.get('email')?.invalid &&
+              signupForm.get('email')?.touched
+            "
+          >
+            <span class="input-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M4 6.5h16v11H4z"
+                  stroke="currentColor"
+                  stroke-width="1.7"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="m5 7.5 7 5.5 7-5.5"
+                  stroke="currentColor"
+                  stroke-width="1.7"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </span>
+
+            <input
+              id="signup-email"
+              type="email"
+              formControlName="email"
+              [placeholder]="'SIGNUP.EMAIL_PLACEHOLDER' | translate"
+              autocomplete="email"
+            />
+          </div>
+
+          @if (
+            signupForm.get('email')?.hasError('required') &&
+            signupForm.get('email')?.touched
+          ) {
+            <small class="field-error">
+              {{ 'SIGNUP.EMAIL_REQUIRED' | translate }}
+            </small>
+          }
+
+          @if (
+            signupForm.get('email')?.hasError('email') &&
+            signupForm.get('email')?.touched
+          ) {
+            <small class="field-error">
+              {{ 'SIGNUP.EMAIL_INVALID' | translate }}
+            </small>
+          }
+        </div>
+
+        
+        <div class="form-row">
+          <div class="form-field">
+            <label for="signup-department">
+              {{ 'SIGNUP.DEPARTMENT' | translate }}
+            </label>
+
+            <div
+              class="input-wrapper"
+              [class.input-error]="department.invalid && department.touched"
+            >
+              <select id="signup-department" formControlName="department">
+                <option value="">
+                  {{ 'SIGNUP.DEPARTMENT_PLACEHOLDER' | translate }}
+                </option>
+
+                @for (dept of departmentOptions; track dept.value) {
+                  <option [value]="dept.value">
+                    {{ dept.key | translate }}
+                  </option>
+                }
+              </select>
+            </div>
+
+            @if (department.hasError('required') && department.touched) {
+              <small class="field-error">
+                {{ 'SIGNUP.DEPARTMENT_REQUIRED' | translate }}
+              </small>
+            }
+          </div>
+
+          <div class="form-field">
+            <label for="signup-position">
+              {{ 'SIGNUP.POSITION' | translate }}
+              <span class="optional">({{ 'SIGNUP.OPTIONAL' | translate }})</span>
+            </label>
+
+            <div class="input-wrapper">
+              <input
+                id="signup-position"
+                type="text"
+                formControlName="position"
+                [placeholder]="'SIGNUP.POSITION_PLACEHOLDER' | translate"
+                autocomplete="organization-title"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label for="signup-phone">
+            {{ 'SIGNUP.PHONE' | translate }}
+            <span class="optional">({{ 'SIGNUP.OPTIONAL' | translate }})</span>
+          </label>
+
+          <div
+            class="input-wrapper"
+            [class.input-error]="phone.invalid && phone.touched"
+          >
+            <input
+              id="signup-phone"
+              type="tel"
+              dir="ltr"
+              formControlName="phone"
+              placeholder="+962 79 000 0000"
+              autocomplete="tel"
+            />
+          </div>
+
+          @if (phone.hasError('pattern') && phone.touched) {
+            <small class="field-error">
+              {{ 'SIGNUP.PHONE_INVALID' | translate }}
+            </small>
+          }
+        </div>
+        <div class="form-field">
+          <label for="signup-password">
+            {{ 'SIGNUP.PASSWORD' | translate }}
+          </label>
+
+          <div
+            class="input-wrapper"
+            [class.input-error]="
+              signupForm.get('password')?.invalid &&
+              signupForm.get('password')?.touched
+            "
+          >
+            <span class="input-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <rect
+                  x="5"
+                  y="10"
+                  width="14"
+                  height="10"
+                  rx="2"
+                  stroke="currentColor"
+                  stroke-width="1.7"
+                />
+                <path
+                  d="M8 10V7a4 4 0 0 1 8 0v3"
+                  stroke="currentColor"
+                  stroke-width="1.7"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </span>
+
+            <input
+              id="signup-password"
+              [type]="showPassword ? 'text' : 'password'"
+              formControlName="password"
+              [placeholder]="'SIGNUP.PASSWORD_PLACEHOLDER' | translate"
+              autocomplete="new-password"
+            />
+
+            <button
+              class="password-toggle"
+              type="button"
+              (click)="showPassword = !showPassword"
+              [attr.aria-label]="
+                (showPassword ? 'SIGNUP.HIDE' : 'SIGNUP.SHOW') | translate
+              "
+            >
+              {{
+                (showPassword ? 'SIGNUP.HIDE' : 'SIGNUP.SHOW') | translate
+              }}
+            </button>
+          </div>
+
+          @if (password.value.length > 0) {
+            <div class="password-strength">
+              <div class="strength-track">
+                <span
+                  class="strength-fill"
+                  [class.strength-weak]="passwordStrength === 'weak'"
+                  [class.strength-medium]="passwordStrength === 'medium'"
+                  [class.strength-strong]="passwordStrength === 'strong'"
+                ></span>
+              </div>
+
+              <span
+                class="strength-label"
+                [class.strength-text-weak]="passwordStrength === 'weak'"
+                [class.strength-text-medium]="passwordStrength === 'medium'"
+                [class.strength-text-strong]="passwordStrength === 'strong'"
+              >
+                {{ passwordStrengthLabel }}
+              </span>
+            </div>
+          }
+
+          @if (
+            signupForm.get('password')?.hasError('required') &&
+            signupForm.get('password')?.touched
+          ) {
+            <small class="field-error">
+              {{ 'SIGNUP.PASSWORD_REQUIRED' | translate }}
+            </small>
+          }
+
+          @if (
+            signupForm.get('password')?.hasError('minlength') &&
+            signupForm.get('password')?.touched
+          ) {
+            <small class="field-error">
+              {{ 'SIGNUP.PASSWORD_MIN' | translate }}
+            </small>
+          }
+        </div>
+        <div class="form-field">
+          <label for="signup-confirm-password">
+            {{ 'SIGNUP.CONFIRM_PASSWORD' | translate }}
+          </label>
+
+          <div
+            class="input-wrapper"
+            [class.input-error]="
+              (
+                signupForm.get('confirmPassword')?.invalid &&
+                signupForm.get('confirmPassword')?.touched
+              ) ||
+              (
+                signupForm.hasError('passwordsMismatch') &&
+                signupForm.get('confirmPassword')?.touched
+              )
+            "
+          >
+            <span class="input-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <rect
+                  x="5"
+                  y="10"
+                  width="14"
+                  height="10"
+                  rx="2"
+                  stroke="currentColor"
+                  stroke-width="1.7"
+                />
+                <path
+                  d="M8 10V7a4 4 0 0 1 8 0v3"
+                  stroke="currentColor"
+                  stroke-width="1.7"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </span>
+
+            <input
+              id="signup-confirm-password"
+              [type]="showConfirmPassword ? 'text' : 'password'"
+              formControlName="confirmPassword"
+              [placeholder]="'SIGNUP.CONFIRM_PASSWORD_PLACEHOLDER' | translate"
+              autocomplete="new-password"
+            />
+
+            <button
+              class="password-toggle"
+              type="button"
+              (click)="showConfirmPassword = !showConfirmPassword"
+              [attr.aria-label]="
+                (
+                  showConfirmPassword ? 'SIGNUP.HIDE' : 'SIGNUP.SHOW'
+                ) | translate
+              "
+            >
+              {{
+                (
+                  showConfirmPassword ? 'SIGNUP.HIDE' : 'SIGNUP.SHOW'
+                ) | translate
+              }}
+            </button>
+          </div>
+
+          @if (
+            signupForm.get('confirmPassword')?.hasError('required') &&
+            signupForm.get('confirmPassword')?.touched
+          ) {
+            <small class="field-error">
+              {{ 'SIGNUP.CONFIRM_PASSWORD_REQUIRED' | translate }}
+            </small>
+          }
+
+          @if (
+            signupForm.hasError('passwordsMismatch') &&
+            signupForm.get('confirmPassword')?.touched
+          ) {
+            <small class="field-error">
+              {{ 'SIGNUP.PASSWORDS_MISMATCH' | translate }}
+            </small>
+          }
+        </div>
+
+        <div class="terms-section">
+          <label class="checkbox-label terms-label">
+            <input type="checkbox" formControlName="terms" />
+            <span class="custom-checkbox"></span>
+
+            <span class="terms-text">
+              {{ 'SIGNUP.TERMS_PREFIX' | translate }}
+              <a href="#" class="text-link">
+                {{ 'SIGNUP.TERMS' | translate }}
+              </a>
+              {{ 'SIGNUP.AND' | translate }}
+              <a href="#" class="text-link">
+                {{ 'SIGNUP.PRIVACY' | translate }}
+              </a>
+            </span>
+          </label>
+
+          @if (
+            signupForm.get('terms')?.hasError('required') &&
+            signupForm.get('terms')?.touched
+          ) {
+            <small class="field-error">
+              {{ 'SIGNUP.TERMS_REQUIRED' | translate }}
+            </small>
+          }
+        </div>
+
+        <button
+          class="auth-submit-btn"
+          type="submit"
+          [disabled]="isLoading"
+        >
+          @if (isLoading) {
+            <span class="loading-spinner"></span>
+            <span>{{ 'SIGNUP.SUBMITTING' | translate }}</span>
+          } @else {
+            <span>{{ 'SIGNUP.SUBMIT' | translate }}</span>
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path
+                d="M5 12h14m-6-6 6 6-6 6"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          }
+        </button>
+
+        @if (errorMessage) {
+          <div class="auth-error-message" role="alert">
+            {{ errorMessage }}
+          </div>
+        }
+      </form>
+      } @else {
+        <div class="signup-success" role="status">
+          <div class="success-icon">✓</div>
+          <h3>{{ 'SIGNUP.SUCCESS_TITLE' | translate }}</h3>
+          <p>{{ 'SIGNUP.SUCCESS_MESSAGE' | translate }}</p>
+
+          <a routerLink="/login" class="auth-submit-btn">
+            {{ 'SIGNUP.BACK_TO_LOGIN' | translate }}
+          </a>
+        </div>
+      }
+      <div class="auth-switch">
+        <span>{{ 'SIGNUP.HAVE_ACCOUNT' | translate }}</span>
+        <a routerLink="/login" class="text-link">
+          {{ 'SIGNUP.SIGN_IN' | translate }}
+        </a>
+      </div>
+
+      <p class="auth-copyright" dir="auto">
+  <span dir="ltr">© {{ currentYear }} PeopleFlow.</span>
+  <span>{{ 'AUTH.COPYRIGHT' | translate }}</span>
+</p>
+    </div>
+  </div>
+</div>

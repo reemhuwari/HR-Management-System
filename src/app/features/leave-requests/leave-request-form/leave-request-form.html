@@ -1,0 +1,385 @@
+
+<div class="leave-form-page">
+
+  <div class="page-header">
+    <div>
+      <button type="button" class="back-link" (click)="cancel()">
+        <span aria-hidden="true">←</span>
+        {{ 'LEAVE_FORM.BACK' | translate }}
+      </button>
+
+      <h1>{{ 'LEAVE_FORM.TITLE' | translate }}</h1>
+      <p>{{ 'LEAVE_FORM.DESCRIPTION' | translate }}</p>
+    </div>
+
+    <div class="header-icon" aria-hidden="true">＋</div>
+  </div>
+
+  <div class="loading-state" *ngIf="isLoading">
+    <div class="spinner"></div>
+    <p>{{ 'LEAVE_FORM.LOADING_DATA' | translate }}</p>
+  </div>
+
+  <div class="message error-message" *ngIf="hasError && !isLoading">
+    {{ errorMessage }}
+    <button type="button" (click)="loadFormData()">
+      {{ 'LEAVE_FORM.TRY_AGAIN' | translate }}
+    </button>
+  </div>
+
+  <ng-container *ngIf="!isLoading && !hasError">
+
+    <div class="form-layout">
+
+      <section class="form-card">
+        <div class="card-heading">
+          <div>
+            <h2>{{ 'LEAVE_FORM.REQUEST_INFO' | translate }}</h2>
+            <p>{{ 'LEAVE_FORM.COMPLETE_DETAILS' | translate }}</p>
+          </div>
+
+          <span class="required-note">
+            {{ 'LEAVE_FORM.REQUIRED_FIELDS' | translate }}
+          </span>
+        </div>
+
+        <form #leaveForm="ngForm" (ngSubmit)="submitRequest()" novalidate>
+
+          <div class="form-section">
+            <h3>{{ 'LEAVE_FORM.EMPLOYEE_DETAILS' | translate }}</h3>
+
+            <div class="form-group">
+              <label for="employeeId">
+                {{ 'LEAVE_FORM.EMPLOYEE' | translate }} <span>*</span>
+              </label>
+
+              <select
+                id="employeeId"
+                name="employeeId"
+                [(ngModel)]="form.employeeId"
+                (ngModelChange)="onEmployeeChange()"
+                required
+              >
+                <option value="">
+                  {{ 'LEAVE_FORM.SELECT_EMPLOYEE' | translate }}
+                </option>
+
+                <option
+                  *ngFor="let employee of employees"
+                  [value]="employee.id"
+                >
+                  {{ employee.firstName }} {{ employee.lastName }}
+                  — {{ employee.employeeId }}
+                </option>
+              </select>
+
+              <small *ngIf="employees.length === 0">
+                {{ 'LEAVE_FORM.NO_ACTIVE_EMPLOYEES' | translate }}
+              </small>
+            </div>
+
+            <div class="employee-preview" *ngIf="selectedEmployee">
+              <div class="employee-avatar">
+                {{ selectedEmployee.firstName.charAt(0) }}{{ selectedEmployee.lastName.charAt(0) }}
+              </div>
+
+              <div class="employee-preview-info">
+                <strong>
+                  {{ selectedEmployee.firstName }} {{ selectedEmployee.lastName }}
+                </strong>
+                <span>{{ selectedEmployee.position }}</span>
+                <span>{{ selectedEmployee.department }}</span>
+              </div>
+
+              <span class="active-badge">
+                {{ 'LEAVE_FORM.ACTIVE' | translate }}
+              </span>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <h3>{{ 'LEAVE_FORM.LEAVE_DETAILS' | translate }}</h3>
+
+            <div class="form-group">
+              <label for="type">
+                {{ 'LEAVE_FORM.LEAVE_TYPE' | translate }} <span>*</span>
+              </label>
+
+              <select
+                id="type"
+                name="type"
+                [(ngModel)]="form.type"
+                (ngModelChange)="onTypeChange()"
+                required
+              >
+                <option value="Annual Leave">
+                  {{ 'LEAVE_FORM.ANNUAL' | translate }}
+                </option>
+                <option value="Sick Leave">
+                  {{ 'LEAVE_FORM.SICK' | translate }}
+                </option>
+                <option value="Personal Leave">
+                  {{ 'LEAVE_FORM.PERSONAL' | translate }}
+                </option>
+              </select>
+            </div>
+
+            <div class="date-grid">
+              <div class="form-group">
+                <label for="startDate">
+                  {{ 'LEAVE_FORM.START_DATE' | translate }} <span>*</span>
+                </label>
+
+                <input
+                  id="startDate"
+                  name="startDate"
+                  type="date"
+                  [min]="minDate"
+                  [(ngModel)]="form.startDate"
+                  (ngModelChange)="onDateChange()"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="endDate">
+                  {{ 'LEAVE_FORM.END_DATE' | translate }} <span>*</span>
+                </label>
+
+                <input
+                  id="endDate"
+                  name="endDate"
+                  type="date"
+                  [min]="form.startDate || minDate"
+                  [(ngModel)]="form.endDate"
+                  (ngModelChange)="onDateChange()"
+                  required
+                />
+              </div>
+            </div>
+
+            <div
+              class="date-warning"
+              *ngIf="form.startDate && form.endDate && !hasValidDates"
+            >
+              {{ 'LEAVE_FORM.INVALID_DATES' | translate }}
+            </div>
+
+            <div class="days-preview" *ngIf="hasValidDates">
+              <div class="days-icon" aria-hidden="true">▦</div>
+              <div>
+                <strong>
+                  {{ requestedDays }}
+                  {{
+                    requestedDays === 1
+                      ? ('LEAVE_FORM.DAY' | translate)
+                      : ('LEAVE_FORM.DAYS' | translate)
+                  }}
+                </strong>
+                <span>{{ 'LEAVE_FORM.DURATION' | translate }}</span>
+              </div>
+            </div>
+
+            <div class="form-group reason-group">
+              <label for="reason">
+                {{ 'LEAVE_FORM.REASON' | translate }} <span>*</span>
+              </label>
+
+              <textarea
+                id="reason"
+                name="reason"
+                [(ngModel)]="form.reason"
+                required
+                minlength="5"
+                maxlength="500"
+                rows="4"
+                [placeholder]="'LEAVE_FORM.REASON_PLACEHOLDER' | translate"
+              ></textarea>
+
+              <div class="character-count">
+                {{ form.reason.length }} / 500
+                {{ 'LEAVE_FORM.CHARACTERS' | translate }}
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="message error-message"
+            *ngIf="errorMessage && !hasError"
+            role="alert"
+          >
+            {{ errorMessage }}
+          </div>
+
+          <div class="message success-message" *ngIf="successMessage" role="status">
+            {{ successMessage }}
+          </div>
+
+          <div class="form-actions">
+            <button
+              type="button"
+              class="cancel-button"
+              (click)="cancel()"
+              [disabled]="isSaving"
+            >
+              {{ 'LEAVE_FORM.CANCEL' | translate }}
+            </button>
+
+            <button
+              type="submit"
+              class="submit-button"
+              [disabled]="!canSubmit || leaveForm.invalid"
+            >
+              <span *ngIf="isSaving" class="button-spinner"></span>
+
+              {{
+                isSaving
+                  ? ('LEAVE_FORM.SUBMITTING' | translate)
+                  : ('LEAVE_FORM.SUBMIT' | translate)
+              }}
+
+              <span *ngIf="!isSaving" aria-hidden="true">→</span>
+            </button>
+          </div>
+
+        </form>
+      </section>
+
+      <aside class="side-column">
+
+        <section class="balance-card">
+          <div class="balance-card-heading">
+            <div>
+              <span class="eyebrow">
+                {{ 'LEAVE_FORM.BALANCE_EYEBROW' | translate }}
+              </span>
+              <h2>{{ 'LEAVE_FORM.AVAILABLE_DAYS' | translate }}</h2>
+            </div>
+            <div class="balance-icon" aria-hidden="true">▤</div>
+          </div>
+
+          <p class="balance-description" *ngIf="!selectedEmployee">
+            {{ 'LEAVE_FORM.SELECT_TO_VIEW' | translate }}
+          </p>
+
+          <ng-container *ngIf="selectedEmployee">
+
+            <p class="balance-employee">
+              {{ selectedEmployee.firstName }} {{ selectedEmployee.lastName }}
+            </p>
+
+            <div class="balance-empty" *ngIf="!selectedBalance">
+              <p>{{ 'LEAVE_FORM.NO_BALANCE' | translate }}</p>
+            </div>
+
+            <ng-container *ngIf="selectedBalance">
+
+              <div class="balance-total">
+                <strong>{{ availableDays ?? 0 }}</strong>
+                <span>
+                  {{ 'LEAVE_FORM.AVAILABLE_FOR' | translate }}
+                  {{
+                    form.type === 'Annual Leave'
+                      ? ('LEAVE_FORM.ANNUAL' | translate)
+                      : form.type === 'Sick Leave'
+                        ? ('LEAVE_FORM.SICK' | translate)
+                        : ('LEAVE_FORM.PERSONAL' | translate)
+                  }}
+                </span>
+              </div>
+
+              <div class="balance-progress">
+                <div class="progress-track">
+                  <div
+                    class="progress-fill"
+                    [style.width.%]="balanceProgress"
+                  ></div>
+                </div>
+              </div>
+
+              <div class="balance-breakdown">
+                <div>
+                  <span class="balance-dot annual"></span>
+                  <span>{{ 'LEAVE_FORM.ANNUAL' | translate }}</span>
+                  <strong>
+                    {{ selectedBalance.annual }}
+                    {{ 'LEAVE_FORM.DAYS' | translate }}
+                  </strong>
+                </div>
+
+                <div>
+                  <span class="balance-dot sick"></span>
+                  <span>{{ 'LEAVE_FORM.SICK' | translate }}</span>
+                  <strong>
+                    {{ selectedBalance.sick }}
+                    {{ 'LEAVE_FORM.DAYS' | translate }}
+                  </strong>
+                </div>
+
+                <div>
+                  <span class="balance-dot personal"></span>
+                  <span>{{ 'LEAVE_FORM.PERSONAL' | translate }}</span>
+                  <strong>
+                    {{ selectedBalance.personal }}
+                    {{ 'LEAVE_FORM.DAYS' | translate }}
+                  </strong>
+                </div>
+              </div>
+
+            </ng-container>
+          </ng-container>
+        </section>
+
+        <section class="validation-card">
+          <h3>{{ 'LEAVE_FORM.REQUEST_SUMMARY' | translate }}</h3>
+
+          <div class="summary-row">
+            <span>{{ 'LEAVE_FORM.LEAVE_TYPE' | translate }}</span>
+            <strong>
+              {{
+                form.type === 'Annual Leave'
+                  ? ('LEAVE_FORM.ANNUAL' | translate)
+                  : form.type === 'Sick Leave'
+                    ? ('LEAVE_FORM.SICK' | translate)
+                    : ('LEAVE_FORM.PERSONAL' | translate)
+              }}
+            </strong>
+          </div>
+
+          <div class="summary-row">
+            <span>{{ 'LEAVE_FORM.REQUESTED_DAYS' | translate }}</span>
+            <strong>{{ requestedDays }}</strong>
+          </div>
+
+          <div class="summary-row">
+            <span>{{ 'LEAVE_FORM.AVAILABLE_DAYS' | translate }}</span>
+            <strong>{{ availableDays === null ? '—' : availableDays }}</strong>
+          </div>
+
+          <div
+            class="balance-status"
+            *ngIf="selectedEmployee && hasValidDates && availableDays !== null"
+            [class.status-valid]="hasSufficientBalance"
+            [class.status-invalid]="!hasSufficientBalance"
+          >
+            <span aria-hidden="true">
+              {{ hasSufficientBalance ? '✓' : '!' }}
+            </span>
+
+            {{
+              hasSufficientBalance
+                ? ('LEAVE_FORM.SUFFICIENT' | translate)
+                : ('LEAVE_FORM.INSUFFICIENT' | translate)
+            }}
+          </div>
+
+          <p class="policy-note">
+            {{ 'LEAVE_FORM.POLICY' | translate }}
+          </p>
+        </section>
+
+      </aside>
+    </div>
+
+  </ng-container>
+</div>

@@ -1,0 +1,359 @@
+
+<header class="top-navbar">
+  <div class="navbar-left">
+    <button
+      type="button"
+      class="menu-button"
+      (click)="toggleMenu()"
+      aria-label="Toggle sidebar"
+    >
+      <span></span><span></span><span></span>
+    </button>
+
+    <div class="mobile-brand">
+      <div class="brand-icon">PF</div>
+      <div class="brand-text">
+        <strong>PeopleFlow</strong>
+        <span>{{ 'APP.SUBTITLE' | translate }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="navbar-right">
+    <!-- Search -->
+    <div class="navbar-search-wrapper">
+      <button
+        type="button"
+        class="icon-button search-button"
+        [class.active]="showSearch"
+        [attr.aria-expanded]="showSearch"
+       [attr.aria-label]="'NAV.SEARCH' | translate"
+        (click)="toggleSearch()"
+      >
+        <svg viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="7"></circle>
+          <path d="M20 20l-4-4"></path>
+        </svg>
+      </button>
+
+      <section class="navbar-search-dropdown" *ngIf="showSearch">
+        <div class="navbar-search-input">
+          <svg viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="7"></circle>
+            <path d="M20 20l-4-4"></path>
+          </svg>
+
+          <input
+  type="search"
+  [(ngModel)]="searchQuery"
+  [placeholder]="'SEARCH.PLACEHOLDER' | translate"
+  [attr.aria-label]="'SEARCH.PLACEHOLDER' | translate"
+  (keydown.escape)="closeNavbarMenus()"
+/>
+          <button
+            type="button"
+            aria-label="Close search"
+            (click)="closeNavbarMenus()"
+          >&times;</button>
+        </div>
+
+        <p class="navbar-search-label">
+  {{
+    searchQuery.trim()
+      ? ('SEARCH.RESULTS' | translate)
+      : ('SEARCH.QUICK_NAVIGATION' | translate)
+  }}
+</p>
+
+        <button
+          type="button"
+          class="navbar-search-result"
+          *ngFor="let page of filteredSearchPages"
+          (click)="openSearchPage(page.path)"
+        >
+          <span class="search-result-icon">
+            <svg viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="1.8">
+              <circle cx="12" cy="12" r="9"></circle>
+              <path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"></path>
+            </svg>
+          </span>
+          <span>{{ page.labelKey | translate }}</span>
+          <span class="search-result-arrow">↗</span>
+        </button>
+
+        <div class="navbar-search-empty" *ngIf="filteredSearchPages.length === 0">
+  {{ 'SEARCH.NO_RESULTS' | translate }}
+</div>
+      </section>
+    </div>
+
+    <!-- Notifications -->
+    <div class="navbar-notification-wrapper">
+      <button
+        type="button"
+        class="icon-button navbar-notification-button"
+        [class.active]="showNotifications"
+        (click)="goToNotifications()"
+        [attr.aria-expanded]="showNotifications"
+        aria-label="Notifications"
+      >
+        <svg viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="1.8">
+          <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
+          <path d="M10 21h4"></path>
+        </svg>
+
+        <span class="navbar-notification-badge"
+          *ngIf="notificationCount > 0">
+          {{ notificationCount > 99 ? '99+' : notificationCount }}
+        </span>
+      </button>
+
+      <section class="navbar-notification-dropdown"
+        *ngIf="showNotifications"
+        aria-label="Notifications list">
+
+        <div class="navbar-notification-header">
+          <div>
+           <h3>{{ 'NOTIFICATIONS.TITLE' | translate }}</h3>
+            <p>
+  {{ notificationCount }}
+  {{
+    notificationCount === 1
+      ? ('NOTIFICATIONS.UNREAD_ONE' | translate)
+      : ('NOTIFICATIONS.UNREAD_MANY' | translate)
+  }}
+</p>
+          </div>
+          <button type="button" class="navbar-notification-close"
+            (click)="showNotifications = false"
+            aria-label="Close notifications">&times;</button>
+        </div>
+
+        <div class="navbar-notification-toolbar">
+          <span>{{ 'NOTIFICATIONS.RECENT_ACTIVITY' | translate }}</span>
+         <button
+  type="button"
+  [disabled]="notificationCount === 0 || isUpdatingNotifications"
+  (click)="markAllNotificationsAsRead()"
+>
+  {{
+    isUpdatingNotifications
+      ? ('NOTIFICATIONS.UPDATING' | translate)
+      : ('NOTIFICATIONS.MARK_ALL_READ' | translate)
+  }}
+</button>
+        </div>
+
+       <div class="navbar-notification-state" *ngIf="isLoadingNotifications">
+  <span class="navbar-notification-spinner"></span>
+  <p>{{ 'NOTIFICATIONS.LOADING' | translate }}</p>
+</div>
+        <div
+  class="navbar-notification-state navbar-notification-error-state"
+  *ngIf="!isLoadingNotifications && notificationError"
+>
+  <p>{{ notificationError | translate }}</p>
+  <button type="button" (click)="loadNotifications()">
+    {{ 'COMMON.TRY_AGAIN' | translate }}
+  </button>
+</div>
+
+        <div class="navbar-notification-state"
+          *ngIf="!isLoadingNotifications && !notificationError && sortedNotifications.length === 0">
+          <div class="navbar-notification-empty-icon">
+            <svg viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="1.6">
+              <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
+              <path d="M10 21h4"></path>
+            </svg>
+          </div>
+          <strong>{{ 'NOTIFICATIONS.ALL_CAUGHT_UP' | translate }}</strong>
+            <p>{{ 'NOTIFICATIONS.EMPTY' | translate }}</p>
+        </div>
+
+        <div class="navbar-notification-list"
+          *ngIf="!isLoadingNotifications && !notificationError && sortedNotifications.length > 0">
+          <button type="button"
+            class="navbar-notification-item"
+            *ngFor="let notification of sortedNotifications"
+            [class.unread]="!notification.isRead"
+                        (click)="openNotification(notification)">
+
+            <span
+  class="navbar-notification-icon"
+  [ngClass]="{
+    'navbar-notification-account-icon': notification.type === 'account-request',
+    'navbar-notification-leave-icon': notification.type === 'leave-request',
+    'navbar-notification-approved-icon': notification.type === 'leave-approved',
+    'navbar-notification-rejected-icon': notification.type === 'leave-rejected',
+    'navbar-notification-general-icon': notification.type === 'general'
+  }"
+>
+              <svg *ngIf="notification.type === 'leave-request'"
+                viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="1.8">
+                <rect x="4" y="5" width="16" height="16" rx="2"></rect>
+                <path d="M8 3v4M16 3v4M4 10h16"></path>
+              </svg>
+              <svg *ngIf="notification.type === 'leave-approved'"
+                viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2">
+                <path d="m5 12 4 4L19 6"></path>
+              </svg>
+              <svg *ngIf="notification.type === 'leave-rejected'"
+                viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="1.8">
+                <path d="m7 7 10 10M17 7 7 17"></path>
+                <circle cx="12" cy="12" r="9"></circle>
+              </svg>
+              <svg *ngIf="notification.type === 'general'"
+                viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="1.8">
+                <path d="M12 8v4l3 2"></path>
+                <circle cx="12" cy="12" r="9"></circle>
+              </svg>
+                            <svg *ngIf="notification.type === 'account-request'"
+                viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="1.8">
+                <circle cx="10" cy="8" r="4"></circle>
+                <path d="M3 21v-1a6 6 0 0 1 6-6h2"></path>
+                <path d="M18 14v6M15 17h6"></path>
+              </svg>
+            </span>
+
+            <span class="navbar-notification-content">
+              <span class="navbar-notification-title">{{ notification | notificationText:'title' }}
+</span>
+<span class="navbar-notification-message">{{ notification | notificationText:'message' }}</span>              <span class="navbar-notification-date">
+                {{ formatNotificationDate(notification.createdAt) }}
+              </span>
+            </span>
+
+            <span class="navbar-notification-unread-dot"
+              *ngIf="!notification.isRead"></span>
+          </button>
+        </div>
+
+        <footer class="navbar-notification-footer"
+          *ngIf="!isLoadingNotifications && !notificationError && sortedNotifications.length > 0">
+          {{ sortedNotifications.length }}
+{{ 'NOTIFICATIONS.SHOWING' | translate }}
+          <button type="button" (click)="openUserPage('/notifications')">
+  {{ 'NOTIFICATIONS.VIEW_ALL' | translate }}
+</button>
+        </footer>
+      </section>
+    </div>
+
+    <div class="navbar-divider"></div>
+
+    <!-- User menu -->
+    <div class="navbar-user-wrapper">
+      <button type="button"
+        class="user-menu"
+        [class.active]="showUserMenu"
+        [attr.aria-expanded]="showUserMenu"
+        aria-label="Open user menu"
+        (click)="toggleUserMenu()">
+
+        <div class="user-avatar">
+          {{ currentUser?.firstName?.charAt(0) || 'U' }}
+        </div>
+
+        <div class="user-info">
+          <strong>
+  {{ currentUser?.firstName || ('SIDEBAR.USER' | translate) }}
+  {{ currentUser?.lastName || '' }}
+</strong> <span>
+  {{
+    currentUser?.role === 'admin'
+      ? ('SIDEBAR.ADMIN' | translate)
+      : currentUser?.role === 'hr'
+        ? ('SIDEBAR.HR' | translate)
+        : currentUser?.role === 'employee'
+          ? ('SIDEBAR.EMPLOYEE' | translate)
+          : ('SIDEBAR.USER' | translate)
+  }}
+</span>
+        </div>
+
+        <svg class="chevron" [class.rotated]="showUserMenu"
+          viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2">
+          <path d="m6 9 6 6 6-6"></path>
+        </svg>
+      </button>
+
+      <section class="navbar-user-dropdown" *ngIf="showUserMenu">
+        <div class="navbar-user-dropdown-header">
+          <div class="user-avatar">
+            {{ currentUser?.firstName?.charAt(0) || 'U' }}
+          </div>
+          <div>
+           <strong>
+  {{ currentUser?.firstName || ('SIDEBAR.USER' | translate) }}
+  {{ currentUser?.lastName || '' }}
+</strong> <span>
+  {{
+    currentUser?.role === 'admin'
+      ? ('SIDEBAR.ADMIN' | translate)
+      : currentUser?.role === 'hr'
+        ? ('SIDEBAR.HR' | translate)
+        : currentUser?.role === 'employee'
+          ? ('SIDEBAR.EMPLOYEE' | translate)
+          : ('SIDEBAR.USER' | translate)
+  }}
+</span></div>
+        </div>
+
+        <div class="navbar-user-dropdown-divider"></div>
+
+        <button
+  type="button"
+  class="navbar-user-dropdown-item"
+  (click)="openUserPage('/profile')"
+>
+  <span class="dropdown-item-icon">◉</span>
+  <span>
+    <strong>{{ 'NAV.MY_PROFILE' | translate }}</strong>
+    <small>{{ 'PROFILE.SUBTITLE' | translate }}</small>
+  </span>
+</button>
+
+<button
+  type="button"
+  class="navbar-user-dropdown-item"
+  (click)="openUserPage('/profile/edit')"
+>
+  <span class="dropdown-item-icon">✎</span>
+  <span>
+    <strong>{{ 'NAV.EDIT_PROFILE' | translate }}</strong>
+    <small>{{ 'EDIT.SUBTITLE' | translate }}</small>
+  </span>
+</button>
+
+      
+
+
+
+        <div class="navbar-user-dropdown-divider"></div>
+
+       <button
+  type="button"
+  class="navbar-user-dropdown-item logout-item"
+  (click)="logout()"
+>
+  <span class="dropdown-item-icon">↪</span>
+  <span>
+    <strong>{{ 'NAV.LOGOUT' | translate }}</strong>
+    <small>{{ 'NAV.SIGN_OUT_DESCRIPTION' | translate }}</small>
+  </span>
+</button>
+      </section>
+    </div>
+  </div>
+</header>

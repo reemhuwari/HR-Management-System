@@ -1,0 +1,266 @@
+<div class="employee-page">
+
+  @if (isLoading) {
+
+    <div class="state-card loading-state" role="status">
+      <span class="spinner"></span>
+      <p>{{ 'COMMON.LOADING' | translate }}</p>
+    </div>
+
+  } @else if (hasError) {
+
+    <div class="state-card error-state" role="alert">
+      <h2>{{ 'EMP_COMMON.ERR_LOAD' | translate }}</h2>
+      <button type="button" class="primary-btn" (click)="load()">
+        {{ 'COMMON.TRY_AGAIN' | translate }}
+      </button>
+    </div>
+
+  } @else if (!employee) {
+
+    <div class="state-card empty-state">
+      <h2>{{ 'EMP_COMMON.NO_RECORD_TITLE' | translate }}</h2>
+      <p>{{ 'EMP_COMMON.NO_RECORD_DESC' | translate }}</p>
+    </div>
+
+  } @else {
+
+    <!-- Header -->
+    <section class="page-header">
+      <div>
+        <span class="eyebrow">{{ 'EMP_DASHBOARD.EYEBROW' | translate }}</span>
+
+        <h1>
+          {{ getGreeting() }}{{ 'DASHBOARD.COMMA' | translate }}
+          {{ employee.firstName }} 👋
+        </h1>
+
+        <p>{{ 'EMP_DASHBOARD.SUBTITLE' | translate }}</p>
+      </div>
+
+      <a routerLink="/employee/request-leave" class="primary-btn">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 5v14M5 12h14" />
+        </svg>
+        {{ 'EMP_DASHBOARD.REQUEST_LEAVE' | translate }}
+      </a>
+    </section>
+
+    <!-- Stats -->
+    <section class="stats-grid">
+
+      <div class="stat-card">
+        <div class="stat-icon" [class]="todayIconClass">
+          <svg viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="9" />
+            <path d="M12 7v5l3 2" />
+          </svg>
+        </div>
+        <div class="stat-content">
+          <span>{{ 'EMP_DASHBOARD.TODAY_STATUS' | translate }}</span>
+          <strong>{{ todayStatusLabel }}</strong>
+          @if (todayStatusDetail) {
+            <small>{{ todayStatusDetail }}</small>
+          }
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon leave">
+          <svg viewBox="0 0 24 24">
+            <path d="M6 2h12v20H6z" />
+            <path d="M9 6h6M9 10h6M9 14h4" />
+          </svg>
+        </div>
+        <div class="stat-content">
+          <span>{{ 'EMP_DASHBOARD.LEAVE_REMAINING' | translate }}</span>
+          <strong>{{ totalRemaining }} {{ 'LABELS.DAYS_UNIT' | translate }}</strong>
+          <small>{{ 'EMP_DASHBOARD.DAYS_ACROSS' | translate }}</small>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon late">
+          <svg viewBox="0 0 24 24">
+            <path d="M5 4h14v16H5z" />
+            <path d="M9 8h6M9 12h6M9 16h4" />
+          </svg>
+        </div>
+        <div class="stat-content">
+          <span>{{ 'EMP_DASHBOARD.PENDING' | translate }}</span>
+          <strong>{{ pendingCount }}</strong>
+          <small>{{ 'EMP_DASHBOARD.AWAITING' | translate }}</small>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon present">
+          <svg viewBox="0 0 24 24">
+            <path d="M20 6L9 17l-5-5" />
+          </svg>
+        </div>
+        <div class="stat-content">
+          <span>{{ 'EMP_DASHBOARD.ATTENDED_MONTH' | translate }}</span>
+          <strong>{{ attendedThisMonth }}</strong>
+          <small>{{ 'EMP_DASHBOARD.ATTENDED_NOTE' | translate }}</small>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Balance + Attendance -->
+    <section class="two-column">
+
+      <div class="content-card">
+        <div class="card-header">
+          <div>
+            <h2>{{ 'EMP_DASHBOARD.BALANCE_TITLE' | translate }}</h2>
+            <p>{{ 'EMP_DASHBOARD.BALANCE_DESC' | translate }}</p>
+          </div>
+
+          <a routerLink="/employee/leave-balance" class="view-all">
+            {{ 'LABELS.VIEW_ALL' | translate }}
+          </a>
+        </div>
+
+        @if (balanceItems.length === 0) {
+          <div class="empty-state">
+            <p>{{ 'EMP_DASHBOARD.NO_BALANCE' | translate }}</p>
+          </div>
+        } @else {
+          <div class="balance-list">
+            @for (item of balanceItems; track item.key) {
+              <div class="balance-row">
+                <div class="balance-label">
+                  <span class="dot" [class]="item.key"></span>
+                  {{ item.labelKey | translate }}
+                </div>
+
+                <strong>{{ item.value }} {{ 'LABELS.DAYS_UNIT' | translate }}</strong>
+
+                <div class="bar">
+                  <span [class]="item.key" [style.width.%]="item.percent"></span>
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="content-card">
+        <div class="card-header">
+          <div>
+            <h2>{{ 'EMP_DASHBOARD.RECENT_ATTENDANCE' | translate }}</h2>
+            <p>{{ 'EMP_DASHBOARD.RECENT_ATTENDANCE_DESC' | translate }}</p>
+          </div>
+
+          <a routerLink="/employee/attendance" class="view-all">
+            {{ 'LABELS.VIEW_ALL' | translate }}
+          </a>
+        </div>
+
+        @if (recentAttendance.length === 0) {
+          <div class="empty-state">
+            <p>{{ 'EMP_DASHBOARD.NO_ATTENDANCE' | translate }}</p>
+          </div>
+        } @else {
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>{{ 'LABELS.DATE' | translate }}</th>
+                  <th>{{ 'LABELS.CHECK_IN' | translate }}</th>
+                  <th>{{ 'LABELS.CHECK_OUT' | translate }}</th>
+                  <th>{{ 'LABELS.WORK_HOURS' | translate }}</th>
+                  <th>{{ 'COMMON.STATUS' | translate }}</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                @for (record of recentAttendance; track record.id) {
+                  <tr>
+                    <td>{{ formatDate(record.date) }}</td>
+                    <td>{{ record.checkIn || '—' }}</td>
+                    <td>{{ record.checkOut || '—' }}</td>
+                    <td>{{ formatHours(record.workHours) }}</td>
+                    <td>
+                      <span
+                        class="status-badge"
+                        [class.present]="record.status === 'present'"
+                        [class.late]="record.status === 'late'"
+                        [class.absent]="record.status === 'absent'"
+                        [class.on-leave]="record.status === 'on-leave'"
+                      >
+                        {{ getAttendanceStatusLabel(record.status) }}
+                      </span>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      </div>
+
+    </section>
+
+    <!-- Recent leave requests -->
+    <section class="content-card">
+      <div class="card-header">
+        <div>
+          <h2>{{ 'EMP_DASHBOARD.RECENT_REQUESTS' | translate }}</h2>
+          <p>{{ 'EMP_DASHBOARD.RECENT_REQUESTS_DESC' | translate }}</p>
+        </div>
+
+        <a routerLink="/employee/leave-requests" class="view-all">
+          {{ 'LABELS.VIEW_ALL' | translate }}
+        </a>
+      </div>
+
+      @if (recentRequests.length === 0) {
+        <div class="empty-state">
+          <p>{{ 'EMP_DASHBOARD.NO_REQUESTS' | translate }}</p>
+        </div>
+      } @else {
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>{{ 'LABELS.LEAVE_TYPE' | translate }}</th>
+                <th>{{ 'LABELS.DATES' | translate }}</th>
+                <th>{{ 'LABELS.DAYS' | translate }}</th>
+                <th>{{ 'COMMON.STATUS' | translate }}</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              @for (request of recentRequests; track request.id) {
+                <tr>
+                  <td><strong>{{ getLeaveTypeLabel(request.type) }}</strong></td>
+                  <td>
+                    {{ formatDate(request.startDate) }}
+                    -
+                    {{ formatDate(request.endDate) }}
+                  </td>
+                  <td>{{ request.days }}</td>
+                  <td>
+                    <span
+                      class="status-badge"
+                      [class.pending]="request.status === 'pending'"
+                      [class.approved]="request.status === 'approved'"
+                      [class.rejected]="request.status === 'rejected'"
+                    >
+                      {{ getLeaveStatusLabel(request.status) }}
+                    </span>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </section>
+
+  }
+
+</div>
