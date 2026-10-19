@@ -1,59 +1,128 @@
-# HrManagementSystem
+# PeopleFlow — HR Management System
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.19.
+A role-based human resources web application built with Angular. PeopleFlow lets HR teams manage employees, attendance, and leave, while employees use a self-service portal to check in, request leave, and track their balances. The interface supports **English and Arabic with full RTL layout**.
 
-## Development server
+![Dashboard](docs/screenshots/dashboard.png)
 
-To start a local development server, run:
+## Features
+
+### Admin / HR
+- Dashboard with attendance, leave, and headcount statistics
+- Employee management: add, edit, view, and delete employees
+- Review and approve or reject new account sign-ups
+- Attendance tracking by date, with check-in and check-out
+- Leave request review with automatic balance deduction on approval
+- Leave balance overview with low-balance warnings
+
+### Employee portal
+- Personal dashboard: today's status, remaining leave, pending requests
+- Check in and check out, with monthly attendance history
+- Submit leave requests with live balance validation and overlap detection
+- Track request status (pending, approved, rejected)
+- View leave balance by type
+
+### Platform
+- Role-based access control with route guards (`admin`, `hr`, `employee`)
+- Sign-up flow that requires HR approval before the account becomes active
+- Role-targeted notifications, translated into the user's language
+- English and Arabic, with RTL support, switchable at runtime
+- Responsive layout
+
+## Tech Stack
+
+| Area | Technology |
+| --- | --- |
+| Framework | Angular (standalone components) |
+| Language | TypeScript |
+| Reactive layer | RxJS |
+| Styling | SCSS, CSS logical properties for RTL/LTR |
+| Mock API | JSON Server |
+| i18n | Custom `LanguageService` and `translate` pipe (JSON dictionaries) |
+
+## Getting Started
+
+### Prerequisites
+- Node.js 18 or later
+- npm
+
+### Installation
 
 ```bash
-ng serve
+git clone https://github.com/<your-username>/<repository-name>.git
+cd <repository-name>
+npm install
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+### Run
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+Start the mock API and the app in two terminals.
 
 ```bash
-ng generate component component-name
+# Terminal 1: mock API (http://localhost:3000)
+npx json-server --watch db.json --port 3000
+
+# Terminal 2: Angular app (http://localhost:4200)
+npm start
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+The API base URL is configured in `src/environments/environment.ts`.
 
-```bash
-ng generate --help
+## Demo Accounts
+
+| Role | Email | Password |
+| --- | --- | --- |
+| Admin | `admin@peopleflow.com` | `Admin123!` |
+| HR | `hr@peopleflow.com` | `Hr123456!` |
+| Employee | `sarah.miller@peopleflow.com` | `Employee123!` |
+
+On the sign-in page, choose the **Employee** or **Admin / HR** tab that matches the account.
+
+## Project Structure
+
+```text
+src/app
+├── core
+│   ├── guards        # authGuard, roleGuard
+│   ├── models        # TypeScript interfaces
+│   ├── pipes         # translate, notification text
+│   └── services      # auth, employees, attendance, leave, notifications, i18n
+├── features
+│   ├── auth          # login, signup
+│   ├── dashboard     # admin dashboard
+│   ├── employees     # employee list, details, edit, employee portal
+│   ├── attendance
+│   ├── leave-requests
+│   ├── leave-balances
+│   ├── notifications
+│   └── profile
+└── shared
+    └── components    # main layout, navbar, sidebar
+public/i18n           # en.json, ar.json
 ```
 
-## Building
+## Internationalization
 
-To build the project run:
+Translations live in `public/i18n/en.json` and `public/i18n/ar.json`. To add a string, add the same key to both files and use it in templates with the `translate` pipe:
 
-```bash
-ng build
+```html
+{{ 'DASHBOARD.TITLE' | translate }}
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+The document direction (`ltr` or `rtl`) is set automatically when the language changes.
 
-## Running unit tests
+## Security Notice
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+This project uses JSON Server as a mock backend. Passwords are stored in plain text and authentication runs on the client, so **it is intended for learning and demonstration only**. A production deployment requires a real backend with password hashing, token-based authentication, and server-side authorization.
 
-```bash
-ng test
-```
+## Roadmap
 
-## Running end-to-end tests
+- [ ] Real backend with JWT authentication
+- [ ] Unit and end-to-end tests
+- [ ] Reports and CSV/PDF export
+- [ ] Email notifications
+- [ ] Password reset flow
 
-For end-to-end (e2e) testing, run:
 
-```bash
-ng e2e
-```
+## Author
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+**Reem Huwari**
