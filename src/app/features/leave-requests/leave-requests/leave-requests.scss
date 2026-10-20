@@ -15,13 +15,15 @@
   h1 {
     margin: 5px 0;
     color: var(--navy);
-    font-size: 30px;
+    font-size: clamp(28px, 2.3vw, 34px);
+    font-weight: 800;
+    letter-spacing: -0.7px;
   }
 
   p {
     margin: 8px 0 0;
     color: var(--muted);
-    font-size: 13px;
+    font-size: var(--font-supporting);
   }
 }
 
@@ -31,9 +33,10 @@
 
 .eyebrow {
   color: var(--primary);
-  font-size: 10px;
+  font-size: var(--font-eyebrow);
   font-weight: 800;
   letter-spacing: 1.3px;
+  text-transform: uppercase;
 }
 
 .new-request-button {
@@ -46,16 +49,18 @@
   padding: 0 18px;
   border: 1px solid #4f46e5;
   border-radius: 9px;
-  background: #4f46e5;
+  background: linear-gradient(135deg, var(--primary), #5b6df7);
   color: #fff;
   font-family: inherit;
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 12px 22px rgba(79, 70, 229, 0.18);
 
   &:hover {
-    background: #4338ca;
+    background: linear-gradient(135deg, var(--primary-dark), #4957d5);
+    transform: translateY(-1px);
   }
 
   span {
@@ -109,16 +114,17 @@
 
 .stats {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 15px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
   margin-bottom: 18px;
 }
 
 .stat-card {
   padding: 20px;
-  background: white;
+  background: rgba(255, 255, 255, 0.92);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: 16px;
+  box-shadow: 0 10px 26px rgba(15, 23, 42, 0.04);
 
   span {
     color: var(--muted);
@@ -143,11 +149,12 @@
     min-width: 170px;
     border: 1px solid var(--border);
     border-radius: 9px;
-    background: white;
+    background: rgba(255, 255, 255, 0.9);
     padding: 0 12px;
     outline: none;
     color: var(--navy);
     font-family: inherit;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 
     &:focus {
       border-color: #818cf8;
@@ -162,7 +169,7 @@
 
   span {
     position: absolute;
-    left: 13px;
+    inset-inline-start: 13px;
     top: 11px;
     color: #9099aa;
   }
@@ -176,6 +183,7 @@
     padding: 0 12px 0 35px;
     outline: none;
     font-family: inherit;
+    background: rgba(255, 255, 255, 0.9);
 
     &:focus {
       border-color: #818cf8;
@@ -185,10 +193,11 @@
 }
 
 .table-card {
-  background: white;
+  background: rgba(255, 255, 255, 0.92);
   border: 1px solid var(--border);
   border-radius: 15px;
   overflow: hidden;
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.04);
 }
 
 .table-header {
@@ -222,7 +231,7 @@ th {
   background: #fafbfc;
   color: #7b8494;
   font-size: 10px;
-  text-align: left;
+  text-align: start;
   text-transform: uppercase;
   white-space: nowrap;
 }
@@ -302,6 +311,8 @@ tbody tr {
       opacity: 0.55;
       cursor: not-allowed;
     }
+
+
   }
 
   .approve {
@@ -594,4 +605,22 @@ tbody tr:hover {
   .stats {
     grid-template-columns: minmax(0, 1fr);
   }
+}
+
+table {
+  table-layout: auto;
+}
+
+table th,
+table td {
+  padding-inline: 12px;
+  text-align: start;
+}
+
+table th {
+  font-size: var(--font-table-header);
+}
+
+table td {
+  font-size: var(--font-table-cell);
 }

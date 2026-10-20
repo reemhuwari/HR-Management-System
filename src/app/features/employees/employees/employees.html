@@ -86,15 +86,20 @@
     </section>
   }
   <div class="toolbar">
-    <div class="search-box">
-      <span>⌕</span>
-      <input
-        type="text"
-        [placeholder]="'EMPLOYEES.SEARCH_PLACEHOLDER' | translate"
-        [(ngModel)]="searchTerm"
-        (ngModelChange)="applyFilters()"
-        [attr.aria-label]="'EMPLOYEES.SEARCH_LABEL' | translate"
-      />
+    <div class="employee-search-toolbar">
+      <div class="search-box">
+        <span>⌕</span>
+        <input
+          type="text"
+          [placeholder]="'EMPLOYEES.SEARCH_PLACEHOLDER' | translate"
+          [(ngModel)]="searchTerm"
+          (ngModelChange)="applyFilters()"
+          [attr.aria-label]="'EMPLOYEES.SEARCH_LABEL' | translate"
+        />
+      </div>
+      <span class="results-count">
+        {{ filteredEmployees.length }} {{ 'EMPLOYEES.COUNT' | translate }}
+      </span>
     </div>
 
     <select
@@ -139,7 +144,6 @@
       <div class="table-heading">
         <div>
           <h2>{{ 'EMPLOYEES.ALL_EMPLOYEES' | translate }}</h2>
-          <span>{{ filteredEmployees.length }} {{ 'EMPLOYEES.COUNT' | translate }}</span>
         </div>
       </div>
 

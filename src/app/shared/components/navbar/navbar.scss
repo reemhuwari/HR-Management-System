@@ -878,7 +878,35 @@ html[dir='rtl'] .search-result-arrow {
     padding: 12px;
     gap: 9px;
   }
-}.navbar-notification-account-icon {
+}
+
+.navbar-notification-account-icon {
   background: #e6f6fb;
   color: #0e7490;
+}
+
+.top-navbar {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
+}
+
+.navbar-search-dropdown,
+.navbar-notification-dropdown,
+.navbar-user-dropdown {
+  backdrop-filter: blur(14px);
+  border-color: rgba(148, 163, 184, 0.16);
+}
+
+.icon-button:hover,
+.icon-button.active,
+.user-menu:hover,
+.user-menu.active {
+  box-shadow: inset 0 0 0 1px rgba(79, 70, 229, 0.08);
+}
+
+.navbar-search-result:hover,
+.navbar-user-dropdown-item:hover,
+.navbar-notification-item:hover {
+  transform: translateY(-1px);
 }

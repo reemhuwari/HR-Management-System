@@ -34,14 +34,14 @@
   p {
     margin: 0;
     color: var(--muted, #687386);
-    font-size: 14px;
+    font-size: var(--font-supporting);
     line-height: 1.6;
   }
 }
 
 .eyebrow {
   color: var(--primary, #4f6ef7);
-  font-size: 11px;
+  font-size: var(--font-eyebrow);
   font-weight: 750;
   letter-spacing: 1.1px;
 }
@@ -477,8 +477,9 @@
 table {
   width: 100%;
   border-collapse: collapse;
-  text-align: left;
+  text-align: start;
   white-space: nowrap;
+  table-layout: auto;
 
   thead {
     background: #f7f9fc;
@@ -686,4 +687,18 @@ select:focus-visible {
   .check-button {
     transition: none;
   }
+}
+
+table th,
+table td {
+  padding-inline: 12px;
+  text-align: start;
+}
+
+table th {
+  font-size: var(--font-table-header);
+}
+
+table td {
+  font-size: var(--font-table-cell);
 }

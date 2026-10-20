@@ -734,6 +734,24 @@ tbody {
   }
 }
 
+table {
+  table-layout: auto;
+}
+
+table th,
+table td {
+  padding-inline: 12px;
+  text-align: start;
+}
+
+table th {
+  font-size: var(--font-table-header);
+}
+
+table td {
+  font-size: var(--font-table-cell);
+}
+
 @media (max-width: 520px) {
   .stats-grid {
     grid-template-columns: 1fr;

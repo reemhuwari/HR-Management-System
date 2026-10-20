@@ -24,7 +24,7 @@
 .eyebrow {
   margin: 0;
   color: #6b63d9;
-  font-size: 20px;
+  font-size: var(--font-eyebrow);
   font-weight: 800;
   letter-spacing: 2px;
 }
@@ -32,7 +32,7 @@
 .subtitle {
   margin: 0;
   color: #858ba1;
-  font-size: 14px;
+  font-size: var(--font-supporting);
 }
 
 .edit-card {
