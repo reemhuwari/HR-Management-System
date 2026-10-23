@@ -2,8 +2,39 @@
 
 A role-based human resources web application built with Angular. PeopleFlow lets HR teams manage employees, attendance, and leave, while employees use a self-service portal to check in, request leave, and track their balances. The interface supports **English and Arabic with full RTL layout**.
 
-![Dashboard](docs/screenshots/dashboard.png)
+## Screenshots
 
+### Admin Dashboard
+![Admin Dashboard 1](docs/screenshots/adminDashboard1.PNG)
+![Admin Dashboard 2](docs/screenshots/adminDashboard2.PNG)
+
+### Employee Dashboard
+![Employee Dashboard](docs/screenshots/employee-dashboard.PNG)
+
+### Employee Management
+![Admin Employees](docs/screenshots/admin-employees.PNG)
+
+### Attendance
+![Admin Attendance 1](docs/screenshots/adminAttendance1.PNG)
+![Admin Attendance 2](docs/screenshots/adminAttendance2.PNG)
+![Employee Attendance](docs/screenshots/employee-attendance.PNG)
+
+### Leave Management
+![Admin Leave Balance](docs/screenshots/admin-leave-balance.PNG)
+![Admin Leave Balance Details](docs/screenshots/admin-leave-balance1.PNG)
+![Admin Leave Requests](docs/screenshots/admin-leave-requests.PNG)
+![Employee Leave Balance](docs/screenshots/employee-leave-balance.PNG)
+![Employee Leave Requests](docs/screenshots/employee-leave-requests.PNG)
+![Employee Request Leave](docs/screenshots/employee-request-leave.PNG)
+
+### Notifications
+![Admin Notifications](docs/screenshots/adminNotifications.PNG)
+
+### Employee Profiles
+![Employee Profile](docs/screenshots/employee-profile.PNG)
+![Edit Employee Profile](docs/screenshots/employee-edit-profile.PNG)
+![Edit Profile](docs/screenshots/editProfile.PNG)
+![Profile](docs/screenshots/profile.PNG)
 ## Features
 
 ### Admin / HR
