@@ -1,4 +1,11 @@
-import { Component, inject } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  inject,
+  OnDestroy,
+  ViewChild
+} from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -8,7 +15,7 @@ import {
 } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
-import { LanguageService } from '../../../core/services/language.service';
+import { LanguageService, type AppLanguage } from '../../../core/services/language.service';
 import { RegistrationService } from '../../../core/services/registration.service';
 import { TranslatePipe } from '../../../core/pipes/translate.pipe';
 
@@ -38,10 +45,31 @@ function passwordsMatch(
   templateUrl: './signup.html',
   styleUrl: './signup.scss'
 })
-export class SignupComponent {
+export class SignupComponent implements AfterViewInit, OnDestroy {
+  @ViewChild('authVideo') private authVideo?: ElementRef<HTMLVideoElement>;
+
   private readonly fb = inject(FormBuilder);
   private readonly languageService = inject(LanguageService);
   private readonly registrationService = inject(RegistrationService);
+  private motionPreference?: MediaQueryList;
+  private readonly handleMotionPreferenceChange = (
+    event: MediaQueryListEvent
+  ): void => {
+    const video = this.authVideo?.nativeElement;
+
+    if (!video) {
+      return;
+    }
+
+    if (event.matches) {
+      video.pause();
+      return;
+    }
+
+    void video.play().catch(error => {
+      console.error('Unable to resume the registration background video:', error);
+    });
+  };
 
   readonly currentYear = new Date().getFullYear();
 
@@ -75,6 +103,32 @@ export class SignupComponent {
       validators: passwordsMatch
     }
   );
+
+  ngAfterViewInit(): void {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    this.motionPreference = window.matchMedia(
+      '(prefers-reduced-motion: reduce)'
+    );
+
+    if (this.motionPreference.matches) {
+      this.authVideo?.nativeElement.pause();
+    }
+
+    this.motionPreference.addEventListener(
+      'change',
+      this.handleMotionPreferenceChange
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.motionPreference?.removeEventListener(
+      'change',
+      this.handleMotionPreferenceChange
+    );
+  }
 
   get firstName() {
     return this.signupForm.controls.firstName;
@@ -110,6 +164,14 @@ export class SignupComponent {
 
   get terms() {
     return this.signupForm.controls.terms;
+  }
+
+  get currentLanguage(): AppLanguage {
+    return this.languageService.currentLanguage;
+  }
+
+  setLanguage(lang: AppLanguage): void {
+    this.languageService.setLanguage(lang);
   }
 
   private t(key: string): string {

@@ -145,6 +145,19 @@
       "position": "هندسة البرمجيات",
       "status": "active",
       "hireDate": "2026-10-19"
+    },
+    {
+      "employeeId": "EMP-008",
+      "firstName": "عمر",
+      "lastName": "احمد",
+      "email": "omer@gmail.com",
+      "phone": "+962786421240",
+      "department": "Engineering",
+      "position": "مطور برامج",
+      "status": "active",
+      "hireDate": "2026-10-23",
+      "id": "T8TBKP2OSkM",
+      "avatar": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBwgHBgkIBwgKCgkLDRYPDQwMDRsUFRAWIB0iIiAdHx8kKDQsJCYxJx8fLT0tMTU3Ojo6Iys/RD84QzQ5OjcBCgoKDQwNGg8PGjclHyU3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N//AABEIAJQA3wMBIgACEQEDEQH/xAAcAAACAgMBAQAAAAAAAAAAAAAAAgEDBQYHBAj/xABAEAABBAECAwUFBgIHCQAAAAABAAIDEQQFIQYSMQciQVFhEzJxgZEUQqGxwdFSYhVykqKys8IXIyUmNDZkdIL/xAAZAQEAAwEBAAAAAAAAAAAAAAAAAQIDBAX/xAAhEQEBAAIDAQABBQAAAAAAAAAAAQIRAxIxIWEEEyJBUf/aAAwDAQACEQMRAD8A6oVFJj1RSJKAik1KaQLSkBNSKRBaRSelCCFHKnpQgWkeNJuq5N2ucYZuLnO0LTZXwsbG12TLGac4uFht+G1X8UGzcTdomjaG98DC7Nym7GOA91p/md+wK1L/AGtag53tGabiCL+HncSPj0XM4Gl7gWuI38RsvZM4Yw5mgc567Ku19R1fR+1fAyOZmqYb8blAIfC72gP4CvxW96VqmDq+KMnTcmPIhJrmYbr0Pkvl4uleTIIjV9QKWxcH8Y5vC2S/2MYlx5SDPA7bnrxHk6vqkpcX0VSKVWn5cOoYGPm4zrhnjbIwnyIteilZQlKCE6KQV0ik9IpAlJSFZSghBUQlIVpCUhBUAnARSYBEvQVCYhFBAqZFKaQRSmkwU0iCUik1IpAlIpMhAtL5v4wZk6tx1qkUY55X5j29PBvdH0AC+kiFwvMw3M7VNVEYpkeQZCD5Oa13+pVzuptfCbyNovZvnzND58yPHafutslbhpvZlosBD8vmypBv39gVdFxXo2EQybMaHN94NaXV9FntN1/TdTj58LJD2gdaIXH3yvrsuMnjH5Gj6fFjOx2YcIjH3eQUuacb6NhwNDoI2xvYRVeq6Vq3EeiYZLMnNZG/yN7rnnFuo4erQytwJ+d4aXUWlpoeVqMe0yWy63G7dC7K8v7ZwbitIF473wje9gdlttLTOyDH9jwTA8jl9rPK/wCIuv0W7LvedfSUpATUoIQLSE1IpAqUi09KCgrISkKxKUFdJgppAQehRSakIIATUgJggilIClCCFBCZFIFpRSdQgqmsQycth3KarzXJcvFlPE78qbfLmxWiZ429o4bB3xoD6Lr1b9LXPOKQcHVcWR7QI45TET/KdwfwXPz71t0/p9f2xJ0TOw2lmA4Y8RFteMf2pJPW6Wa4d0c42Wyafn5nGi1zQ2x6hZJmtYmPix24OdJsxt1zFeNvFWkx6o2LJyQ2TzDSW9PNc83Y6/kazm8NuysrKyoZZfbe0PKGMDuTfyPVeHI4ey4AcrN9qQNmGUAOPnYCzePxdpf9LywYUgcLNyOFM+vxV3EWuY+VprnROaXNdTgDdFTuxFmN+vR2UvnhhfivkcYPY80cZNhpa6iR8bXQqWmdmeNJ/R7sqZpFsEce3Ue878SPot1pdfHvr9cHLrt8LSKTUilozLSKTqKQJSilZSWkFaUhWFKUCUikyEF6KUoQFJkoTIBShCAUKUIIUJlCCFr3HeK2fhjNkDGmWFrZWurccrgT+FrYl5tQibNg5MThYkhe0j4gqMvNJxuq5Dg4kGu44azIMOREXBp6ijuLHldg/BZTA4bhmhMeoMw3ztG9Yjn2fra1DEe/RdQb9qDvZOI5Xg7ELdueHNibNj6j7Au6kUVxeXT0cb2n31hNZ4ahx+XF0+WGGzu44wbQ9NybWP1qCKBuFo+nhz5MqQFzju51kNb8ybPyWXz58PCiMmRnPyHkeBGyo7NmRa/xm/NyG2MaJ0zG+ANhrfoCr4TtVeXKY4/l2ONgjibG2g1rQG14BMp+KF1vOCEIQChShEopKU9JfNAtJCE5UFAiFKhBehCEAnShSOiCVKhSgEIQghCCqM3NxdPgM+dkxY8Q3L5Xho/FBctY7Rddm0Hh10uJyjJyJGwxuP3L9530/NYXX+1fSMHmi0mCTUZh0dfs4h/9VZ+Q+a5jxZxnq3EhYzPdEzHjfzMhiZytafO9yVOqjbouVpOPqWmckjAbbtsudavpWbppLMaaUwXYAN0s/wAD8WsjbHp+qvHsxTYpnHp/K79Cto1bTWOs9Gu8wuGy8dd0szjjxE8rwyWWR19AStj0fV5+D9QwMuFwDHyBuS09HReI+XX5LLS6Th4zpMzLlbFBF4nbdaJrupjPzTyN/wB03utYfL1W3HvKz/GPJqTT6q28Dt4KV8+8PdpfEWktZFNMzPgaKbHkjcDyDxv+a6LofatoOocseeybTZTsfad+K/R4/UBdOnO31Cow8zFzoRLhZEWRGfvRPDvyV6qBCEIIUFSoRJUpTlIUCoQgILkJSVFoHtSkBTAoHQotFoGWL1/X9O4fwvtWpz8jSaYxu75D5NHivZmZUOFhz5WS/kghYXyO8mgbr5y4r4gyOJNYk1DJ5mMPdhicbETPBvlfn6qZBs+u9qmr5znM0uNunQno7Z8tfHoPktGy8zIzZzNmTy5Ep3Mk0he76lUu2F+Pmqz7wpaIOaFKurYb8U5/RS0bIhj8hsjmiNt0N1k9H17VNIyWSsfLJEPeikkJY8eVeHyVL2d4O2obkV1Qd+l+lKtxl9WmVniNc1vU9enYc0hsUZuOCMU1p/U+q8kETmnmk97x9F7Hs5AQ5u4vr5qsNdyd7q4pMZPC20NGzfNWM3c60EboaO8VZVfjZM2HkMyMSaSCVvSSJ5a4fMLoPC3avmYgZj8RRnLgNVkR0JGC+rhsHD6Fc3PiPNK4Dr5KLNpfVsE8WTDHPjyNlikaHMe02HA9CrFyLsW4kc18vDuVKXNNy4nMfdP3mD08fqutqliUqCi1BKgQSlKklIUAhQpQOotQSltA4KYFVWmtBZalV2muxSDRu2PUXYfCrMZhIdmTtjNfwgFx/JcSsWb2tdJ7c8p7tQ0jFa/uMhllc3zLiAP8JXM78D1WmPiEnuivA9PRVjw+qmQ0N+iSMnu+dUVIucFPRCEQCq21e6cpCe/8kEyFzg6ySTvZ8VHvOb5AWpeenqobu53oKRJlHl8FKre6uRBHNtdqQb6Cj4KmI81g9AVa73LLuUILsLNl0zUMbNxnls2PK2VpB8Qbr57g+hX1Hi5MeZiw5MV+zmja9u/gRa+U6AYXHYeF9Svo/s/yvtXBWjzeP2ZrT8Rt+ipklsNoJSkqFUSSlKCoKARaW1IKBiUpKCUhKBwUyqBT2ga0WotFoONds7vacT47evJhMr5vetArbfcefkt67Yf+74z/AOFH/ictJsAbha4z4iqX7WDv4qrmoeoIKvkAI2Xlds/4qKPW12ym1RG5WWpDEpRRkaCaB8fL1UFyh3Vp+SINIGteWxkuYD3XEUSiPoT5lIau0zTTUEuVEriBt1CZ7lU4FxAtQlbGOSNti3FMIt+eY9NwPAKxo8vqq5QZHez+6Pe9fRSKTeRIHb8g6eq732QTmXgjHaTvFPNH/eJH4FcMrl93Zdm7FHk8LZbT0bnvr+wxVsI6Dai1FotUSklISglKSgm0ApEwKB3KsndM5Vk7oGBU2kTIHtFpVIQcd7YW1xViu/iwmX8nvWkELf8AtpYWaxpMoHv472/2XA/6lz4voFxB28vFa4+K31U8EWW/NZbQuDtZ4gLZcaFsOIWk/aZHUxxHgPG/2WFfksvvNePPu3S7b2ZZuLLwhhxQTgyNL+dh/rGlly59ZuNOLGW6rkOucP6pw/MI9SxXxsdsyZu8b/g791j+bZfQ+U7C1TFlhZLjzMIIcyxIw11BXC+J8XBg1aUaX/0pAPJzcwjd4tB8v3VOPkuV1WnJxzGbjF8yHHYfFDWud7rT9EzGBxp1iuuy6GBHmrPko5wG2SvX7JjgDy38UwaxvQUERtjucEXRUMNys+K2PQOH2cQ5kuPHmNx5WR+0AMXPziwD4jpYWX1Ls7Gmadk5z9UdK/HYZAxsNNdXhdlZZcmMy62tJhbjuNTsAHwQyq2VMr3g91u/g49EczgwCcj+sG0FqzNLIGjlbu78l13sPkJ4f1KMndudf1jZ+y5CR3etrrXYcP8Ag+rf+43/ACwq1MdKCm1ChUSCUqlKUEEpmlIVIKC1yqPVCEEhT4oQgZCEIOb9tbG/0bpMtd8TvaD6Ftn8guTyk8go+84AoQtJ4rfVrI2NFNaAB5K47sDT7pHu+H0QhX1Datwa3vhjeYdHVupHug+iEJqK7qLPmp+ZQhEq7olI7cElCFWjP9nEjm8YYYadntex3qOUmvwCyPGfEOoZeoZOnc7YsaN7oyyIEe0HTvEk2pQsbJ+42l/g1IgBjRQrypUnuvfHZ5W9LQhb1iToNhXouv8AYeP+XtSd4nPP+WxCFSrR0VBQhUSUqChCBShqEIP/2Q=="
     }
   ],
   "attendance": [
@@ -228,6 +241,24 @@
       "checkOut": null,
       "status": "late",
       "workHours": 0
+    },
+    {
+      "employeeId": "1",
+      "date": "2026-10-23",
+      "checkIn": "15:36",
+      "checkOut": null,
+      "status": "late",
+      "workHours": 0,
+      "id": "1AJzSBx_Tyc"
+    },
+    {
+      "employeeId": "T8TBKP2OSkM",
+      "date": "2026-10-23",
+      "checkIn": "15:45",
+      "checkOut": null,
+      "status": "late",
+      "workHours": 0,
+      "id": "MRHlGLCcuqI"
     }
   ],
   "leaveRequests": [

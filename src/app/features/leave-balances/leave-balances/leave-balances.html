@@ -111,38 +111,38 @@
 
   </div>
 
-  <div class="toolbar">
-    <div class="search-box">
-      <span class="search-icon" aria-hidden="true">⌕</span>
+ <div class="toolbar">
+  <div class="search-box">
+    <span class="search-icon" aria-hidden="true">⌕</span>
 
-      <input
-        type="search"
-        [placeholder]="'LEAVE_BALANCES.SEARCH' | translate"
-        [attr.aria-label]="'LEAVE_BALANCES.SEARCH_LABEL' | translate"
-        [(ngModel)]="searchTerm"
-      />
+    <input
+      type="search"
+      [placeholder]="'LEAVE_BALANCES.SEARCH' | translate"
+      [attr.aria-label]="'LEAVE_BALANCES.SEARCH_LABEL' | translate"
+      [(ngModel)]="searchTerm"
+    />
 
-      @if (searchTerm) {
-        <button
-          type="button"
-          class="clear-search"
-          [attr.aria-label]="'LEAVE_BALANCES.CLEAR_SEARCH' | translate"
-          (click)="searchTerm = ''"
-        >
-          ×
-        </button>
-      }
-    </div>
-
-    <span class="results-count">
-      {{ filteredBalances.length }}
-      {{
-        filteredBalances.length === 1
-          ? ('LEAVE_BALANCES.EMPLOYEE' | translate)
-          : ('LEAVE_BALANCES.EMPLOYEES' | translate)
-      }}
-    </span>
+    @if (searchTerm) {
+      <button
+        type="button"
+        class="clear-search"
+        [attr.aria-label]="'LEAVE_BALANCES.CLEAR_SEARCH' | translate"
+        (click)="searchTerm = ''"
+      >
+        ×
+      </button>
+    }
   </div>
+
+  <span class="results-count">
+    {{ filteredBalances.length }}
+    {{
+      filteredBalances.length === 1
+        ? ('LEAVE_BALANCES.EMPLOYEE' | translate)
+        : ('LEAVE_BALANCES.EMPLOYEES' | translate)
+    }}
+  </span>
+</div>
 
   <div class="table-card">
 

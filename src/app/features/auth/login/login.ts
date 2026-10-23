@@ -1,4 +1,11 @@
-import { Component, inject } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  inject,
+  OnDestroy,
+  ViewChild
+} from '@angular/core';
 import {
   FormBuilder,
   ReactiveFormsModule,
@@ -7,6 +14,7 @@ import {
 import { Router, RouterLink } from '@angular/router';
 
 import { AuthService } from '../../../core/services/auth.service';
+import { LanguageService, type AppLanguage } from '../../../core/services/language.service';
 import { TranslatePipe } from '../../../core/pipes/translate.pipe';
 
 type LoginRole = 'employee' | 'admin';
@@ -18,10 +26,32 @@ type LoginRole = 'employee' | 'admin';
   templateUrl: './login.html',
   styleUrl: './login.scss'
 })
-export class LoginComponent {
+export class LoginComponent implements AfterViewInit, OnDestroy {
+  @ViewChild('authVideo') private authVideo?: ElementRef<HTMLVideoElement>;
+
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
   private readonly authService = inject(AuthService);
+  private readonly languageService = inject(LanguageService);
+  private motionPreference?: MediaQueryList;
+  private readonly handleMotionPreferenceChange = (
+    event: MediaQueryListEvent
+  ): void => {
+    const video = this.authVideo?.nativeElement;
+
+    if (!video) {
+      return;
+    }
+
+    if (event.matches) {
+      video.pause();
+      return;
+    }
+
+    void video.play().catch(error => {
+      console.error('Unable to resume the login background video:', error);
+    });
+  };
 
   readonly currentYear = new Date().getFullYear();
 
@@ -38,12 +68,46 @@ export class LoginComponent {
     rememberMe: [false]
   });
 
+  ngAfterViewInit(): void {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    this.motionPreference = window.matchMedia(
+      '(prefers-reduced-motion: reduce)'
+    );
+
+    if (this.motionPreference.matches) {
+      this.authVideo?.nativeElement.pause();
+    }
+
+    this.motionPreference.addEventListener(
+      'change',
+      this.handleMotionPreferenceChange
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.motionPreference?.removeEventListener(
+      'change',
+      this.handleMotionPreferenceChange
+    );
+  }
+
   get email() {
     return this.loginForm.controls.email;
   }
 
   get password() {
     return this.loginForm.controls.password;
+  }
+
+  get currentLanguage(): AppLanguage {
+    return this.languageService.currentLanguage;
+  }
+
+  setLanguage(lang: AppLanguage): void {
+    this.languageService.setLanguage(lang);
   }
 
   setRole(role: LoginRole): void {

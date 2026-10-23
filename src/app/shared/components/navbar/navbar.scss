@@ -910,3 +910,83 @@ html[dir='rtl'] .search-result-arrow {
 .navbar-notification-item:hover {
   transform: translateY(-1px);
 }
+
+.top-navbar {
+  background: var(--sidebar-background);
+  border-block-end: 1px solid rgba(203, 213, 225, 0.14);
+  box-shadow: 0 8px 24px rgba(2, 6, 23, 0.18);
+  color: #f1f5f9;
+}
+
+.menu-button {
+  background: rgba(255, 255, 255, 0.07);
+
+  span {
+    background: #cbd5e1;
+  }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.13);
+
+    span {
+      background: #fff;
+    }
+  }
+}
+
+.brand-text {
+  strong {
+    color: #f8fafc;
+  }
+
+  span {
+    color: #a8b4c5;
+  }
+}
+
+.icon-button {
+  color: #c3cedc;
+
+  &:hover,
+  &.active {
+    background: rgba(255, 255, 255, 0.09);
+    color: #dbeafe;
+  }
+}
+
+.navbar-divider {
+  background: rgba(203, 213, 225, 0.2);
+}
+
+.navbar-notification-badge {
+  border-color: var(--sidebar-background);
+}
+
+.user-menu {
+  &:hover,
+  &.active {
+    background: rgba(255, 255, 255, 0.09);
+  }
+}
+
+.user-info {
+  strong {
+    color: #f8fafc;
+  }
+
+  span,
+  .chevron {
+    color: #a8b4c5;
+  }
+}
+
+.chevron {
+  color: #a8b4c5;
+}
+
+.menu-button:focus-visible,
+.icon-button:focus-visible,
+.user-menu:focus-visible {
+  outline: 2px solid #a5b4fc;
+  outline-offset: 2px;
+}

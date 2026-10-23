@@ -430,6 +430,9 @@
   "VISUAL_TITLE": "People first.",
   "VISUAL_TITLE_ACCENT": "Work smarter.",
   "VISUAL_DESCRIPTION": "Manage your people, attendance, leave requests and approvals from one intelligent workspace.",
+  "CHIP_1": "Attendance tracking",
+  "CHIP_2": "Leave management",
+  "CHIP_3": "Smart approvals",
   "PLATFORM": "PeopleFlow HR Platform",
   "WELCOME": "WELCOME BACK",
   "TITLE": "Sign in to your account",
@@ -516,6 +519,7 @@
     "BACK_TO_LOGIN": "Back to Sign In"
 }
 ,"AUTH": {
+  "TAGLINE": "People first. Work flows.",
   "COPYRIGHT": "All rights reserved."
 },
 
@@ -762,6 +766,4 @@
     "SUCCESS": "Leave request submitted successfully."
   }
 }
-
-
 

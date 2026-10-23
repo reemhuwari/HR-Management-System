@@ -4,6 +4,7 @@
   --primary-soft: #eef2ff;
   --teal: #0f766e;
   --navy: #172033;
+  --sidebar-background: #0f172a;
   --text: #263247;
   --muted: #667085;
   --background: #f4f6fa;
@@ -29,7 +30,7 @@
     linear-gradient(180deg, #f7f9fd 0%, #eef3fb 100%);
   --font-body: 15px;
   --font-supporting: 14px;
-  --font-eyebrow: 12px;
+  --font-eyebrow: 20px;
   --font-table-header: 12px;
   --font-table-cell: 13px;
 }
@@ -360,7 +361,6 @@ td {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
-
 @media (max-width: 520px) {
   .stats-grid {
     grid-template-columns: 1fr;
