@@ -2,12 +2,15 @@
 <div class="auth-page signup-page">
   <div class="auth-visual">
     <video
+      #authVideo
       class="auth-video"
       autoplay
       muted
+      [muted]="true"
       loop
       playsinline
       aria-hidden="true"
+      preload="metadata"
     >
       <source src="videos/hr-office.mp4" type="video/mp4" />
     </video>
@@ -20,7 +23,9 @@
           <span>PF</span>
         </div>
 
-        <span class="brand-name">PeopleFlow</span>
+        <span class="brand-copy">
+          <span class="brand-name">PeopleFlow</span>
+        </span>
       </div>
 
       <div class="visual-message">
@@ -36,6 +41,11 @@
         <p>
           {{ 'SIGNUP.VISUAL_DESCRIPTION' | translate }}
         </p>
+        <div class="visual-chips">
+          <span>{{ 'LOGIN.CHIP_1' | translate }}</span>
+          <span>{{ 'LOGIN.CHIP_2' | translate }}</span>
+          <span>{{ 'LOGIN.CHIP_3' | translate }}</span>
+        </div>
       </div>
 
       <div class="visual-footer">
@@ -46,12 +56,28 @@
   </div>
 
   <div class="auth-form-section signup-form-section">
+    <div class="language-switch" role="group">
+      <button
+        type="button"
+        [class.active]="currentLanguage === 'ar'"
+        [attr.aria-pressed]="currentLanguage === 'ar'"
+        (click)="setLanguage('ar')"
+      >AR</button>
+      <button
+        type="button"
+        [class.active]="currentLanguage === 'en'"
+        [attr.aria-pressed]="currentLanguage === 'en'"
+        (click)="setLanguage('en')"
+      >EN</button>
+    </div>
     <div class="auth-form-wrapper signup-form-wrapper">
       <div class="mobile-brand">
         <div class="brand-icon">
           <span>PF</span>
         </div>
-        <span class="brand-name">PeopleFlow</span>
+        <span class="brand-copy">
+          <span class="brand-name">PeopleFlow</span>
+        </span>
       </div>
 
       <div class="form-heading">
@@ -184,6 +210,7 @@
             <input
               id="signup-email"
               type="email"
+              dir="ltr"
               formControlName="email"
               [placeholder]="'SIGNUP.EMAIL_PLACEHOLDER' | translate"
               autocomplete="email"
@@ -319,6 +346,7 @@
             <input
               id="signup-password"
               [type]="showPassword ? 'text' : 'password'"
+              dir="ltr"
               formControlName="password"
               [placeholder]="'SIGNUP.PASSWORD_PLACEHOLDER' | translate"
               autocomplete="new-password"
@@ -326,15 +354,30 @@
 
             <button
               class="password-toggle"
+              [class.password-visible]="showPassword"
               type="button"
               (click)="showPassword = !showPassword"
               [attr.aria-label]="
                 (showPassword ? 'SIGNUP.HIDE' : 'SIGNUP.SHOW') | translate
               "
             >
-              {{
-                (showPassword ? 'SIGNUP.HIDE' : 'SIGNUP.SHOW') | translate
-              }}
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path
+                  d="M2.5 12s3.4-6 9.5-6 9.5 6 9.5 6-3.4 6-9.5 6-9.5-6-9.5-6Z"
+                  stroke="currentColor"
+                  stroke-width="1.7"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <circle cx="12" cy="12" r="2.7" stroke="currentColor" stroke-width="1.7" />
+                <path
+                  class="eye-slash"
+                  d="m4 4 16 16"
+                  stroke="currentColor"
+                  stroke-width="1.7"
+                  stroke-linecap="round"
+                />
+              </svg>
             </button>
           </div>
 
@@ -419,6 +462,7 @@
             <input
               id="signup-confirm-password"
               [type]="showConfirmPassword ? 'text' : 'password'"
+              dir="ltr"
               formControlName="confirmPassword"
               [placeholder]="'SIGNUP.CONFIRM_PASSWORD_PLACEHOLDER' | translate"
               autocomplete="new-password"
@@ -426,6 +470,7 @@
 
             <button
               class="password-toggle"
+              [class.password-visible]="showConfirmPassword"
               type="button"
               (click)="showConfirmPassword = !showConfirmPassword"
               [attr.aria-label]="
@@ -434,11 +479,23 @@
                 ) | translate
               "
             >
-              {{
-                (
-                  showConfirmPassword ? 'SIGNUP.HIDE' : 'SIGNUP.SHOW'
-                ) | translate
-              }}
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path
+                  d="M2.5 12s3.4-6 9.5-6 9.5 6 9.5 6-3.4 6-9.5 6-9.5-6-9.5-6Z"
+                  stroke="currentColor"
+                  stroke-width="1.7"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <circle cx="12" cy="12" r="2.7" stroke="currentColor" stroke-width="1.7" />
+                <path
+                  class="eye-slash"
+                  d="m4 4 16 16"
+                  stroke="currentColor"
+                  stroke-width="1.7"
+                  stroke-linecap="round"
+                />
+              </svg>
             </button>
           </div>
 

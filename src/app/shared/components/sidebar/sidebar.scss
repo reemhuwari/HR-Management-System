@@ -432,7 +432,12 @@ html[dir='rtl'] .logout-button:hover svg {
 }
 
 .sidebar {
-  background: linear-gradient(180deg, #0f172a 0%, #111827 48%, #0b1220 100%);
+  background: linear-gradient(
+    180deg,
+    var(--sidebar-background) 0%,
+    #111827 48%,
+    #0b1220 100%
+  );
   border-inline-end: 1px solid rgba(148, 163, 184, 0.14);
   box-shadow: 16px 0 40px rgba(15, 23, 42, 0.12);
 }
