@@ -44,7 +44,7 @@
 
   <div class="summary">
 
-    <div class="summary-card total-card">
+    <div class="summary-card total-card" [appReveal]="0">
       <div class="card-top">
         <span class="card-label">
           {{ 'LEAVE_BALANCES.TOTAL_REMAINING' | translate }}
@@ -52,37 +52,37 @@
         <span class="card-icon total-icon" aria-hidden="true">◷</span>
       </div>
 
-      <strong>{{ totalRemaining }}</strong>
+      <strong [appCountUp]="totalRemaining"></strong>
       <small>{{ 'LEAVE_BALANCES.DAYS_ACROSS_EMPLOYEES' | translate }}</small>
     </div>
 
-    <div class="summary-card annual-card">
+    <div class="summary-card annual-card" [appReveal]="1">
       <div class="card-top">
         <span class="card-label">{{ 'LEAVE_BALANCES.ANNUAL' | translate }}</span>
         <span class="card-icon annual-icon" aria-hidden="true">✦</span>
       </div>
 
-      <strong>{{ totalAnnual }}</strong>
+      <strong [appCountUp]="totalAnnual"></strong>
       <small>{{ 'LEAVE_BALANCES.TOTAL_REMAINING_DAYS' | translate }}</small>
     </div>
 
-    <div class="summary-card sick-card">
+    <div class="summary-card sick-card" [appReveal]="2">
       <div class="card-top">
         <span class="card-label">{{ 'LEAVE_BALANCES.SICK' | translate }}</span>
         <span class="card-icon sick-icon" aria-hidden="true">＋</span>
       </div>
 
-      <strong>{{ totalSick }}</strong>
+      <strong [appCountUp]="totalSick"></strong>
       <small>{{ 'LEAVE_BALANCES.TOTAL_REMAINING_DAYS' | translate }}</small>
     </div>
 
-    <div class="summary-card personal-card">
+    <div class="summary-card personal-card" [appReveal]="3">
       <div class="card-top">
         <span class="card-label">{{ 'LEAVE_BALANCES.PERSONAL' | translate }}</span>
         <span class="card-icon personal-icon" aria-hidden="true">◇</span>
       </div>
 
-      <strong>{{ totalPersonal }}</strong>
+      <strong [appCountUp]="totalPersonal"></strong>
       <small>{{ 'LEAVE_BALANCES.TOTAL_REMAINING_DAYS' | translate }}</small>
     </div>
 
@@ -144,7 +144,7 @@
   </span>
 </div>
 
-  <div class="table-card">
+  <div class="table-card" [appReveal]="0">
 
     <div class="table-header">
       <div>
@@ -160,10 +160,10 @@
 
     @if (isLoading) {
 
-      <div class="loading-state">
-        <span class="spinner" aria-hidden="true"></span>
-        <strong>{{ 'LEAVE_BALANCES.LOADING' | translate }}</strong>
-        <p>{{ 'LEAVE_BALANCES.PLEASE_WAIT' | translate }}</p>
+      <div class="loading-state" role="status" [attr.aria-label]="'LEAVE_BALANCES.LOADING' | translate">
+        @for (placeholder of [1, 2, 3, 4]; track placeholder) {
+          <div class="skeleton skeleton-text"></div>
+        }
       </div>
 
     } @else if (!errorMessage) {

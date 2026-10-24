@@ -9,10 +9,11 @@ import { TranslatePipe } from '../../../core/pipes/translate.pipe';
 import { Employee } from '../../../core/models/employee.model';
 import { User } from '../../../core/models/user.model';
 import { RegistrationService } from '../../../core/services/registration.service';
+import { RevealDirective } from '../../../shared/directives/reveal.directive';
 @Component({
   selector: 'app-employees',
   standalone: true,
-  imports: [CommonModule, FormsModule, TranslatePipe],
+  imports: [CommonModule, FormsModule, TranslatePipe, RevealDirective],
   templateUrl: './employees.html',
   styleUrl: './employees.scss'
 })

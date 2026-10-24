@@ -16,13 +16,23 @@ import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { LanguageService, type AppLanguage } from '../../../core/services/language.service';
 import { TranslatePipe } from '../../../core/pipes/translate.pipe';
+import { RevealDirective } from '../../../shared/directives/reveal.directive';
+import { TiltDirective } from '../../../shared/directives/tilt.directive';
+import { ParallaxDirective } from '../../../shared/directives/parallax.directive';
 
 type LoginRole = 'employee' | 'admin';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink, TranslatePipe],
+  imports: [
+    ReactiveFormsModule,
+    RouterLink,
+    TranslatePipe,
+    RevealDirective,
+    TiltDirective,
+    ParallaxDirective
+  ],
   templateUrl: './login.html',
   styleUrl: './login.scss'
 })

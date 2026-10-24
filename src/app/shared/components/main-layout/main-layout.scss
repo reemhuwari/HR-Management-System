@@ -14,7 +14,8 @@
   min-height: 100vh;
   margin-inline-start: 250px;
   margin-inline-end: 0;
-  transition: margin-inline-start 0.25s ease, margin-inline-end 0.25s ease;
+  transition: margin-inline-start var(--dur-base) var(--ease-out),
+    margin-inline-end var(--dur-base) var(--ease-out);
   background: transparent;
 }
 

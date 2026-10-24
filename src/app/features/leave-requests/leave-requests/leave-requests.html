@@ -32,19 +32,19 @@
   }
 
   <div class="stats">
-    <div class="stat-card">
+    <div class="stat-card" [appReveal]="0">
       <span>{{ 'LEAVE_REQUESTS.PENDING_REQUESTS' | translate }}</span>
-      <strong>{{ pendingCount }}</strong>
+      <strong [appCountUp]="pendingCount"></strong>
     </div>
 
-    <div class="stat-card">
+    <div class="stat-card" [appReveal]="1">
       <span>{{ 'LEAVE_REQUESTS.APPROVED' | translate }}</span>
-      <strong>{{ approvedCount }}</strong>
+      <strong [appCountUp]="approvedCount"></strong>
     </div>
 
-    <div class="stat-card">
+    <div class="stat-card" [appReveal]="2">
       <span>{{ 'LEAVE_REQUESTS.REJECTED' | translate }}</span>
-      <strong>{{ rejectedCount }}</strong>
+      <strong [appCountUp]="rejectedCount"></strong>
     </div>
   </div>
 
@@ -97,7 +97,7 @@
     </select>
   </div>
 
-  <div class="table-card">
+  <div class="table-card" [appReveal]="0">
     <div class="table-header">
       <div>
         <h2>{{ 'LEAVE_REQUESTS.TITLE' | translate }}</h2>
@@ -109,9 +109,10 @@
     </div>
 
     @if (isLoading) {
-      <div class="loading" role="status">
-        <span class="spinner"></span>
-        <span>{{ 'LEAVE_REQUESTS.LOADING' | translate }}</span>
+      <div class="loading" role="status" [attr.aria-label]="'LEAVE_REQUESTS.LOADING' | translate">
+        @for (placeholder of [1, 2, 3, 4]; track placeholder) {
+          <div class="skeleton skeleton-text"></div>
+        }
       </div>
     } @else if (loadError) {
       <div class="empty error-state">

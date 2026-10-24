@@ -50,14 +50,14 @@
 
       <section class="balance-grid">
 
-        <div class="total-card">
+        <div class="total-card" [appReveal]="0">
           <span>{{ 'EMP_BALANCE.TOTAL' | translate }}</span>
-          <strong>{{ totalRemaining }}</strong>
+          <strong [appCountUp]="totalRemaining"></strong>
           <small>{{ 'LABELS.DAYS_UNIT' | translate }}</small>
         </div>
 
         @for (card of cards; track card.key) {
-          <div class="type-card">
+          <div class="type-card" [appReveal]="$index + 1">
             <div class="type-top">
               <div class="type-name">
                 <span class="dot" [class]="card.key"></span>
@@ -72,12 +72,12 @@
             </div>
 
             <div class="type-value">
-              <strong>{{ card.value }}</strong>
+              <strong [appCountUp]="card.value"></strong>
               <small>{{ 'LABELS.DAYS_UNIT' | translate }}</small>
             </div>
 
             <div class="bar">
-              <span [class]="card.key" [style.width.%]="card.percent"></span>
+              <span [class]="card.key" [style.--progress]="card.percent"></span>
             </div>
           </div>
         }

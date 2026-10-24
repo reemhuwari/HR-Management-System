@@ -18,9 +18,7 @@
   display: flex;
   flex-direction: column;
 
-  transition:
-    width 0.25s ease,
-    transform 0.25s ease;
+  transition: transform var(--dur-base) var(--ease-out);
 
   overflow: hidden;
   box-shadow: 10px 0 32px rgba(15, 23, 42, 0.12);
@@ -128,15 +126,12 @@ html[dir='ltr'] .sidebar {
   cursor: pointer;
 
   transition:
-    background 0.18s ease,
-    color 0.18s ease,
     transform 0.18s ease;
 
   svg {
     width: 19px;
     height: 19px;
     flex-shrink: 0;
-    transition: color 0.2s ease;
   }
 
   span {
@@ -171,7 +166,8 @@ html[dir='ltr'] .sidebar {
       position: absolute;
       top: 50%;
       inset-inline-start: 0;
-      transform: translateY(-50%);
+      transform: translateY(-50%) translateX(calc(var(--dir) * -4px));
+      animation: sidebar-indicator-in var(--dur-base) var(--ease-out) both;
 
       width: 3px;
       height: 28px;
@@ -180,6 +176,18 @@ html[dir='ltr'] .sidebar {
       border-end-end-radius: 4px;
       background: #818cf8;
     }
+  }
+}
+
+@keyframes sidebar-indicator-in {
+  from {
+    opacity: 0;
+    transform: translateY(-50%) translateX(calc(var(--dir) * -4px));
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
   }
 }
 
@@ -275,15 +283,11 @@ html[dir='ltr'] .sidebar {
 }
 
 .language-options {
-  margin-block: 2px 8px;
-  margin-inline: 32px 0;
+  position: absolute;
+  inset-block-end: calc(100% + 8px);
+  width: calc(100% - 24px);
+  margin-inline-start: 24px;
   padding: 5px;
-
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 9px;
-
-  background: rgba(8, 15, 30, 0.55);
-  animation: languageMenuIn 0.18s ease;
 }
 
 .language-option {
@@ -295,7 +299,7 @@ html[dir='ltr'] .sidebar {
   justify-content: space-between;
   gap: 8px;
 
-  padding: 0 10px;
+  padding: .5rem 1rem;
   border: 0;
   border-radius: 6px;
 
@@ -308,8 +312,7 @@ html[dir='ltr'] .sidebar {
   cursor: pointer;
 
   transition:
-    background 0.18s ease,
-    color 0.18s ease;
+    transform var(--dur-base) var(--ease-out);
 
   &:hover {
     background: rgba(255, 255, 255, 0.07);
@@ -328,18 +331,6 @@ html[dir='ltr'] .sidebar {
   font-weight: 700;
 }
 
-@keyframes languageMenuIn {
-  from {
-    opacity: 0;
-    transform: translateY(-4px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 .logout-button {
   font-family: inherit;
   text-align: start;
@@ -348,9 +339,7 @@ html[dir='ltr'] .sidebar {
     width: 19px;
     height: 19px;
     flex-shrink: 0;
-    transition:
-      transform 0.2s ease,
-      color 0.2s ease;
+    transition: transform var(--dur-base) var(--ease-out);
   }
 
   &:hover {
@@ -359,7 +348,6 @@ html[dir='ltr'] .sidebar {
 
     svg {
       color: #ff929c;
-      transform: translateX(2px);
     }
   }
 
@@ -377,10 +365,6 @@ html[dir='rtl'] .logout-button svg {
   transform: scaleX(-1);
 }
 
-html[dir='rtl'] .logout-button:hover svg {
-  transform: scaleX(-1) translateX(2px);
-}
-
 .sidebar-navigation::-webkit-scrollbar {
   width: 4px;
 }
@@ -395,7 +379,7 @@ html[dir='rtl'] .logout-button:hover svg {
 }
 
 .sidebar.sidebar-closed {
-  width: 0;
+  transform: translateX(calc(var(--dir) * -100%));
 }
 
 @media (max-width: 768px) {
@@ -403,10 +387,6 @@ html[dir='rtl'] .logout-button:hover svg {
     width: 250px;
     transform: translateX(0);
     box-shadow: 12px 0 36px rgba(15, 23, 42, 0.22);
-  }
-
-  .sidebar.sidebar-closed {
-    width: 250px;
   }
 
   html[dir='ltr'] .sidebar.sidebar-closed {
@@ -428,6 +408,26 @@ html[dir='rtl'] .logout-button:hover svg {
   .language-toggle .language-chevron {
     animation: none;
     transition: none;
+  }
+
+  .sidebar-link:hover svg {
+    transform: none;
+  }
+
+  .sidebar-link.active::before {
+    animation: none;
+    opacity: 1;
+    transform: translateY(-50%);
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .sidebar-link:hover svg {
+    transform: translateX(calc(var(--dir) * 2px));
+  }
+
+  html[dir='rtl'] .logout-button:hover svg {
+    transform: scaleX(-1) translateX(calc(var(--dir) * 2px));
   }
 }
 
@@ -458,7 +458,7 @@ html[dir='rtl'] .logout-button:hover svg {
 
 .sidebar-button:hover,
 .sidebar-link:hover {
-  transform: translateX(0);
+  transform: none;
 }
 
 .sidebar-bottom {

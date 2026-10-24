@@ -1,3 +1,5 @@
+@use './styles/motion';
+
 :root {
   --primary: #4f46e5;
   --primary-dark: #4338ca;
@@ -183,17 +185,11 @@ html[dir='rtl'] input[type='url'] {
   color: #fff;
   font-size: 14px;
   font-weight: 700;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  transition: transform var(--dur-fast) var(--ease-out);
   box-shadow: 0 12px 22px rgba(79, 70, 229, 0.18);
 }
 
-.primary-btn:hover,
-.secondary-btn:hover,
-.new-request-button:hover,
-.primary-button:hover,
-.auth-submit-btn:hover {
-  transform: translateY(-1px);
-}
+
 
 .secondary-btn,
 .secondary-button {
@@ -364,16 +360,5 @@ td {
 @media (max-width: 520px) {
   .stats-grid {
     grid-template-columns: 1fr;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    scroll-behavior: auto !important;
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
   }
 }

@@ -8,6 +8,8 @@ import { TranslatePipe } from '../../../core/pipes/translate.pipe';
 
 import { Employee } from '../../../core/models/employee.model';
 import { LeaveBalance } from '../../../core/models/leave-balance.model';
+import { RevealDirective } from '../../../shared/directives/reveal.directive';
+import { CountUpDirective } from '../../../shared/directives/count-up.directive';
 
 interface BalanceCard {
   key: 'annual' | 'sick' | 'personal';
@@ -26,7 +28,7 @@ interface BalanceResult {
 @Component({
   selector: 'app-my-leave-balance',
   standalone: true,
-  imports: [RouterLink, TranslatePipe],
+  imports: [RouterLink, TranslatePipe, RevealDirective, CountUpDirective],
   templateUrl: './my-leave-balance.html',
   styleUrl: './my-leave-balance.scss'
 })

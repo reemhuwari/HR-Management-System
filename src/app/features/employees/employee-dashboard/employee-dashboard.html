@@ -49,7 +49,7 @@
     <!-- Stats -->
     <section class="stats-grid">
 
-      <div class="stat-card">
+      <div class="stat-card" [appReveal]="0" [appTilt]="5">
         <div class="stat-icon" [class]="todayIconClass">
           <svg viewBox="0 0 24 24">
             <circle cx="12" cy="12" r="9" />
@@ -65,7 +65,7 @@
         </div>
       </div>
 
-      <div class="stat-card">
+      <div class="stat-card" [appReveal]="1" [appTilt]="5">
         <div class="stat-icon leave">
           <svg viewBox="0 0 24 24">
             <path d="M6 2h12v20H6z" />
@@ -74,12 +74,12 @@
         </div>
         <div class="stat-content">
           <span>{{ 'EMP_DASHBOARD.LEAVE_REMAINING' | translate }}</span>
-          <strong>{{ totalRemaining }} {{ 'LABELS.DAYS_UNIT' | translate }}</strong>
+          <strong><span [appCountUp]="totalRemaining"></span> {{ 'LABELS.DAYS_UNIT' | translate }}</strong>
           <small>{{ 'EMP_DASHBOARD.DAYS_ACROSS' | translate }}</small>
         </div>
       </div>
 
-      <div class="stat-card">
+      <div class="stat-card" [appReveal]="2" [appTilt]="5">
         <div class="stat-icon late">
           <svg viewBox="0 0 24 24">
             <path d="M5 4h14v16H5z" />
@@ -88,12 +88,12 @@
         </div>
         <div class="stat-content">
           <span>{{ 'EMP_DASHBOARD.PENDING' | translate }}</span>
-          <strong>{{ pendingCount }}</strong>
+          <strong [appCountUp]="pendingCount"></strong>
           <small>{{ 'EMP_DASHBOARD.AWAITING' | translate }}</small>
         </div>
       </div>
 
-      <div class="stat-card">
+      <div class="stat-card" [appReveal]="3" [appTilt]="5">
         <div class="stat-icon present">
           <svg viewBox="0 0 24 24">
             <path d="M20 6L9 17l-5-5" />
@@ -101,7 +101,7 @@
         </div>
         <div class="stat-content">
           <span>{{ 'EMP_DASHBOARD.ATTENDED_MONTH' | translate }}</span>
-          <strong>{{ attendedThisMonth }}</strong>
+          <strong [appCountUp]="attendedThisMonth"></strong>
           <small>{{ 'EMP_DASHBOARD.ATTENDED_NOTE' | translate }}</small>
         </div>
       </div>
@@ -111,7 +111,7 @@
     <!-- Balance + Attendance -->
     <section class="two-column">
 
-      <div class="content-card">
+      <div class="content-card" [appReveal]="0">
         <div class="card-header">
           <div>
             <h2>{{ 'EMP_DASHBOARD.BALANCE_TITLE' | translate }}</h2>
@@ -139,7 +139,7 @@
                 <strong>{{ item.value }} {{ 'LABELS.DAYS_UNIT' | translate }}</strong>
 
                 <div class="bar">
-                  <span [class]="item.key" [style.width.%]="item.percent"></span>
+                  <span [class]="item.key" [style.--progress]="item.percent"></span>
                 </div>
               </div>
             }
@@ -147,7 +147,7 @@
         }
       </div>
 
-      <div class="content-card">
+      <div class="content-card" [appReveal]="1">
         <div class="card-header">
           <div>
             <h2>{{ 'EMP_DASHBOARD.RECENT_ATTENDANCE' | translate }}</h2>
@@ -205,7 +205,7 @@
     </section>
 
     <!-- Recent leave requests -->
-    <section class="content-card">
+    <section class="content-card" [appReveal]="2">
       <div class="card-header">
         <div>
           <h2>{{ 'EMP_DASHBOARD.RECENT_REQUESTS' | translate }}</h2>

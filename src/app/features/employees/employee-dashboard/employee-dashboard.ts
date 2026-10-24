@@ -9,6 +9,9 @@ import { LanguageService } from '../../../core/services/language.service';
 import { LeaveBalanceService } from '../../../core/services/leave-balance.service';
 import { LeaveRequestService } from '../../../core/services/leave-request.service';
 import { TranslatePipe } from '../../../core/pipes/translate.pipe';
+import { RevealDirective } from '../../../shared/directives/reveal.directive';
+import { CountUpDirective } from '../../../shared/directives/count-up.directive';
+import { TiltDirective } from '../../../shared/directives/tilt.directive';
 
 import { Attendance } from '../../../core/models/attendance.model';
 import { Employee } from '../../../core/models/employee.model';
@@ -32,7 +35,7 @@ interface BalanceItem {
 @Component({
   selector: 'app-employee-dashboard',
   standalone: true,
-  imports: [RouterLink, TranslatePipe],
+  imports: [RouterLink, TranslatePipe, RevealDirective, CountUpDirective, TiltDirective],
   templateUrl: './employee-dashboard.html',
   styleUrl: './employee-dashboard.scss'
 })

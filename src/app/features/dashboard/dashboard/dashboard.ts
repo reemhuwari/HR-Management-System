@@ -9,6 +9,9 @@ import { AttendanceService } from '../../../core/services/attendance.service';
 import { LeaveRequestService } from '../../../core/services/leave-request.service';
 import { LanguageService } from '../../../core/services/language.service';
 import { TranslatePipe } from '../../../core/pipes/translate.pipe';
+import { RevealDirective } from '../../../shared/directives/reveal.directive';
+import { CountUpDirective } from '../../../shared/directives/count-up.directive';
+import { TiltDirective } from '../../../shared/directives/tilt.directive';
 
 import { Employee } from '../../../core/models/employee.model';
 import { Attendance } from '../../../core/models/attendance.model';
@@ -17,7 +20,14 @@ import { LeaveRequest } from '../../../core/models/leave-request.model';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterLink, TranslatePipe],
+  imports: [
+    CommonModule,
+    RouterLink,
+    TranslatePipe,
+    RevealDirective,
+    CountUpDirective,
+    TiltDirective
+  ],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss'
 })

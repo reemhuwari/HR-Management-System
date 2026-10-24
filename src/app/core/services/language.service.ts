@@ -18,6 +18,7 @@ export class LanguageService {
   private readonly document = inject(DOCUMENT);
   private readonly platformId = inject(PLATFORM_ID);
   private readonly http = inject(HttpClient);
+  private langFadeTimer?: ReturnType<typeof setTimeout>;
 
   private readonly languageSubject = new BehaviorSubject<AppLanguage>(
     this.getInitialLanguage()
@@ -48,6 +49,15 @@ export class LanguageService {
 
     this.languageSubject.next(language);
     this.applyLanguage(language);
+    const root = this.document.documentElement;
+    root.classList.add('lang-fade');
+    if (this.langFadeTimer) {
+      clearTimeout(this.langFadeTimer);
+    }
+    this.langFadeTimer = setTimeout(() => {
+      root.classList.remove('lang-fade');
+      this.langFadeTimer = undefined;
+    }, 220);
 
     if (isPlatformBrowser(this.platformId)) {
       try {

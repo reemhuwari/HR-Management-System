@@ -22,7 +22,9 @@
 
   @if (successMessage) {
     <div class="attendance-alert success-alert" role="status">
-      <span class="alert-symbol">✓</span>
+      <svg class="check-draw alert-symbol" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="m5 12 4 4L19 6" pathLength="1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
       <span>{{ successMessage }}</span>
       <button
         type="button"
@@ -54,48 +56,48 @@
   }
 
   <section class="stats-grid">
-    <article class="stat-card">
+    <article class="stat-card" [appReveal]="0">
       <div class="stat-icon total">T</div>
       <div class="stat-content">
         <span>{{ 'ATTENDANCE.TOTAL_RECORDS' | translate }}</span>
-        <strong>{{ totalRecords }}</strong>
+        <strong [appCountUp]="totalRecords"></strong>
       </div>
     </article>
 
-    <article class="stat-card">
+    <article class="stat-card" [appReveal]="1">
       <div class="stat-icon present">✓</div>
       <div class="stat-content">
         <span>{{ 'ATTENDANCE.PRESENT' | translate }}</span>
-        <strong>{{ presentCount }}</strong>
+        <strong [appCountUp]="presentCount"></strong>
       </div>
     </article>
 
-    <article class="stat-card">
+    <article class="stat-card" [appReveal]="2">
       <div class="stat-icon late">◷</div>
       <div class="stat-content">
         <span>{{ 'ATTENDANCE.LATE' | translate }}</span>
-        <strong>{{ lateCount }}</strong>
+        <strong [appCountUp]="lateCount"></strong>
       </div>
     </article>
 
-    <article class="stat-card">
+    <article class="stat-card" [appReveal]="3">
       <div class="stat-icon absent">×</div>
       <div class="stat-content">
         <span>{{ 'ATTENDANCE.ABSENT' | translate }}</span>
-        <strong>{{ absentCount }}</strong>
+        <strong [appCountUp]="absentCount"></strong>
       </div>
     </article>
 
-    <article class="stat-card">
+    <article class="stat-card" [appReveal]="4">
       <div class="stat-icon leave">L</div>
       <div class="stat-content">
         <span>{{ 'ATTENDANCE.ON_LEAVE' | translate }}</span>
-        <strong>{{ onLeaveCount }}</strong>
+        <strong [appCountUp]="onLeaveCount"></strong>
       </div>
     </article>
   </section>
 
-  <section class="content-card">
+  <section class="content-card" [appReveal]="0">
     <div class="section-heading">
       <div>
         <h2>{{ 'ATTENDANCE.EMPLOYEE_ATTENDANCE' | translate }}</h2>
@@ -107,8 +109,14 @@
 
     @if (isLoading) {
       <div class="loading-state">
-        <span class="spinner"></span>
-        <p>{{ 'ATTENDANCE.LOADING_ATTENDANCE' | translate }}</p>
+        <div class="employee-grid" aria-hidden="true">
+          @for (placeholder of [1, 2, 3, 4]; track placeholder) {
+            <div class="skeleton-card">
+              <span class="skeleton skeleton-text"></span>
+              <span class="skeleton skeleton-text"></span>
+            </div>
+          }
+        </div>
       </div>
     } @else if (!hasError) {
       @if (employees.length > 0) {
@@ -213,7 +221,7 @@
     }
   </section>
 
-  <section class="content-card records-section">
+  <section class="content-card records-section" [appReveal]="1">
     <div class="section-heading records-heading">
       <div>
         <h2>{{ 'ATTENDANCE.ATTENDANCE_RECORDS' | translate }}</h2>
@@ -253,9 +261,12 @@
     </div>
 
     @if (isLoading) {
-      <div class="loading-state">
-        <span class="spinner"></span>
-        <p>{{ 'ATTENDANCE.LOADING_RECORDS' | translate }}</p>
+      <div class="loading-state" role="status" [attr.aria-label]="'ATTENDANCE.LOADING_RECORDS' | translate">
+        <div class="skeleton-card" aria-hidden="true">
+          <span class="skeleton skeleton-text"></span>
+          <span class="skeleton skeleton-text"></span>
+          <span class="skeleton skeleton-text"></span>
+        </div>
       </div>
     } @else if (!hasError) {
       <div class="table-wrapper">

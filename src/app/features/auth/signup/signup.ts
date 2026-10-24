@@ -18,6 +18,9 @@ import { RouterLink } from '@angular/router';
 import { LanguageService, type AppLanguage } from '../../../core/services/language.service';
 import { RegistrationService } from '../../../core/services/registration.service';
 import { TranslatePipe } from '../../../core/pipes/translate.pipe';
+import { RevealDirective } from '../../../shared/directives/reveal.directive';
+import { TiltDirective } from '../../../shared/directives/tilt.directive';
+import { ParallaxDirective } from '../../../shared/directives/parallax.directive';
 
 function passwordsMatch(
   control: AbstractControl
@@ -40,7 +43,10 @@ function passwordsMatch(
   imports: [
     ReactiveFormsModule,
     RouterLink,
-    TranslatePipe
+    TranslatePipe,
+    RevealDirective,
+    TiltDirective,
+    ParallaxDirective
   ],
   templateUrl: './signup.html',
   styleUrl: './signup.scss'

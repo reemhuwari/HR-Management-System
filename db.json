@@ -259,6 +259,24 @@
       "status": "late",
       "workHours": 0,
       "id": "MRHlGLCcuqI"
+    },
+    {
+      "employeeId": "1",
+      "date": "2026-10-24",
+      "checkIn": "13:39",
+      "checkOut": null,
+      "status": "late",
+      "workHours": 0,
+      "id": "B7aD7DIy3aw"
+    },
+    {
+      "employeeId": "2",
+      "date": "2026-10-24",
+      "checkIn": "14:07",
+      "checkOut": null,
+      "status": "late",
+      "workHours": 0,
+      "id": "rv43jeNiyNc"
     }
   ],
   "leaveRequests": [
@@ -309,6 +327,42 @@
       "reason": "مرضية",
       "status": "approved",
       "submittedAt": "2026-10-19"
+    },
+    {
+      "employeeId": "1",
+      "employeeName": "Sarah Ahmad",
+      "type": "Annual Leave",
+      "startDate": "2026-10-24",
+      "endDate": "2026-10-24",
+      "days": 1,
+      "reason": "إنهاء التزامات حياتية",
+      "status": "pending",
+      "submittedAt": "2026-10-24",
+      "id": "5ycvJ-ZFydE"
+    },
+    {
+      "employeeId": "foUGw0gusgI",
+      "employeeName": "غادة احمد",
+      "type": "Sick Leave",
+      "startDate": "2026-10-24",
+      "endDate": "2026-10-25",
+      "days": 2,
+      "reason": "موعد دخول مستشفى",
+      "status": "pending",
+      "submittedAt": "2026-10-24",
+      "id": "nqwYnF7HJ9M"
+    },
+    {
+      "employeeId": "1",
+      "employeeName": "Sarah Ahmad",
+      "type": "Sick Leave",
+      "startDate": "2026-10-29",
+      "endDate": "2026-10-30",
+      "days": 2,
+      "reason": "دخول للعمليات",
+      "status": "pending",
+      "submittedAt": "2026-10-24",
+      "id": "JkTVnOn_Kxk"
     }
   ],
   "leaveBalances": [
@@ -411,7 +465,7 @@
         "leaveType": "Sick Leave",
         "days": 1
       },
-      "isRead": false,
+      "isRead": true,
       "createdAt": "2026-10-19T11:34:59.745Z"
     },
     {
@@ -426,6 +480,21 @@
       },
       "isRead": true,
       "createdAt": "2026-10-19T15:04:38.811Z"
+    },
+    {
+      "title": "New Leave Request",
+      "message": "Sarah Ahmad submitted a sick leave request for 2 day(s).",
+      "type": "leave-request",
+      "relatedId": "JkTVnOn_Kxk",
+      "audience": "admin",
+      "params": {
+        "employeeName": "Sarah Ahmad",
+        "leaveType": "Sick Leave",
+        "days": 2
+      },
+      "isRead": false,
+      "createdAt": "2026-10-24T11:30:04.866Z",
+      "id": "xp_OckOJ9Eo"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

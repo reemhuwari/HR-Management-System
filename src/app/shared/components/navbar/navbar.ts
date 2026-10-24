@@ -2,22 +2,23 @@
 import { CommonModule } from '@angular/common';
 import {
   Component,
+  DestroyRef,
   EventEmitter,
   inject,
-  OnDestroy,
   OnInit,
   Output
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { interval, Subscription } from 'rxjs';
-import { forkJoin, Observable, of, map } from 'rxjs';
+import { NavigationEnd, Router } from '@angular/router';
+import { filter, forkJoin, map, Observable, of } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TranslatePipe } from '../../../core/pipes/translate.pipe';
 import { AuthService } from '../../../core/services/auth.service';
 import { LanguageService } from '../../../core/services/language.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { NotificationInt } from '../../../core/models/notification.model';
 import { NotificationTextPipe } from'../../../core/pipes/notification-text.pipe'
+import { MenuInteractionsDirective } from '../../directives/menu-interactions.directive';
 interface SearchPage {
   labelKey: string;
   path: string;
@@ -31,17 +32,19 @@ interface SearchPage {
     CommonModule,
     FormsModule,
     TranslatePipe,
-    NotificationTextPipe
+    NotificationTextPipe,
+    MenuInteractionsDirective
   ],
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss'
 })
-export class NavbarComponent implements OnInit, OnDestroy {
+export class NavbarComponent implements OnInit {
   private readonly authService = inject(AuthService);
   private readonly notificationService = inject(NotificationService);
   private readonly languageService = inject(LanguageService);
   private readonly router = inject(Router);
-  private refreshSubscription?: Subscription;
+  private readonly destroyRef = inject(DestroyRef);
+  private hasLoadedNotifications = false;
 
   @Output() menuToggle = new EventEmitter<void>();
 
@@ -90,13 +93,12 @@ export class NavbarComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.loadNotifications();
 
-    this.refreshSubscription = interval(30000).subscribe(() => {
-      this.loadNotifications();
-    });
-  }
-
-  ngOnDestroy(): void {
-    this.refreshSubscription?.unsubscribe();
+    this.router.events
+      .pipe(
+        filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe(() => this.loadNotifications());
   }
 
   get notificationCount(): number {
@@ -154,7 +156,12 @@ export class NavbarComponent implements OnInit, OnDestroy {
   closeNavbarMenus(): void {
     this.showSearch = false;
     this.showUserMenu = false;
+    this.showNotifications = false;
     this.searchQuery = '';
+  }
+
+  closeNotifications(): void {
+    this.showNotifications = false;
   }
 
   openSearchPage(path: string): void {
@@ -171,12 +178,12 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   
   openNotification(notification: NotificationInt): void {
+    this.showNotifications = false;
     this.markNotificationAsRead(notification);
 
     const route = this.getNotificationRoute(notification);
 
     if (route) {
-      this.showNotifications = false;
       this.router.navigate([route]);
     }
   }
@@ -197,12 +204,13 @@ export class NavbarComponent implements OnInit, OnDestroy {
     }
   }
    loadNotifications(): void {
-    this.isLoadingNotifications = true;
+    this.isLoadingNotifications = !this.hasLoadedNotifications;
     this.notificationError = '';
 
     this.notificationService.getMyNotifications().subscribe({
       next: notifications => {
         this.notifications = notifications;
+        this.hasLoadedNotifications = true;
         this.isLoadingNotifications = false;
       },
       error: error => {

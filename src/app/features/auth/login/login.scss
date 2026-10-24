@@ -126,6 +126,10 @@
   font-size: 13px;
 }
 
+.visual-chips .tilt {
+  display: inline-block;
+}
+
 .visual-message {
   max-width: 550px;
   margin-block: auto;
@@ -299,6 +303,7 @@
 }
 
 .role-switch {
+  position: relative;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 5px;
@@ -310,7 +315,26 @@
   background: rgb(255 255 255 / 6%);
 }
 
+.role-switch::before {
+  position: absolute;
+  inset-block: 4px;
+  inset-inline-start: 4px;
+  width: calc(50% - 4.5px);
+  border: 1px solid rgb(129 140 248 / 50%);
+  border-radius: 9px;
+  background: rgb(99 102 241 / 28%);
+  content: '';
+  pointer-events: none;
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+.role-switch.is-admin::before {
+  transform: translateX(calc(var(--dir) * 100%));
+}
+
 .role-tab {
+  position: relative;
+  z-index: 1;
   min-height: 39px;
   border: 1px solid transparent;
   border-radius: 9px;
@@ -320,12 +344,10 @@
   font-size: 12px;
   font-weight: 700;
   cursor: pointer;
-  transition: background-color 180ms ease, color 180ms ease, box-shadow 180ms ease;
+  transition: color var(--dur-base) var(--ease-out);
 }
 
 .role-tab.active {
-  border: 1px solid rgb(129 140 248 / 50%);
-  background: rgb(99 102 241 / 28%);
   color: #fff;
 }
 
@@ -363,7 +385,8 @@
   border: 1px solid rgb(255 255 255 / 14%);
   border-radius: 12px;
   background: rgb(255 255 255 / 6%);
-  transition: border-color 180ms ease, box-shadow 180ms ease, background-color 180ms ease;
+  transition: border-color var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out);
 }
 
 .input-wrapper:hover {
@@ -488,6 +511,7 @@
 }
 
 .checkbox-label {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: 9px;
@@ -499,33 +523,53 @@
 
 .checkbox-label input {
   appearance: none;
+  position: absolute;
   width: 18px;
   height: 18px;
   flex: 0 0 18px;
-  margin-block: 0;
-  margin-inline: 0;
-  border: 1px solid rgb(255 255 255 / 30%);
-  border-radius: 5px;
-  background: rgb(255 255 255 / 6%);
+  opacity: 0;
   cursor: pointer;
 }
 
-.checkbox-label input:checked {
-  border-color: #6366f1;
-  background-color: #6366f1;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 16 16' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m3 8 3.2 3.2L13 4.5' fill='none' stroke='white' stroke-linecap='round' stroke-linejoin='round' stroke-width='2'/%3E%3C/svg%3E");
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: 14px;
+.checkbox-label input:focus-visible {
+  outline: none;
 }
 
-.checkbox-label input:focus-visible {
-  outline: 0;
-  box-shadow: 0 0 0 3px rgb(129 140 248 / 35%);
+.checkbox-label input:focus-visible + .custom-checkbox {
+  outline: 2px solid #a5b4fc;
+  outline-offset: 3px;
 }
 
 .custom-checkbox {
-  display: none;
+  display: block;
+  position: relative;
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+  border: 1px solid rgb(255 255 255 / 30%);
+  border-radius: 5px;
+  background: rgb(255 255 255 / 6%);
+}
+
+.custom-checkbox::after {
+  position: absolute;
+  inset: 3px;
+  border-inline-end: 2px solid #fff;
+  border-block-end: 2px solid #fff;
+  content: '';
+  opacity: 0;
+  transform: rotate(45deg) scale(.4);
+  transition: transform var(--dur-fast) var(--ease-out), opacity var(--dur-fast) ease;
+}
+
+.checkbox-label input:checked + .custom-checkbox {
+  border-color: #6366f1;
+  background: #6366f1;
+}
+
+.checkbox-label input:checked + .custom-checkbox::after {
+  opacity: 1;
+  transform: rotate(45deg) scale(1);
 }
 
 .auth-submit-btn {
@@ -678,24 +722,24 @@
 
 .strength-fill {
   display: block;
-  width: 0;
+  width: 100%;
   height: 100%;
   border-radius: inherit;
-  transition: width 220ms ease, background-color 220ms ease;
+  transition: transform 600ms var(--ease-out), background-color 220ms ease;
 }
 
 .strength-fill.strength-weak {
-  width: 33%;
+  --progress: 33;
   background: #f87171;
 }
 
 .strength-fill.strength-medium {
-  width: 66%;
+  --progress: 66;
   background: #fbbf24;
 }
 
 .strength-fill.strength-strong {
-  width: 100%;
+  --progress: 100;
   background: #818cf8;
 }
 
@@ -787,6 +831,11 @@
   color: #c7d2fe;
   font-size: 26px;
   font-weight: 800;
+}
+
+.success-icon svg {
+  width: 28px;
+  height: 28px;
 }
 
 .auth-submit-btn:focus-visible,

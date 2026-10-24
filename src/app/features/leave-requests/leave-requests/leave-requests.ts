@@ -12,11 +12,13 @@ import { LeaveRequestService } from '../../../core/services/leave-request.servic
 import { LeaveBalanceService } from '../../../core/services/leave-balance.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { NotificationInt } from '../../../core/models/notification.model';
+import { RevealDirective } from '../../../shared/directives/reveal.directive';
+import { CountUpDirective } from '../../../shared/directives/count-up.directive';
 
 @Component({
   selector: 'app-leave-requests',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink,TranslatePipe],
+  imports: [CommonModule, FormsModule, RouterLink,TranslatePipe, RevealDirective, CountUpDirective],
   templateUrl: './leave-requests.html',
   styleUrl: './leave-requests.scss'
 })

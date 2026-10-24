@@ -5,11 +5,13 @@ import { FormsModule } from '@angular/forms';
 import { LeaveBalance } from '../../../core/models/leave-balance.model';
 import { LeaveBalanceService } from '../../../core/services/leave-balance.service';
 import { TranslatePipe } from '../../../core/pipes/translate.pipe';
+import { RevealDirective } from '../../../shared/directives/reveal.directive';
+import { CountUpDirective } from '../../../shared/directives/count-up.directive';
 
 @Component({
   selector: 'app-leave-balances',
   standalone: true,
-  imports: [CommonModule, FormsModule,TranslatePipe],
+  imports: [CommonModule, FormsModule,TranslatePipe, RevealDirective, CountUpDirective],
   templateUrl: './leave-balances.html',
   styleUrl: './leave-balances.scss'
 })

@@ -160,11 +160,18 @@
  
       
 <!-- LANGUAGE SELECTOR -->
-<div class="sidebar-language">
+<div
+  class="sidebar-language"
+  appMenuInteractions
+  [menuOpen]="showLanguageMenu"
+  (menuDismiss)="closeLanguageMenu()"
+  (menuEscape)="closeLanguageMenu()"
+>
 
   <button
     type="button"
     class="sidebar-link sidebar-button language-toggle"
+    aria-haspopup="menu"
     [class.language-active]="showLanguageMenu"
     (click)="toggleLanguageMenu()"
     [attr.aria-expanded]="showLanguageMenu"
@@ -199,12 +206,16 @@
   </button>
 
   <div
-    class="language-options"
+    class="menu-panel menu-panel-dark menu-panel-open language-options"
     *ngIf="showLanguageMenu"
+    animate.enter="menu-panel-enter"
+    animate.leave="menu-panel-leave"
+    role="menu"
   >
     <button
       type="button"
-      class="language-option"
+      class="menu-item language-option"
+      role="menuitem"
       [class.selected]="currentLanguage === 'en'"
       (click)="changeLanguage('en')"
     >
@@ -216,7 +227,8 @@
 
     <button
       type="button"
-      class="language-option"
+      class="menu-item language-option"
+      role="menuitem"
       [class.selected]="currentLanguage === 'ar'"
       (click)="changeLanguage('ar')"
     >

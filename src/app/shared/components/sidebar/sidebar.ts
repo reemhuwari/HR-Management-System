@@ -19,6 +19,7 @@ import {
   AppLanguage
 } from '../../../core/services/language.service';
 import { TranslatePipe } from '../../../core/pipes/translate.pipe';
+import { MenuInteractionsDirective } from '../../directives/menu-interactions.directive';
 
 interface SidebarItem {
   labelKey: string;
@@ -34,7 +35,8 @@ interface SidebarItem {
     CommonModule,
     RouterLink,
     RouterLinkActive,
-    TranslatePipe
+    TranslatePipe,
+    MenuInteractionsDirective
   ],
   templateUrl: './sidebar.html',
   styleUrl: './sidebar.scss'
@@ -82,6 +84,10 @@ export class SidebarComponent {
 
   toggleLanguageMenu(): void {
     this.showLanguageMenu = !this.showLanguageMenu;
+  }
+
+  closeLanguageMenu(): void {
+    this.showLanguageMenu = false;
   }
 
   changeLanguage(value: AppLanguage): void {

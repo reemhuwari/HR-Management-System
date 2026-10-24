@@ -13,11 +13,13 @@ import { Employee } from '../../core/models/employee.model';
 import { Attendance } from '../../core/models/attendance.model';
 import { LeaveRequest } from '../../core/models/leave-request.model';
 import { TranslatePipe } from '../../core/pipes/translate.pipe';
+import { RevealDirective } from '../../shared/directives/reveal.directive';
+import { CountUpDirective } from '../../shared/directives/count-up.directive';
 
 @Component({
   selector: 'app-attendace',
   standalone: true,
-  imports: [CommonModule, FormsModule, TranslatePipe],
+  imports: [CommonModule, FormsModule, TranslatePipe, RevealDirective, CountUpDirective],
   templateUrl: './attendace.html',
   styleUrl: './attendace.scss'
 })

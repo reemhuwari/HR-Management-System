@@ -1,9 +1,10 @@
 
-<div class="auth-page login-page">
+<div class="auth-page login-page" appParallax>
   <div class="auth-visual">
     <video
       #authVideo
       class="auth-video"
+      data-parallax="-8"
       autoplay
       muted
       [muted]="true"
@@ -18,7 +19,7 @@
     <div class="auth-visual-overlay"></div>
 
     <div class="visual-content">
-      <div class="brand">
+      <div class="brand" data-parallax="6" [appTilt]="4">
         <div class="brand-icon">
           <span>PF</span>
         </div>
@@ -28,7 +29,7 @@
         </span>
       </div>
 
-      <div class="visual-message">
+      <div class="visual-message" data-parallax="14" [appReveal]="1">
         <span class="visual-eyebrow">
           {{ 'LOGIN.VISUAL_EYEBROW' | translate }}
         </span>
@@ -42,9 +43,9 @@
           {{ 'LOGIN.VISUAL_DESCRIPTION' | translate }}
         </p>
         <div class="visual-chips">
-          <span>{{ 'LOGIN.CHIP_1' | translate }}</span>
-          <span>{{ 'LOGIN.CHIP_2' | translate }}</span>
-          <span>{{ 'LOGIN.CHIP_3' | translate }}</span>
+          <span [appTilt]="4">{{ 'LOGIN.CHIP_1' | translate }}</span>
+          <span [appTilt]="4">{{ 'LOGIN.CHIP_2' | translate }}</span>
+          <span [appTilt]="4">{{ 'LOGIN.CHIP_3' | translate }}</span>
         </div>
       </div>
 
@@ -80,7 +81,7 @@
         </span>
       </div>
 
-      <div class="form-heading">
+      <div class="form-heading" [appReveal]="0">
         <span class="form-eyebrow">
           {{ 'LOGIN.WELCOME' | translate }}
         </span>
@@ -89,7 +90,7 @@
 
         <p>{{ 'LOGIN.SUBTITLE' | translate }}</p>
       </div>
-      <div class="role-switch" role="tablist">
+      <div class="role-switch" [class.is-admin]="selectedRole === 'admin'" role="tablist">
         <button
           type="button"
           role="tab"

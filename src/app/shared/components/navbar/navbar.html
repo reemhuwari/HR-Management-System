@@ -21,10 +21,17 @@
 
   <div class="navbar-right">
     <!-- Search -->
-    <div class="navbar-search-wrapper">
+    <div
+      class="navbar-search-wrapper"
+      appMenuInteractions
+      [menuOpen]="showSearch"
+      (menuDismiss)="closeNavbarMenus()"
+      (menuEscape)="closeNavbarMenus()"
+    >
       <button
         type="button"
         class="icon-button search-button"
+        aria-haspopup="menu"
         [class.active]="showSearch"
         [attr.aria-expanded]="showSearch"
        [attr.aria-label]="'NAV.SEARCH' | translate"
@@ -37,7 +44,13 @@
         </svg>
       </button>
 
-      <section class="navbar-search-dropdown" *ngIf="showSearch">
+      <section
+        class="menu-panel menu-panel-open navbar-search-dropdown"
+        *ngIf="showSearch"
+        animate.enter="menu-panel-enter"
+        animate.leave="menu-panel-leave"
+        role="menu"
+      >
         <div class="navbar-search-input">
           <svg viewBox="0 0 24 24" fill="none"
             stroke="currentColor" stroke-width="2">
@@ -54,6 +67,7 @@
 />
           <button
             type="button"
+            role="menuitem"
             aria-label="Close search"
             (click)="closeNavbarMenus()"
           >&times;</button>
@@ -69,7 +83,8 @@
 
         <button
           type="button"
-          class="navbar-search-result"
+          class="menu-item navbar-search-result"
+          role="menuitem"
           *ngFor="let page of filteredSearchPages"
           (click)="openSearchPage(page.path)"
         >
@@ -91,10 +106,17 @@
     </div>
 
     <!-- Notifications -->
-    <div class="navbar-notification-wrapper">
+    <div
+      class="navbar-notification-wrapper"
+      appMenuInteractions
+      [menuOpen]="showNotifications"
+      (menuDismiss)="closeNotifications()"
+      (menuEscape)="closeNotifications()"
+    >
       <button
         type="button"
         class="icon-button navbar-notification-button"
+        aria-haspopup="menu"
         [class.active]="showNotifications"
         (click)="goToNotifications()"
         [attr.aria-expanded]="showNotifications"
@@ -112,8 +134,12 @@
         </span>
       </button>
 
-      <section class="navbar-notification-dropdown"
+      <section class="menu-panel navbar-notification-dropdown"
+        [class.menu-panel-open]="showNotifications"
         *ngIf="showNotifications"
+        animate.enter="menu-panel-enter"
+        animate.leave="menu-panel-leave"
+        role="menu"
         aria-label="Notifications list">
 
         <div class="navbar-notification-header">
@@ -129,7 +155,8 @@
 </p>
           </div>
           <button type="button" class="navbar-notification-close"
-            (click)="showNotifications = false"
+            role="menuitem"
+            (click)="closeNotifications()"
             aria-label="Close notifications">&times;</button>
         </div>
 
@@ -137,6 +164,7 @@
           <span>{{ 'NOTIFICATIONS.RECENT_ACTIVITY' | translate }}</span>
          <button
   type="button"
+         role="menuitem"
   [disabled]="notificationCount === 0 || isUpdatingNotifications"
   (click)="markAllNotificationsAsRead()"
 >
@@ -157,7 +185,7 @@
   *ngIf="!isLoadingNotifications && notificationError"
 >
   <p>{{ notificationError | translate }}</p>
-  <button type="button" (click)="loadNotifications()">
+  <button type="button" role="menuitem" (click)="loadNotifications()">
     {{ 'COMMON.TRY_AGAIN' | translate }}
   </button>
 </div>
@@ -176,9 +204,10 @@
         </div>
 
         <div class="navbar-notification-list"
-          *ngIf="!isLoadingNotifications && !notificationError && sortedNotifications.length > 0">
+          *ngIf="!isLoadingNotifications && sortedNotifications.length > 0">
           <button type="button"
-            class="navbar-notification-item"
+                    class="menu-item navbar-notification-item"
+                    role="menuitem"
             *ngFor="let notification of sortedNotifications"
             [class.unread]="!notification.isRead"
                         (click)="openNotification(notification)">
@@ -239,10 +268,10 @@
         </div>
 
         <footer class="navbar-notification-footer"
-          *ngIf="!isLoadingNotifications && !notificationError && sortedNotifications.length > 0">
+          *ngIf="!isLoadingNotifications && sortedNotifications.length > 0">
           {{ sortedNotifications.length }}
 {{ 'NOTIFICATIONS.SHOWING' | translate }}
-          <button type="button" (click)="openUserPage('/notifications')">
+          <button type="button" role="menuitem" (click)="openUserPage('/notifications')">
   {{ 'NOTIFICATIONS.VIEW_ALL' | translate }}
 </button>
         </footer>
@@ -252,9 +281,16 @@
     <div class="navbar-divider"></div>
 
     <!-- User menu -->
-    <div class="navbar-user-wrapper">
+    <div
+      class="navbar-user-wrapper"
+      appMenuInteractions
+      [menuOpen]="showUserMenu"
+      (menuDismiss)="showUserMenu = false"
+      (menuEscape)="showUserMenu = false"
+    >
       <button type="button"
         class="user-menu"
+        aria-haspopup="menu"
         [class.active]="showUserMenu"
         [attr.aria-expanded]="showUserMenu"
         aria-label="Open user menu"
@@ -288,7 +324,13 @@
         </svg>
       </button>
 
-      <section class="navbar-user-dropdown" *ngIf="showUserMenu">
+      <section
+        class="menu-panel menu-panel-open navbar-user-dropdown"
+        *ngIf="showUserMenu"
+        animate.enter="menu-panel-enter"
+        animate.leave="menu-panel-leave"
+        role="menu"
+      >
         <div class="navbar-user-dropdown-header">
           <div class="user-avatar">
             {{ currentUser?.firstName?.charAt(0) || 'U' }}
@@ -314,7 +356,8 @@
 
         <button
   type="button"
-  class="navbar-user-dropdown-item"
+  class="menu-item navbar-user-dropdown-item"
+  role="menuitem"
   (click)="openUserPage('/profile')"
 >
   <span class="dropdown-item-icon">◉</span>
@@ -326,7 +369,8 @@
 
 <button
   type="button"
-  class="navbar-user-dropdown-item"
+  class="menu-item navbar-user-dropdown-item"
+  role="menuitem"
   (click)="openUserPage('/profile/edit')"
 >
   <span class="dropdown-item-icon">✎</span>
@@ -344,7 +388,8 @@
 
        <button
   type="button"
-  class="navbar-user-dropdown-item logout-item"
+  class="menu-item navbar-user-dropdown-item logout-item"
+  role="menuitem"
   (click)="logout()"
 >
   <span class="dropdown-item-icon">↪</span>

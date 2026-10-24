@@ -1,4 +1,11 @@
 <div class="app-layout">
+  <div
+    class="top-progress-bar"
+    [class.visible]="loadingService.state() !== 'hidden'"
+    [class.loading]="loadingService.state() === 'loading'"
+    [class.finishing]="loadingService.state() === 'finishing'"
+    aria-hidden="true"
+  ></div>
 
   <!-- SIDEBAR -->
 

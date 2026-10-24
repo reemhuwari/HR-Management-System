@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { LoadingService } from '../../../core/services/loading.service';
 
 import { NavbarComponent } from '../navbar/navbar';
 import { SidebarComponent } from '../sidebar/sidebar';
@@ -16,6 +17,7 @@ import { SidebarComponent } from '../sidebar/sidebar';
   styleUrl: './main-layout.scss'
 })
 export class MainLayoutComponent {
+  readonly loadingService = inject(LoadingService);
 
   sidebarOpen = true;
 
