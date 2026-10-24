@@ -2,8 +2,26 @@
 
 A role-based human resources web application built with Angular. PeopleFlow lets HR teams manage employees, attendance, and leave, while employees use a self-service portal to check in, request leave, and track their balances. The interface supports **English and Arabic with full RTL layout**.
 
-![Dashboard](docs/screenshots/dashboard.png)
+## Screenshots
 
+### Admin Dashboard
+![Admin Dashboard](docs/screenshots/adminDashboard1.PNG)
+
+### Employee Dashboard
+![Employee Dashboard](docs/screenshots/employee-dashboard.PNG)
+
+### Employee Management
+![Employee Management](docs/screenshots/admin-employees.PNG)
+
+**Explore More Screenshots:**  
+[View All Project Screenshots](docs/screenshots/)
+
+
+### Employee Profiles
+![Employee Profile](docs/screenshots/employee-profile.PNG)
+![Edit Employee Profile](docs/screenshots/employee-edit-profile.PNG)
+![Edit Profile](docs/screenshots/editProfile.PNG)
+![Profile](docs/screenshots/profile.PNG)
 ## Features
 
 ### Admin / HR
